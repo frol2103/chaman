@@ -1,0 +1,7 @@
+additionalProperties:
+        apiNameSuffix: "Api"
+        artifactId: "generated"
+
+
+
+

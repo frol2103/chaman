@@ -1,0 +1,11 @@
+templateDir: "openapi/back/templates"
+additionalProperties:
+        apiNameSuffix: "Api"
+        routesFileName: "be.frol.chaman.generated.routes"
+        skipStubs: true
+        supportAsync: true
+        hideGenerationTimestamp: true
+        artifactId: "generated-api"
+        artifactVersion: "1.0-SNAPSHOT"
+        apiPackage: "be.frol.chaman.openapi.api"
+        modelPackage: "be.frol.chaman.openapi.model"
