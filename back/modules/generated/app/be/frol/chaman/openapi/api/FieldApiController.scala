@@ -11,11 +11,45 @@ import be.frol.chaman.openapi.model.Field
 @Singleton
 class FieldApiController @Inject()(cc: ControllerComponents, api: FieldApi)(implicit executionContext: ExecutionContext) extends AbstractController(cc) {
   /**
+    * POST /api/field
+    */
+  def createField(): Action[AnyContent] = Action.async { request =>
+    def executeApi(): Future[Field] = {
+      val field = request.body.asJson.map(_.as[Field]).getOrElse {
+        throw new OpenApiExceptions.MissingRequiredParameterException("body", "field")
+      }
+      api.createField(field)(request)
+    }
+
+    executeApi().map { result =>
+      val json = Json.toJson(result)
+      Ok(json)
+    }
+  }
+
+  /**
     * GET /api/field
     */
   def getField(): Action[AnyContent] = Action.async { request =>
-    def executeApi(): Future[Field] = {
+    def executeApi(): Future[List[Field]] = {
       api.getField()(request)
+    }
+
+    executeApi().map { result =>
+      val json = Json.toJson(result)
+      Ok(json)
+    }
+  }
+
+  /**
+    * PUT /api/field/:uuid
+    */
+  def updateField(uuid: String): Action[AnyContent] = Action.async { request =>
+    def executeApi(): Future[Field] = {
+      val field = request.body.asJson.map(_.as[Field]).getOrElse {
+        throw new OpenApiExceptions.MissingRequiredParameterException("body", "field")
+      }
+      api.updateField(uuid, field)(request)
     }
 
     executeApi().map { result =>

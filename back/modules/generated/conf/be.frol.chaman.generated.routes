@@ -5,7 +5,9 @@
 
 # Routes for Field API
 
-GET /api/field    be.frol.chaman.openapi.api.FieldApiController.getField()
+POST /api/field         be.frol.chaman.openapi.api.FieldApiController.createField()
+GET /api/field          be.frol.chaman.openapi.api.FieldApiController.getField()
+PUT /api/field/:uuid    be.frol.chaman.openapi.api.FieldApiController.updateField(uuid: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET /assets/*file           controllers.Assets.at(file)

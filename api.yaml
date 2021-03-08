@@ -9,25 +9,76 @@ info:
 host: "chaman.frol.be"
 basePath: "/api"
 tags:
-- name: "field"
-  description: "Field information"
-- name: "template"
-  description: "Template information"
-- name: "item"
-  description: "complete item form"
+  - name: "field"
+    description: "Field information"
+  - name: "template"
+    description: "Template information"
+  - name: "item"
+    description: "complete item form"
 schemes:
-- "https"
-- "http"
+  - "https"
+  - "http"
+
 paths:
   /field:
     get:
       tags:
-      - "field"
+        - "field"
       summary: "Get a field"
       description: ""
       operationId: "getField"
       produces:
-      - "application/json"
+        - "application/json"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Field"
+    post:
+      tags:
+        - "field"
+      summary: "create a field"
+      description: ""
+      operationId: "createField"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "field"
+          required: true
+          schema:
+            $ref : "#/definitions/Field"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Field"
+
+  /field/{uuid}:
+    put:
+      tags:
+        - "field"
+      summary: "update a field"
+      description: ""
+      operationId: "updateField"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "uuid"
+          required: true
+          type: string
+        - in: "body"
+          name: "field"
+          required: true
+          schema:
+            $ref : "#/definitions/Field"
       responses:
         "200":
           description: "OK"
@@ -43,16 +94,33 @@ definitions:
         type: "string"
         description: "single uuid acrross all version of the field"
         format: "uuid"
-      versionUuid:
+      label:
         type: "string"
-        description: "version specific uuid of the field"
-        format: "uuid"
       reference:
         type: "string"
       dataType:
         type: "string"
-      
-      
+      value:
+        description: "value of the type"
+      valueOrigin:
+        type: string
+        format: uuid
+
+  Section:
+    type: "object"
+    properties:
+      uuid:
+        type: string
+      label:
+        type: "string"
+      reference:
+        type: "string"
+      content:
+        type: array
+        items:
+          $ref: "#/definitions/Field"
+
+
   Template:
     type: "object"
     properties:
@@ -62,19 +130,12 @@ definitions:
         type: array
         items:
           $ref: "#/definitions/Template"
+      label:
+        type: "string"
+      reference:
+        type: "string"
       content:
         type: array
-        items: 
-          $ref: "#/definitions/FieldContent"
-          
-  FieldContent:
-    type: "object"
-    properties:
-      fieldUuid:
-        type: string
-      value:
-        description: "value of the type"
-      valueOrigin:
-        type: string
-        format: uuid
-    
+        items:
+          $ref: "#/definitions/Section"
+

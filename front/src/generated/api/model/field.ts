@@ -16,11 +16,13 @@ export interface Field {
      * single uuid acrross all version of the field
      */
     uuid?: string;
-    /**
-     * version specific uuid of the field
-     */
-    versionUuid?: string;
+    label?: string;
     reference?: string;
     dataType?: string;
+    /**
+     * value of the type
+     */
+    value?: object;
+    valueOrigin?: string;
 }
 

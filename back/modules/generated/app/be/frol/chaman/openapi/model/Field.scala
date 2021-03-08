@@ -6,14 +6,16 @@ import java.util.UUID
 /**
   * Represents the Swagger definition for Field.
   * @param uuid single uuid acrross all version of the field
-  * @param versionUuid version specific uuid of the field
+  * @param value value of the type
   */
 @javax.annotation.Generated(value = Array("org.openapitools.codegen.languages.ScalaPlayFrameworkServerCodegen"))
 case class Field(
   uuid: Option[UUID],
-  versionUuid: Option[UUID],
+  label: Option[String],
   reference: Option[String],
-  dataType: Option[String]
+  dataType: Option[String],
+  value: Option[JsObject],
+  valueOrigin: Option[UUID]
 )
 
 object Field {

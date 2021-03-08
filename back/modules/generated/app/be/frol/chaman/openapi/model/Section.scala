@@ -3,18 +3,17 @@ package be.frol.chaman.openapi.model
 import play.api.libs.json._
 
 /**
-  * Represents the Swagger definition for Template.
+  * Represents the Swagger definition for Section.
   */
 @javax.annotation.Generated(value = Array("org.openapitools.codegen.languages.ScalaPlayFrameworkServerCodegen"))
-case class Template(
+case class Section(
   uuid: Option[String],
-  parent: Option[List[Template]],
   label: Option[String],
   reference: Option[String],
-  content: Option[List[Section]]
+  content: Option[List[Field]]
 )
 
-object Template {
-  implicit lazy val templateJsonFormat: Format[Template] = Json.format[Template]
+object Section {
+  implicit lazy val sectionJsonFormat: Format[Section] = Json.format[Section]
 }
 

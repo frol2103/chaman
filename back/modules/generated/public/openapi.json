@@ -33,7 +33,10 @@
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/Field"
+                  "items" : {
+                    "$ref" : "#/components/schemas/Field"
+                  },
+                  "type" : "array"
                 }
               }
             },
@@ -42,6 +45,72 @@
         },
         "summary" : "Get a field",
         "tags" : [ "field" ]
+      },
+      "post" : {
+        "operationId" : "createField",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Field"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Field"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "create a field",
+        "tags" : [ "field" ],
+        "x-codegen-request-body-name" : "field"
+      }
+    },
+    "/field/{uuid}" : {
+      "put" : {
+        "operationId" : "updateField",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "uuid",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Field"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Field"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "update a field",
+        "tags" : [ "field" ],
+        "x-codegen-request-body-name" : "field"
       }
     }
   },
@@ -49,10 +118,12 @@
     "schemas" : {
       "Field" : {
         "example" : {
-          "versionUuid" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "reference" : "reference",
+          "valueOrigin" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
           "dataType" : "dataType",
-          "uuid" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91"
+          "label" : "label",
+          "uuid" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "value" : "{}"
         },
         "properties" : {
           "uuid" : {
@@ -60,9 +131,7 @@
             "format" : "uuid",
             "type" : "string"
           },
-          "versionUuid" : {
-            "description" : "version specific uuid of the field",
-            "format" : "uuid",
+          "label" : {
             "type" : "string"
           },
           "reference" : {
@@ -70,6 +139,34 @@
           },
           "dataType" : {
             "type" : "string"
+          },
+          "value" : {
+            "description" : "value of the type",
+            "type" : "object"
+          },
+          "valueOrigin" : {
+            "format" : "uuid",
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "Section" : {
+        "properties" : {
+          "uuid" : {
+            "type" : "string"
+          },
+          "label" : {
+            "type" : "string"
+          },
+          "reference" : {
+            "type" : "string"
+          },
+          "content" : {
+            "items" : {
+              "$ref" : "#/components/schemas/Field"
+            },
+            "type" : "array"
           }
         },
         "type" : "object"
@@ -85,27 +182,17 @@
             },
             "type" : "array"
           },
+          "label" : {
+            "type" : "string"
+          },
+          "reference" : {
+            "type" : "string"
+          },
           "content" : {
             "items" : {
-              "$ref" : "#/components/schemas/FieldContent"
+              "$ref" : "#/components/schemas/Section"
             },
             "type" : "array"
-          }
-        },
-        "type" : "object"
-      },
-      "FieldContent" : {
-        "properties" : {
-          "fieldUuid" : {
-            "type" : "string"
-          },
-          "value" : {
-            "description" : "value of the type",
-            "type" : "object"
-          },
-          "valueOrigin" : {
-            "format" : "uuid",
-            "type" : "string"
           }
         },
         "type" : "object"

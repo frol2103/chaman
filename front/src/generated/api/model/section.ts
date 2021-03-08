@@ -9,14 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Section } from './section';
+import { Field } from './field';
 
 
-export interface Template { 
+export interface Section { 
     uuid?: string;
-    parent?: Array<Template>;
     label?: string;
     reference?: string;
-    content?: Array<Section>;
+    content?: Array<Field>;
 }
 
