@@ -1,0 +1,16 @@
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th scope="col">Reference</th>
+    <th scope="col">Label</th>
+    <th scope="col">Datatype</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let field of fields">
+    <th scope="row">{{ field.reference }}</th>
+    <td>{{ field.label }}</td>
+    <td>{{ field.dataType }}</td>
+  </tr>
+  </tbody>
+</table>
