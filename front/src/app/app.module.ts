@@ -14,6 +14,7 @@ import {HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import {BASE_PATH} from "../generated/api";
 import { FieldEditComponent } from './admin/fields/field-edit/field-edit.component';
+import { ToastComponent } from './toast/toast.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { FieldEditComponent } from './admin/fields/field-edit/field-edit.compone
     FieldTableComponent,
     FieldsComponent,
     HomeComponent,
-    FieldEditComponent
+    FieldEditComponent,
+    ToastComponent
   ],
   imports: [
     BrowserModule,
