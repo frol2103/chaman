@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Field, FieldService} from "../../../../generated/api";
+import {DatatypesService, Field, FieldService} from "../../../../generated/api";
 import {Observable} from "rxjs";
 import {FieldImpl} from "../../../model/FieldImpl";
 
@@ -14,18 +14,15 @@ export class FieldsComponent implements OnInit {
     private fieldService: FieldService,
   ) { }
 
-  fields: Observable<Array<Field>>
+  fields: Array<Field>
   editionField : Field = new FieldImpl();
 
   ngOnInit(): void {
-    this.fields = this.fieldService.getField()
+    this.fieldService.getField().toPromise().then(l => this.fields = l)
   }
 
-  submit(): void {
-    console.log("edition field", this.editionField)
-    this.fieldService.createField(this.editionField)
-      .toPromise()
-      .then(v => {})
+  updateField(field : Field) : void {
+    this.fields.push(field)
   }
 
 }

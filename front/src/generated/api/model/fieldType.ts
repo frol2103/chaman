@@ -9,14 +9,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Field } from './field';
 
 
-export interface Template { 
-    uuid?: string;
-    parents?: Array<Template>;
-    label?: string;
-    reference?: string;
-    content?: Array<Field>;
+export interface FieldType { 
+    identifier: string;
 }
 

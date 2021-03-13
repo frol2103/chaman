@@ -3,6 +3,10 @@
 # ~~~~
 
 
+# Routes for Datatypes API
+
+GET /api/data-types/    be.frol.chaman.openapi.api.DatatypesApiController.getDataTypes()
+
 # Routes for Field API
 
 POST /api/field         be.frol.chaman.openapi.api.FieldApiController.createField()

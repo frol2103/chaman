@@ -1,3 +1,3 @@
 export * from './field';
-export * from './section';
+export * from './fieldType';
 export * from './template';

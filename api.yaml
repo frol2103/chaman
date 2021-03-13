@@ -85,8 +85,33 @@ paths:
           schema:
             $ref: "#/definitions/Field"
 
+  /data-types/:
+    get:
+      tags:
+        - "datatypes"
+      summary: "get data type"
+      description: ""
+      operationId: "getDataTypes"
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/FieldType"
+
 
 definitions:
+  FieldType:
+    type: "object"
+    required:
+      - identifier
+    properties:
+      identifier:
+        type: "string"
+
   Field:
     type: "object"
     properties:
@@ -106,27 +131,13 @@ definitions:
         type: string
         format: uuid
 
-  Section:
-    type: "object"
-    properties:
-      uuid:
-        type: string
-      label:
-        type: "string"
-      reference:
-        type: "string"
-      content:
-        type: array
-        items:
-          $ref: "#/definitions/Field"
-
 
   Template:
     type: "object"
     properties:
       uuid:
         type: string
-      parent:
+      parents:
         type: array
         items:
           $ref: "#/definitions/Template"
@@ -137,5 +148,5 @@ definitions:
       content:
         type: array
         items:
-          $ref: "#/definitions/Section"
+          $ref: "#/definitions/Field"
 

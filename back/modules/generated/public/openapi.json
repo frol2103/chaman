@@ -112,10 +112,44 @@
         "tags" : [ "field" ],
         "x-codegen-request-body-name" : "field"
       }
+    },
+    "/data-types/" : {
+      "get" : {
+        "operationId" : "getDataTypes",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/FieldType"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "get data type",
+        "tags" : [ "datatypes" ]
+      }
     }
   },
   "components" : {
     "schemas" : {
+      "FieldType" : {
+        "example" : {
+          "identifier" : "identifier"
+        },
+        "properties" : {
+          "identifier" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "identifier" ],
+        "type" : "object"
+      },
       "Field" : {
         "example" : {
           "reference" : "reference",
@@ -151,32 +185,12 @@
         },
         "type" : "object"
       },
-      "Section" : {
-        "properties" : {
-          "uuid" : {
-            "type" : "string"
-          },
-          "label" : {
-            "type" : "string"
-          },
-          "reference" : {
-            "type" : "string"
-          },
-          "content" : {
-            "items" : {
-              "$ref" : "#/components/schemas/Field"
-            },
-            "type" : "array"
-          }
-        },
-        "type" : "object"
-      },
       "Template" : {
         "properties" : {
           "uuid" : {
             "type" : "string"
           },
-          "parent" : {
+          "parents" : {
             "items" : {
               "$ref" : "#/components/schemas/Template"
             },
@@ -190,7 +204,7 @@
           },
           "content" : {
             "items" : {
-              "$ref" : "#/components/schemas/Section"
+              "$ref" : "#/components/schemas/Field"
             },
             "type" : "array"
           }

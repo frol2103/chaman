@@ -1,24 +1,7 @@
 <h1>Fields</h1>
-<field-table [fields]="fields | async"></field-table>
+<field-table [fields]="fields"></field-table>
 
 <button type="button" class="btn btn-primary">+</button>
 
-<form>
-  <div class="form-group">
-    <label for="labelInput">Label</label>
-    <input type="text" class="form-control" id="labelInput" name="labelInput" [(ngModel)]="editionField.label" />
-  </div>
-
-  <div class="form-group">
-    <label for="labelInput">Reference</label>
-    <input type="text" class="form-control" id="reference" name="reference" [(ngModel)]="editionField.reference" />
-  </div>
-
-  <div class="form-group">
-    <label for="dataType">Data type</label>
-    <input type="text" class="form-control" id="dataType" name="dataType" [(ngModel)]="editionField.dataType" />
-  </div>
-
-  <button type="submit" class="btn btn-primary" (click)="submit()">Submit</button>
-</form>
+<app-field-edit [field]="editionField" (fieldSaved)="updateField($event)"></app-field-edit>
 

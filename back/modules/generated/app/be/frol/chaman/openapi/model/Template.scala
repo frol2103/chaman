@@ -8,10 +8,10 @@ import play.api.libs.json._
 @javax.annotation.Generated(value = Array("org.openapitools.codegen.languages.ScalaPlayFrameworkServerCodegen"))
 case class Template(
   uuid: Option[String],
-  parent: Option[List[Template]],
+  parents: Option[List[Template]],
   label: Option[String],
   reference: Option[String],
-  content: Option[List[Section]]
+  content: Option[List[Field]]
 )
 
 object Template {

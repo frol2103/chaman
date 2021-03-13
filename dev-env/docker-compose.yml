@@ -17,7 +17,7 @@ services:
   front:
     build: ./front
     ports:
-      - 4200:4200
+      - 80:4200
     volumes: 
       - ../front:/src
     user: $UID
