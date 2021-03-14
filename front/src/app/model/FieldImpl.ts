@@ -13,4 +13,9 @@ export class FieldImpl implements Field {
     public valueOrigin?: string,
   ) {
   }
+
+  withDataType(dataType:string) : FieldImpl {
+    this.dataType = dataType;
+    return this
+  }
 }

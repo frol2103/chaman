@@ -15,6 +15,10 @@ import {FormsModule} from "@angular/forms";
 import {BASE_PATH} from "../generated/api";
 import { FieldEditComponent } from './admin/fields/field-edit/field-edit.component';
 import { ToastComponent } from './toast/toast.component';
+import { FieldComponent } from './field/core/field/field.component';
+import {FieldDirective} from "./field/core/field.directive";
+import { StringComponent } from './field/template/string/string.component';
+import { IntegerComponent } from './field/template/integer/integer.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +30,11 @@ import { ToastComponent } from './toast/toast.component';
     FieldsComponent,
     HomeComponent,
     FieldEditComponent,
-    ToastComponent
+    ToastComponent,
+    FieldComponent,
+    FieldDirective,
+    StringComponent,
+    IntegerComponent,
   ],
   imports: [
     BrowserModule,

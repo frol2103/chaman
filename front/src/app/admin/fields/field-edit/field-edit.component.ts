@@ -1,7 +1,10 @@
-import {Component, Input, OnInit, Output, EventEmitter} from '@angular/core';
+import {Component, Input, OnInit, Output, EventEmitter, ViewChild} from '@angular/core';
 import {DatatypesService, Field, FieldService} from "../../../../generated/api";
 import {FieldImpl} from "../../../model/FieldImpl";
 import {ToastService} from "../../../toast/toast.service";
+import {Subject} from "rxjs";
+import {FieldDirective} from "../../../field/core/field.directive";
+import {FieldComponent} from "../../../field/core/field/field.component";
 
 @Component({
   selector: 'app-field-edit',
@@ -21,7 +24,10 @@ export class FieldEditComponent implements OnInit {
 
   @Output() fieldSaved = new EventEmitter<Field>();
 
+  @ViewChild(FieldComponent) fieldComponent: FieldComponent;
+
   dataTypes = this.datatypesService.getDataTypes().toPromise()
+
 
   ngOnInit(): void {
   }
@@ -31,6 +37,13 @@ export class FieldEditComponent implements OnInit {
       .toPromise()
       .then(v => this.fieldSaved.emit(v))
       .catch(e =>  this.toastService.showError('Error while saving field',e) )
+  }
+
+  updateField(){
+    this.field.value = undefined;
+    if(this.fieldComponent){
+      this.fieldComponent.refresh();
+    }
   }
 
 }
