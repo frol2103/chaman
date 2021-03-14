@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {DatatypesService, Field, FieldService} from "../../../../generated/api";
 import {Observable} from "rxjs";
 import {FieldImpl} from "../../../model/FieldImpl";
+import * as _ from 'lodash';
 
 @Component({
   selector: 'fields',
@@ -15,14 +16,29 @@ export class FieldsComponent implements OnInit {
   ) { }
 
   fields: Array<Field>
-  editionField : Field = new FieldImpl();
+  editionField : Field
 
   ngOnInit(): void {
     this.fieldService.getField().toPromise().then(l => this.fields = l)
   }
 
-  updateField(field : Field) : void {
-    this.fields.push(field)
+  newField() {
+    this.editionField = new FieldImpl();
   }
 
+  fieldUpdated(field : Field) : void {
+    this.editionField = undefined
+    let indexInArray = _.findIndex(this.fields, {uuid:field.uuid})
+    console.log("indexInArray", indexInArray)
+    if(indexInArray != -1){
+      this.fields[indexInArray] = field;
+    } else {
+      this.fields.push(field)
+    }
+  }
+
+
+  startEdit(field:Field) {
+    this.editionField = (JSON.parse(JSON.stringify(field)));
+  }
 }

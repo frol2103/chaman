@@ -33,7 +33,7 @@ export class FieldEditComponent implements OnInit {
   }
 
   submit(): void {
-    this.fieldService.createField(this.field)
+    ((this.field.uuid)? this.fieldService.updateField(this.field.uuid,this.field):this.fieldService.createField(this.field))
       .toPromise()
       .then(v => this.fieldSaved.emit(v))
       .catch(e =>  this.toastService.showError('Error while saving field',e) )

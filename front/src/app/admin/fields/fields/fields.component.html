@@ -1,7 +1,7 @@
 <h1>Fields</h1>
-<field-table [fields]="fields"></field-table>
+<field-table [fields]="fields" (editField)="startEdit($event)"></field-table>
 
-<button type="button" class="btn btn-primary">+</button>
+<button *ngIf="!editionField" (click)="newField()" type="button" class="btn btn-primary">+</button>
 
-<app-field-edit [field]="editionField" (fieldSaved)="updateField($event)"></app-field-edit>
+<app-field-edit *ngIf="editionField" [field]="editionField" (fieldSaved)="fieldUpdated($event)"></app-field-edit>
 
