@@ -34,3 +34,5 @@ docker run --rm -u $(id -u) -w /local -v "$DIR/../:/local" openapitools/openapi-
     -o front/src/generated/api \
     -c openapi/front/config.yaml
 
+sed -i 's/value?: object;/value?: any;/g' $DIR/../front/src/generated/api/model/field.ts
+
