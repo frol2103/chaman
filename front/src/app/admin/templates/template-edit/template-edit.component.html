@@ -1,26 +1,28 @@
 <h1>Template edit</h1>
-<div *ngIf="template"></div>
-<div class="bd-callout bd-callout-meta">
-  <strong>Meta data</strong>
-  <div class="row input-group mb-3">
-    <div class="col-2">
-      <label>Reference</label>
+<div *wait="template">
+
+  <div class="bd-callout bd-callout-meta">
+    <strong>Meta data</strong>
+    <div class="row input-group mb-3">
+      <div class="col-2">
+        <label>Reference</label>
+      </div>
+      <div class="col-10">
+        <input type="text" class="form-control" [(ngModel)]="template.reference">
+      </div>
     </div>
-    <div class="col-10">
-      <input type="text" class="form-control" [(ngModel)]="template.reference">
+    <div class="row input-group">
+      <div class="col-2">
+        <label>Label</label>
+      </div>
+      <div class="col-10">
+        <input type="text" class="form-control" [(ngModel)]="template.label">
+      </div>
     </div>
-  </div>
-  <div class="row input-group">
-    <div class="col-2">
-      <label>Label</label>
-    </div>
-    <div class="col-10">
-      <input type="text" class="form-control" [(ngModel)]="template.label">
-    </div>
-  </div>
 
 
+  </div>
+  <button class="btn btn-primary" (click)="save()">save</button>
 </div>
 
-<button class="btn btn-primary" (click)="save()">save</button>
 

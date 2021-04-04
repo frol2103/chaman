@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {Template, TemplateService} from "../../../../generated/api";
-import {map, mergeMap} from "rxjs/operators";
-import {BehaviorSubject} from "rxjs";
+import {first, map} from "rxjs/operators";
 import {TemplateImpl} from "../../../model/TemplateImpl";
+import {RxjsHelperService} from "../../../rxjs-helper.service";
 
 @Component({
   selector: 'app-template-edit',
@@ -15,31 +15,31 @@ export class TemplateEditComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private templateService: TemplateService,
+    private r: RxjsHelperService,
   ) {
   }
 
   id: string
-  template: Template
+  template?: Template
 
 
   ngOnInit(): void {
-    console.log("init")
     this.route.params.pipe(
-      map(params => params.id)
-    ).subscribe(v => {
-      console.log("template for", v)
+      map(params => params.id),
+      first()
+    ).toPromise().then(v => {
       if (v == "new") {
-        this.template =new TemplateImpl();
+        this.template = new TemplateImpl();
       } else return this.templateService.getTemplate(v).toPromise().then(t => this.template = t)
     })
   }
 
-  save(){
-    if(this.template.uuid){
-      this.templateService.updateTemplate(this.template.uuid, this.template).toPromise()
-    } else {
-      console.log("save")
-      this.templateService.createTemplate(this.template).toPromise().then(v => console.log(v))
-    }
+  save() {
+    this.r.wrap((this.template.uuid) ?
+      this.templateService.updateTemplate(this.template.uuid, this.template) :
+      this.templateService.createTemplate(this.template))
+      .withErrorMessage("Error while saving template")
+      .withSuccessMessage("Template saved")
+      .then(v => this.template = v)
   }
 }

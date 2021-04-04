@@ -22,6 +22,8 @@ import { IntegerComponent } from './field/template/integer/integer.component';
 import { TemplatesComponent } from './admin/templates/templates/templates.component';
 import { TemplateTableComponent } from './admin/templates/template-table/template-table.component';
 import { TemplateEditComponent } from './admin/templates/template-edit/template-edit.component';
+import { WaitComponent } from './wait/wait.component';
+import { WaitDirective } from './wait/wait.directive';
 
 @NgModule({
   declarations: [
@@ -41,6 +43,8 @@ import { TemplateEditComponent } from './admin/templates/template-edit/template-
     TemplatesComponent,
     TemplateTableComponent,
     TemplateEditComponent,
+    WaitComponent,
+    WaitDirective,
   ],
   imports: [
     BrowserModule,

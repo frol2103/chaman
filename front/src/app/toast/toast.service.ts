@@ -12,6 +12,10 @@ export class ToastService {
     this.show(text, {classname: 'bg-danger text-light', delay: 10000})
   }
 
+  showSuccess(text: string) {
+    this.show(text, {classname: 'bg-success text-light', delay: 10000})
+  }
+
   remove(toast) {
     this.toasts = this.toasts.filter(t => t !== toast);
   }
