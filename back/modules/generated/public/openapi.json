@@ -134,6 +134,119 @@
         "summary" : "get data type",
         "tags" : [ "datatypes" ]
       }
+    },
+    "/template" : {
+      "get" : {
+        "operationId" : "getTemplates",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "items" : {
+                    "$ref" : "#/components/schemas/Template"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "Get all templates",
+        "tags" : [ "template" ]
+      },
+      "post" : {
+        "operationId" : "createTemplate",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Template"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Template"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "create a template",
+        "tags" : [ "template" ],
+        "x-codegen-request-body-name" : "template"
+      }
+    },
+    "/template/{uuid}" : {
+      "get" : {
+        "operationId" : "getTemplate",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "uuid",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Template"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "get a template",
+        "tags" : [ "template" ]
+      },
+      "put" : {
+        "operationId" : "updateTemplate",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "uuid",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/Template"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/Template"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "update a template",
+        "tags" : [ "template" ],
+        "x-codegen-request-body-name" : "template"
+      }
     }
   },
   "components" : {
@@ -153,16 +266,15 @@
       "Field" : {
         "example" : {
           "reference" : "reference",
-          "valueOrigin" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "valueOrigin" : "valueOrigin",
           "dataType" : "dataType",
           "label" : "label",
-          "uuid" : "046b6c7f-0b8a-43b9-b35d-6489e6daee91",
+          "uuid" : "uuid",
           "value" : "{}"
         },
         "properties" : {
           "uuid" : {
             "description" : "single uuid acrross all version of the field",
-            "format" : "uuid",
             "type" : "string"
           },
           "label" : {
@@ -179,13 +291,33 @@
             "type" : "object"
           },
           "valueOrigin" : {
-            "format" : "uuid",
             "type" : "string"
           }
         },
         "type" : "object"
       },
       "Template" : {
+        "example" : {
+          "reference" : "reference",
+          "label" : "label",
+          "uuid" : "uuid",
+          "content" : [ {
+            "reference" : "reference",
+            "valueOrigin" : "valueOrigin",
+            "dataType" : "dataType",
+            "label" : "label",
+            "uuid" : "uuid",
+            "value" : "{}"
+          }, {
+            "reference" : "reference",
+            "valueOrigin" : "valueOrigin",
+            "dataType" : "dataType",
+            "label" : "label",
+            "uuid" : "uuid",
+            "value" : "{}"
+          } ],
+          "parents" : [ null, null ]
+        },
         "properties" : {
           "uuid" : {
             "type" : "string"

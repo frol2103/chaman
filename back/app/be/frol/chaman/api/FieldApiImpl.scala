@@ -31,7 +31,7 @@ class FieldApiImpl @Inject()(
   override def createField(field: Field)(implicit request: Request[AnyContent]): Future[Field] = {
     db.run(
       fieldService.add(FieldMapper.toRow(field))
-    ).map(FieldMapper.toDto)
+    ).map(FieldMapper.toDto(_))
   }
 
   /**
@@ -39,7 +39,7 @@ class FieldApiImpl @Inject()(
    */
   override def getField()(implicit request: Request[AnyContent]): Future[List[Field]] = {
     db.run(fieldService.allFields)
-      .map(_.map(FieldMapper.toDto).toList)
+      .map(_.map(FieldMapper.toDto(_)).toList)
   }
 
   /**
@@ -58,6 +58,6 @@ class FieldApiImpl @Inject()(
         f <- fieldService.getField(uuid)
         nf <- updateIfNeeded(f)
       } yield(nf)
-    ).map(FieldMapper.toDto)
+    ).map(FieldMapper.toDto(_))
   }
 }

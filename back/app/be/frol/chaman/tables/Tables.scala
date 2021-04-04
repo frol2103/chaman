@@ -14,7 +14,7 @@ trait Tables {
   import slick.jdbc.{GetResult => GR}
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema: profile.SchemaDescription = Field.schema ++ PlayEvolutions.schema ++ User.schema
+  lazy val schema: profile.SchemaDescription = Field.schema ++ FieldData.schema ++ PlayEvolutions.schema ++ Template.schema ++ User.schema
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
 
@@ -56,6 +56,38 @@ trait Tables {
   /** Collection-like TableQuery object for table Field */
   lazy val Field = new TableQuery(tag => new Field(tag))
 
+  /** Entity class storing rows of table FieldData
+   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param fieldUuid Database column field_uuid SqlType(VARCHAR), Length(36,true)
+   *  @param referenceUuid Database column reference_uuid SqlType(VARCHAR), Length(36,true)
+   *  @param value Database column value SqlType(TEXT), Default(None)
+   *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
+  case class FieldDataRow(id: Long, fieldUuid: String, referenceUuid: String, value: Option[String] = None, timestamp: java.sql.Timestamp)
+  /** GetResult implicit for fetching FieldDataRow objects using plain SQL queries */
+  implicit def GetResultFieldDataRow(implicit e0: GR[Long], e1: GR[String], e2: GR[Option[String]], e3: GR[java.sql.Timestamp]): GR[FieldDataRow] = GR{
+    prs => import prs._
+    FieldDataRow.tupled((<<[Long], <<[String], <<[String], <<?[String], <<[java.sql.Timestamp]))
+  }
+  /** Table description of table field_data. Objects of this class serve as prototypes for rows in queries. */
+  class FieldData(_tableTag: Tag) extends profile.api.Table[FieldDataRow](_tableTag, Some("chaman"), "field_data") {
+    def * = (id, fieldUuid, referenceUuid, value, timestamp) <> (FieldDataRow.tupled, FieldDataRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = ((Rep.Some(id), Rep.Some(fieldUuid), Rep.Some(referenceUuid), value, Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> FieldDataRow.tupled((_1.get, _2.get, _3.get, _4, _5.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column field_uuid SqlType(VARCHAR), Length(36,true) */
+    val fieldUuid: Rep[String] = column[String]("field_uuid", O.Length(36,varying=true))
+    /** Database column reference_uuid SqlType(VARCHAR), Length(36,true) */
+    val referenceUuid: Rep[String] = column[String]("reference_uuid", O.Length(36,varying=true))
+    /** Database column value SqlType(TEXT), Default(None) */
+    val value: Rep[Option[String]] = column[Option[String]]("value", O.Default(None))
+    /** Database column timestamp SqlType(TIMESTAMP) */
+    val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
+  }
+  /** Collection-like TableQuery object for table FieldData */
+  lazy val FieldData = new TableQuery(tag => new FieldData(tag))
+
   /** Entity class storing rows of table PlayEvolutions
    *  @param id Database column id SqlType(INT), PrimaryKey
    *  @param hash Database column hash SqlType(VARCHAR), Length(255,true)
@@ -93,6 +125,38 @@ trait Tables {
   }
   /** Collection-like TableQuery object for table PlayEvolutions */
   lazy val PlayEvolutions = new TableQuery(tag => new PlayEvolutions(tag))
+
+  /** Entity class storing rows of table Template
+   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param uuid Database column uuid SqlType(VARCHAR), Length(36,true)
+   *  @param reference Database column reference SqlType(VARCHAR), Length(255,true)
+   *  @param label Database column label SqlType(VARCHAR), Length(255,true)
+   *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
+  case class TemplateRow(id: Long, uuid: String, reference: String, label: String, timestamp: java.sql.Timestamp)
+  /** GetResult implicit for fetching TemplateRow objects using plain SQL queries */
+  implicit def GetResultTemplateRow(implicit e0: GR[Long], e1: GR[String], e2: GR[java.sql.Timestamp]): GR[TemplateRow] = GR{
+    prs => import prs._
+    TemplateRow.tupled((<<[Long], <<[String], <<[String], <<[String], <<[java.sql.Timestamp]))
+  }
+  /** Table description of table template. Objects of this class serve as prototypes for rows in queries. */
+  class Template(_tableTag: Tag) extends profile.api.Table[TemplateRow](_tableTag, Some("chaman"), "template") {
+    def * = (id, uuid, reference, label, timestamp) <> (TemplateRow.tupled, TemplateRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = ((Rep.Some(id), Rep.Some(uuid), Rep.Some(reference), Rep.Some(label), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> TemplateRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column uuid SqlType(VARCHAR), Length(36,true) */
+    val uuid: Rep[String] = column[String]("uuid", O.Length(36,varying=true))
+    /** Database column reference SqlType(VARCHAR), Length(255,true) */
+    val reference: Rep[String] = column[String]("reference", O.Length(255,varying=true))
+    /** Database column label SqlType(VARCHAR), Length(255,true) */
+    val label: Rep[String] = column[String]("label", O.Length(255,varying=true))
+    /** Database column timestamp SqlType(TIMESTAMP) */
+    val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
+  }
+  /** Collection-like TableQuery object for table Template */
+  lazy val Template = new TableQuery(tag => new Template(tag))
 
   /** Entity class storing rows of table User
    *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey

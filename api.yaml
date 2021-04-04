@@ -102,6 +102,88 @@ paths:
             items:
               $ref: "#/definitions/FieldType"
 
+  /template:
+    get:
+      tags:
+        - "template"
+      summary: "Get all templates"
+      description: ""
+      operationId: "getTemplates"
+      produces:
+        - "application/json"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Template"
+    post:
+      tags:
+        - "template"
+      summary: "create a template"
+      description: ""
+      operationId: "createTemplate"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "body"
+          name: "template"
+          required: true
+          schema:
+            $ref : "#/definitions/Template"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Template"
+
+  /template/{uuid}:
+    get:
+      tags:
+        - "template"
+      summary: "get a template"
+      description: ""
+      operationId: "getTemplate"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "uuid"
+          required: true
+          type: string
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Template"
+    put:
+      tags:
+        - "template"
+      summary: "update a template"
+      description: ""
+      operationId: "updateTemplate"
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      parameters:
+        - in: "path"
+          name: "uuid"
+          required: true
+          type: string
+        - in: "body"
+          name: "template"
+          required: true
+          schema:
+            $ref : "#/definitions/Template"
+      responses:
+        "200":
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Template"
 
 definitions:
   FieldType:
@@ -118,7 +200,6 @@ definitions:
       uuid:
         type: "string"
         description: "single uuid acrross all version of the field"
-        format: "uuid"
       label:
         type: "string"
       reference:
@@ -129,7 +210,6 @@ definitions:
         description: "value of the type"
       valueOrigin:
         type: string
-        format: uuid
 
 
   Template:

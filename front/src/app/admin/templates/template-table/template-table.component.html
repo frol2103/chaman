@@ -1,0 +1,17 @@
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th scope="col">Reference</th>
+    <th scope="col">Label</th>
+    <th scope="col">Actions</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let template of templates">
+    <th scope="row">{{ template.reference }}</th>
+    <td>{{ template.label }}</td>
+    <td><button class="btn btn-secondary" routerLink="/admin/template/{{template.uuid}}"><i class="bi bi-pencil-fill"></i></button></td>
+  </tr>
+  </tbody>
+</table>
+

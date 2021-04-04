@@ -1,6 +1,6 @@
 package be.frol.chaman.mapper
 
-import be.frol.chaman.openapi.model.Field
+import be.frol.chaman.openapi.model.Template
 import be.frol.chaman.tables.Tables
 import be.frol.chaman.utils.DateUtils
 import be.frol.chaman.utils.OptionUtils._
@@ -8,28 +8,25 @@ import play.api.libs.json.{JsObject, Json}
 
 import java.util.UUID
 
-object FieldMapper {
+object TemplateMapper {
 
 
-  def toDto(f:Tables.FieldRow, fd: Option[Tables.FieldDataRow]=None) : Field = {
-    Field(
+  def toDto(f:Tables.TemplateRow) : Template = {
+    Template(
       f.uuid.toOpt,
+      List().toOpt(),
       f.label.toOpt,
       f.reference.toOpt,
-      f.datatype.toOpt,
-      fd.flatMap(_.value).orElse(f.defaultValue).map(v => JsObject(Seq("data" -> Json.parse(v)))),
-      None,
+      List().toOpt(),
     )
   }
 
-  def toRow(f:Field) = {
-    Tables.FieldRow(
+  def toRow(f:Template) = {
+    Tables.TemplateRow(
       0L,
       f.uuid.map(_.toString).getOrElse(UUID.randomUUID().toString),
       f.reference.getOrThrow("missing reference"),
-      f.dataType.getOrThrow("missing datatype"),
       f.label.getOrElse(""),
-      f.value.flatMap(_.value.get("data").map(_.toString())),
       DateUtils.ts,
     )
 

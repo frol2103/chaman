@@ -1,7 +1,6 @@
 package be.frol.chaman.openapi.model
 
 import play.api.libs.json._
-import java.util.UUID
 
 /**
   * Represents the Swagger definition for Field.
@@ -10,12 +9,12 @@ import java.util.UUID
   */
 @javax.annotation.Generated(value = Array("org.openapitools.codegen.languages.ScalaPlayFrameworkServerCodegen"))
 case class Field(
-  uuid: Option[UUID],
+  uuid: Option[String],
   label: Option[String],
   reference: Option[String],
   dataType: Option[String],
   value: Option[JsObject],
-  valueOrigin: Option[UUID]
+  valueOrigin: Option[String]
 )
 
 object Field {

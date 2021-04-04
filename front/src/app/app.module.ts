@@ -19,6 +19,9 @@ import { FieldComponent } from './field/core/field/field.component';
 import {FieldDirective} from "./field/core/field.directive";
 import { StringComponent } from './field/template/string/string.component';
 import { IntegerComponent } from './field/template/integer/integer.component';
+import { TemplatesComponent } from './admin/templates/templates/templates.component';
+import { TemplateTableComponent } from './admin/templates/template-table/template-table.component';
+import { TemplateEditComponent } from './admin/templates/template-edit/template-edit.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +38,9 @@ import { IntegerComponent } from './field/template/integer/integer.component';
     FieldDirective,
     StringComponent,
     IntegerComponent,
+    TemplatesComponent,
+    TemplateTableComponent,
+    TemplateEditComponent,
   ],
   imports: [
     BrowserModule,

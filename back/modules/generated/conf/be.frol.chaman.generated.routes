@@ -5,13 +5,20 @@
 
 # Routes for Datatypes API
 
-GET /api/data-types/    be.frol.chaman.openapi.api.DatatypesApiController.getDataTypes()
+GET /api/data-types/       be.frol.chaman.openapi.api.DatatypesApiController.getDataTypes()
 
 # Routes for Field API
 
-POST /api/field         be.frol.chaman.openapi.api.FieldApiController.createField()
-GET /api/field          be.frol.chaman.openapi.api.FieldApiController.getField()
-PUT /api/field/:uuid    be.frol.chaman.openapi.api.FieldApiController.updateField(uuid: String)
+POST /api/field            be.frol.chaman.openapi.api.FieldApiController.createField()
+GET /api/field             be.frol.chaman.openapi.api.FieldApiController.getField()
+PUT /api/field/:uuid       be.frol.chaman.openapi.api.FieldApiController.updateField(uuid: String)
+
+# Routes for Template API
+
+POST /api/template         be.frol.chaman.openapi.api.TemplateApiController.createTemplate()
+GET /api/template          be.frol.chaman.openapi.api.TemplateApiController.getTemplates()
+GET /api/template/:uuid    be.frol.chaman.openapi.api.TemplateApiController.getTemplate(uuid: String)
+PUT /api/template/:uuid    be.frol.chaman.openapi.api.TemplateApiController.updateTemplate(uuid: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET /assets/*file           controllers.Assets.at(file)
