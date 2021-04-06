@@ -1,5 +1,6 @@
 package be.frol.chaman.mapper
 
+import be.frol.chaman.model.RichField
 import be.frol.chaman.openapi.model.Template
 import be.frol.chaman.tables.Tables
 import be.frol.chaman.utils.DateUtils
@@ -11,13 +12,13 @@ import java.util.UUID
 object TemplateMapper {
 
 
-  def toDto(f:Tables.TemplateRow) : Template = {
+  def toDto(f:Tables.TemplateRow, fields:Option[Seq[RichField]]=None) : Template = {
     Template(
       f.uuid.toOpt,
       List().toOpt(),
       f.label.toOpt,
       f.reference.toOpt,
-      List().toOpt(),
+      fields.map(_.map(FieldMapper.toDto(_)).toList)
     )
   }
 

@@ -21,7 +21,10 @@ class FieldService @Inject()(
 
   def getField(uuid:String) : DBIO[FieldRow]= lastVersionOfFields.filter(_.uuid === uuid).result.head
 
-  private def lastVersionOfFields = {
+  def getFields(uuid:String*) : DBIO[Seq[FieldRow]]= lastVersionOfFields.filter(_.uuid.inSet(uuid)).result
+
+  val lastVersionOfFields = {
     Tables.Field.filterNot(f => Tables.Field.filter(_.uuid === f.uuid).filter(_.id > f.id).exists)
   }
 }
+

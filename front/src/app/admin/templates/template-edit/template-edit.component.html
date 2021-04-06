@@ -19,10 +19,17 @@
         <input type="text" class="form-control" [(ngModel)]="template.label">
       </div>
     </div>
-
-
   </div>
+
+
+  <ul>
+    <li *ngFor="let field of template.content"><app-field [field]="field"></app-field></li>
+  </ul>
+
+  <app-field-selector *ngIf="selectField" (selectField)="addField($event)"></app-field-selector>
+
   <button class="btn btn-primary" (click)="save()">save</button>
+  <button class="btn btn-primary" (click)="startAddField()" *ngIf="!selectField">addField</button>
 </div>
 
 

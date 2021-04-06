@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {Template, TemplateService} from "../../../../generated/api";
+import {Field, Template, TemplateService} from "../../../../generated/api";
 import {first, map} from "rxjs/operators";
 import {TemplateImpl} from "../../../model/TemplateImpl";
 import {RxjsHelperService} from "../../../rxjs-helper.service";
@@ -22,6 +22,8 @@ export class TemplateEditComponent implements OnInit {
   id: string
   template?: Template
 
+  selectField = false;
+
 
   ngOnInit(): void {
     this.route.params.pipe(
@@ -41,5 +43,14 @@ export class TemplateEditComponent implements OnInit {
       .withErrorMessage("Error while saving template")
       .withSuccessMessage("Template saved")
       .then(v => this.template = v)
+  }
+
+  startAddField(){
+    this.selectField = true
+  }
+
+  addField(field : Field) {
+    this.template.content.push(field)
+    this.selectField = false
   }
 }

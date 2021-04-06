@@ -1,0 +1,6 @@
+<div class="bd-callout bd-callout-meta">
+  <strong>Select field</strong>
+  <div class="row input-group mb-3">
+    <field-table [fields]="fields | async" (selectField)="actionSelectField($event)" ></field-table>
+  </div>
+</div>

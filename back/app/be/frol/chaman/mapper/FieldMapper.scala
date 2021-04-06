@@ -1,5 +1,6 @@
 package be.frol.chaman.mapper
 
+import be.frol.chaman.model.RichField
 import be.frol.chaman.openapi.model.Field
 import be.frol.chaman.tables.Tables
 import be.frol.chaman.utils.DateUtils
@@ -11,7 +12,9 @@ import java.util.UUID
 object FieldMapper {
 
 
-  def toDto(f:Tables.FieldRow, fd: Option[Tables.FieldDataRow]=None) : Field = {
+  def toDto(f: RichField): Field = toDto(f.field, f.fieldData)
+
+  def toDto(f: Tables.FieldRow, fd: Option[Tables.FieldDataRow] = None): Field = {
     Field(
       f.uuid.toOpt,
       f.label.toOpt,
@@ -22,7 +25,7 @@ object FieldMapper {
     )
   }
 
-  def toRow(f:Field) = {
+  def toRow(f: Field) = {
     Tables.FieldRow(
       0L,
       f.uuid.map(_.toString).getOrElse(UUID.randomUUID().toString),
@@ -33,5 +36,15 @@ object FieldMapper {
       DateUtils.ts,
     )
 
+  }
+
+  def toDataRow(f: Field, referenceUuid:String) = {
+    Tables.FieldDataRow(
+      0L,
+      f.uuid.get,
+      referenceUuid,
+      f.value.flatMap(_.value.get("data").map(_.toString())),
+      DateUtils.ts,
+    )
   }
 }

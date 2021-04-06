@@ -24,6 +24,7 @@ import { TemplateTableComponent } from './admin/templates/template-table/templat
 import { TemplateEditComponent } from './admin/templates/template-edit/template-edit.component';
 import { WaitComponent } from './wait/wait.component';
 import { WaitDirective } from './wait/wait.directive';
+import { FieldSelectorComponent } from './admin/templates/field-selector/field-selector.component';
 
 @NgModule({
   declarations: [
@@ -45,6 +46,7 @@ import { WaitDirective } from './wait/wait.directive';
     TemplateEditComponent,
     WaitComponent,
     WaitDirective,
+    FieldSelectorComponent,
   ],
   imports: [
     BrowserModule,

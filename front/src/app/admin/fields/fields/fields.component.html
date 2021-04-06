@@ -1,5 +1,5 @@
 <h1>Fields</h1>
-<field-table [fields]="fields" (editField)="startEdit($event)"></field-table>
+<field-table [allowEdit]="true" [fields]="fields" (editField)="startEdit($event)"></field-table>
 
 <button *ngIf="!editionField" (click)="newField()" type="button" class="btn btn-primary">+</button>
 
