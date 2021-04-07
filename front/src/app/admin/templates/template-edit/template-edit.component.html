@@ -1,4 +1,6 @@
 <h1>Template edit</h1>
+
+
 <div *wait="template">
 
   <div class="bd-callout bd-callout-meta">
@@ -11,7 +13,7 @@
         <input type="text" class="form-control" [(ngModel)]="template.reference">
       </div>
     </div>
-    <div class="row input-group">
+    <div class="row input-group mb-3">
       <div class="col-2">
         <label>Label</label>
       </div>
@@ -19,6 +21,20 @@
         <input type="text" class="form-control" [(ngModel)]="template.label">
       </div>
     </div>
+    <div class="row input-group mb-3">
+      <div class="col-2">
+        <label>Parents</label>
+      </div>
+      <div class="col-10">
+        <ul class="templateParents">
+          <li *ngFor="let p of template.parents">
+            <span class="badge badge-primary">{{p.label}} <i (click)="removeParent(p)" class="bi bi-x-circle-fill"></i></span>
+          </li>
+          <li><button class="btn" (click)="addParent()"><i class="bi bi-plus-circle-fill"></i></button></li>
+        </ul>
+      </div>
+    </div>
+
   </div>
 
 
@@ -29,10 +45,9 @@
     </li>
   </ul>
 
-  <app-field-selector *ngIf="selectField" (selectField)="addField($event)"></app-field-selector>
 
   <button class="btn btn-primary" (click)="save()">save</button>
-  <button class="btn btn-primary" (click)="startAddField()" *ngIf="!selectField">addField</button>
+  <button class="btn btn-primary" (click)="startAddField()">addField</button>
 </div>
 
 

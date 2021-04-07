@@ -3,16 +3,16 @@
   <tr>
     <th scope="col">Reference</th>
     <th scope="col">Label</th>
-    <th scope="col">Actions</th>
+    <th *ngIf="showActionCol()" scope="col">Actions</th>
   </tr>
   </thead>
   <tbody>
   <tr *ngFor="let template of templates">
-    <th scope="row">{{ template.reference }}</th>
+    <th scope="row" (click)="select(template)">{{ template.reference }}</th>
     <td>{{ template.label }}</td>
-    <td>
-      <button class="btn" routerLink="/admin/template/{{template.uuid}}"><i class="bi bi-pencil-fill"></i></button>
-      <button class="btn" (click)="remove(template)"><i class="bi bi-trash"></i></button>
+    <td *ngIf="showActionCol()">
+      <button *ngIf="canEdit" class="btn" routerLink="/admin/template/{{template.uuid}}"><i class="bi bi-pencil-fill"></i></button>
+      <button *ngIf="canRemove" class="btn" (click)="remove(template)"><i class="bi bi-trash"></i></button>
     </td>
   </tr>
   </tbody>

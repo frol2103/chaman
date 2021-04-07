@@ -4,6 +4,9 @@ import {Field, Template, TemplateService} from "../../../../generated/api";
 import {first, map} from "rxjs/operators";
 import {TemplateImpl} from "../../../model/TemplateImpl";
 import {RxjsHelperService} from "../../../rxjs-helper.service";
+import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {TemplateSelectorComponent} from "../template-selector/template-selector.component";
+import {FieldSelectorComponent} from "../field-selector/field-selector.component";
 
 @Component({
   selector: 'app-template-edit',
@@ -16,13 +19,13 @@ export class TemplateEditComponent implements OnInit {
     private route: ActivatedRoute,
     private templateService: TemplateService,
     private r: RxjsHelperService,
+    private modalService: NgbModal,
   ) {
   }
 
   id: string
   template?: Template
 
-  selectField = false;
 
 
   ngOnInit(): void {
@@ -46,15 +49,23 @@ export class TemplateEditComponent implements OnInit {
   }
 
   startAddField(){
-    this.selectField = true
-  }
-
-  addField(field : Field) {
-    this.template.content.push(field)
-    this.selectField = false
+    this.modalService.open(FieldSelectorComponent).result.then((result) => {
+      this.template.content.push(result)
+    });
   }
 
   deleteField(field: Field){
     this.template.content.splice(this.template.content.indexOf(field),1)
+  }
+
+  addParent(){
+    this.modalService.open(TemplateSelectorComponent).result.then((result) => {
+      this.template.parents.push(result)
+    });
+  }
+
+  removeParent(parent:Template){
+    this.template.parents.splice(this.template.parents.indexOf(parent),1)
+
   }
 }

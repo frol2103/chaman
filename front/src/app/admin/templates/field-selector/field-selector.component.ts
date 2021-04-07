@@ -1,5 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {Field, FieldService} from "../../../../generated/api";
+import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-field-selector',
@@ -10,18 +11,14 @@ export class FieldSelectorComponent implements OnInit {
 
   constructor(
     private fieldService : FieldService,
+    public modal: NgbActiveModal,
   ) { }
 
-
-  @Output() selectField = new EventEmitter<Field>();
 
   fields = this.fieldService.getField().toPromise()
 
   ngOnInit(): void {
   }
 
-  actionSelectField(field){
-    this.selectField.emit(field)
-  }
 
 }
