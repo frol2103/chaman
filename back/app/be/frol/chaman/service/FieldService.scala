@@ -2,14 +2,18 @@ package be.frol.chaman.service
 
 import be.frol.chaman.api.DbContext
 import be.frol.chaman.tables.Tables
-import be.frol.chaman.tables.Tables.FieldRow
+import be.frol.chaman.tables.Tables.{FieldDataDeletedRow, FieldRow}
+import be.frol.chaman.utils.DateUtils
 import play.api.db.slick.DatabaseConfigProvider
+import slick.dbio.{DBIOAction, NoStream}
 
 import javax.inject.Inject
+import scala.concurrent.ExecutionContext
 
 class FieldService @Inject()(
                               val dbConfigProvider: DatabaseConfigProvider,
                             ) extends DbContext {
+
   import api._
 
   def add(p: Tables.FieldRow) = {
@@ -26,6 +30,12 @@ class FieldService @Inject()(
   val lastVersionOfFields = {
     Tables.Field.filterNot(f => Tables.Field.filter(_.uuid === f.uuid).filter(_.id > f.id).exists)
       .filterNot(f => Tables.FieldDeleted.filter(f.id === _.fkFieldId).exists)
+  }
+
+  def delete(uuid: String)(implicit executionContext: ExecutionContext) = {
+    getField(uuid).flatMap(lv =>
+      Tables.FieldDeleted += Tables.FieldDeletedRow(0L, lv.id, DateUtils.ts)
+    )
   }
 }
 

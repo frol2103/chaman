@@ -14,6 +14,12 @@ trait FieldApi {
 
 
   /**
+    * delete a field
+    */
+  def deleteField(uuid: String)(implicit request:Request[AnyContent]): Future[Unit]
+
+
+  /**
     * Get a field
     */
   def getField()(implicit request:Request[AnyContent]): Future[List[Field]]

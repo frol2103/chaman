@@ -60,4 +60,12 @@ class FieldApiImpl @Inject()(
       } yield(nf)
     ).map(FieldMapper.toDto(_))
   }
+
+  /**
+   * delete a field
+   */
+  override def deleteField(uuid: String)(implicit request: Request[AnyContent]): Future[Unit] = {
+    db.run(this.fieldService.delete(uuid))
+      .map(_ => Unit)
+  }
 }

@@ -1,5 +1,5 @@
-import {Component, Input, OnInit} from '@angular/core';
-import {Template} from "../../../../generated/api";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Field, Template} from "../../../../generated/api";
 
 @Component({
   selector: 'app-template-table',
@@ -11,9 +11,13 @@ export class TemplateTableComponent implements OnInit {
   constructor() { }
 
   @Input() templates: Array<Template>
+  @Output() removeTemplate = new EventEmitter<Template>();
 
   ngOnInit(): void {
   }
 
+  remove(template:Template){
+    this.removeTemplate.emit(template)
+  }
 
 }

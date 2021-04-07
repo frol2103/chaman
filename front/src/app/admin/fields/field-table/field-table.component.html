@@ -12,7 +12,10 @@
     <th scope="row" (click)="actionSelectField(field)">{{ field.reference }}</th>
     <td>{{ field.label }}</td>
     <td>{{ field.dataType }}</td>
-    <td *ngIf="allowEdit"><button class="btn btn-secondary" (click)="actionEditField(field)"><i class="bi bi-pencil-fill"></i></button></td>
+    <td *ngIf="allowEdit">
+      <button class="btn" (click)="actionEditField(field)"><i class="bi bi-pencil-fill"></i></button>
+      <button class="btn" (click)="actionRemoveField(field)"><i class="bi bi-trash"></i></button>
+    </td>
   </tr>
   </tbody>
 </table>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {DatatypesService, Field, FieldService} from "../../../../generated/api";
+import {DatatypesService, Field, FieldService, Template} from "../../../../generated/api";
 import {Observable} from "rxjs";
 import {FieldImpl} from "../../../model/FieldImpl";
 import * as _ from 'lodash';
@@ -40,5 +40,12 @@ export class FieldsComponent implements OnInit {
 
   startEdit(field:Field) {
     this.editionField = (JSON.parse(JSON.stringify(field)));
+  }
+
+  delete(field: Field): void {
+    if (confirm("Are you sure to delete field " + field.label)) {
+      this.fieldService.deleteField(field.uuid).toPromise()
+        .then(t => this.fields.splice(this.fields.indexOf(field), 1))
+    }
   }
 }

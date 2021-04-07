@@ -28,6 +28,19 @@ class TemplateApiController @Inject()(cc: ControllerComponents, api: TemplateApi
   }
 
   /**
+    * DELETE /api/template/:uuid
+    */
+  def deleteTemplate(uuid: String): Action[AnyContent] = Action.async { request =>
+    def executeApi(): Future[Unit] = {
+      api.deleteTemplate(uuid)(request)
+    }
+
+    executeApi().map { _ =>
+      Ok
+    }
+  }
+
+  /**
     * GET /api/template/:uuid
     */
   def getTemplate(uuid: String): Action[AnyContent] = Action.async { request =>

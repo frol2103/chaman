@@ -85,6 +85,21 @@ paths:
           schema:
             $ref: "#/definitions/Field"
 
+    delete:
+      tags:
+        - "field"
+      summary: "delete a field"
+      description: ""
+      operationId: "deleteField"
+      parameters:
+        - in: "path"
+          name: "uuid"
+          required: true
+          type: string
+      responses:
+        "200":
+          description: "OK"
+
   /data-types/:
     get:
       tags:
@@ -159,6 +174,22 @@ paths:
           description: "OK"
           schema:
             $ref: "#/definitions/Template"
+
+    delete:
+      tags:
+        - "template"
+      summary: "delete a template"
+      description: ""
+      operationId: "deleteTemplate"
+      parameters:
+        - in: "path"
+          name: "uuid"
+          required: true
+          type: string
+      responses:
+        "200":
+          description: "OK"
+
     put:
       tags:
         - "template"

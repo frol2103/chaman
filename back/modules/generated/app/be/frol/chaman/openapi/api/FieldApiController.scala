@@ -28,6 +28,19 @@ class FieldApiController @Inject()(cc: ControllerComponents, api: FieldApi)(impl
   }
 
   /**
+    * DELETE /api/field/:uuid
+    */
+  def deleteField(uuid: String): Action[AnyContent] = Action.async { request =>
+    def executeApi(): Future[Unit] = {
+      api.deleteField(uuid)(request)
+    }
+
+    executeApi().map { _ =>
+      Ok
+    }
+  }
+
+  /**
     * GET /api/field
     */
   def getField(): Action[AnyContent] = Action.async { request =>

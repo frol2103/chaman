@@ -12,9 +12,11 @@ export class FieldTableComponent implements OnInit {
 
   @Input() fields: Array<Field>
   @Input() allowEdit: boolean = false
+  @Input() allowRemove: boolean = false
 
   @Output() editField = new EventEmitter<Field>();
   @Output() selectField = new EventEmitter<Field>();
+  @Output() removeField = new EventEmitter<Field>();
 
   ngOnInit(): void {
   }
@@ -24,6 +26,9 @@ export class FieldTableComponent implements OnInit {
   }
   actionSelectField(field:Field) : void {
     this.selectField.emit(field);
+  }
+  actionRemoveField(field:Field) : void {
+    this.removeField.emit(field);
   }
 
 }

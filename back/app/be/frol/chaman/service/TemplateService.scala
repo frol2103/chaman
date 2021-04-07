@@ -2,10 +2,12 @@ package be.frol.chaman.service
 
 import be.frol.chaman.api.DbContext
 import be.frol.chaman.tables.Tables
-import be.frol.chaman.tables.Tables.FieldRow
+import be.frol.chaman.tables.Tables.{FieldRow, TemplateDeletedRow}
+import be.frol.chaman.utils.DateUtils
 import play.api.db.slick.DatabaseConfigProvider
 
 import javax.inject.Inject
+import scala.concurrent.{ExecutionContext, Future}
 
 class TemplateService @Inject()(
                               val dbConfigProvider: DatabaseConfigProvider,
@@ -25,6 +27,13 @@ class TemplateService @Inject()(
   def all() = lastVersion.result
 
   def find(uuid: String) = lastVersion.filter(_.uuid === uuid).result.head
+
+  def delete(uuid: String)(implicit executionContext: ExecutionContext) = {
+    find(uuid).flatMap(lv =>
+      Tables.TemplateDeleted += TemplateDeletedRow(0L, lv.id, DateUtils.ts)
+    )
+  }
+
 
 
 }

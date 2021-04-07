@@ -73,4 +73,12 @@ class TemplateApiImpl @Inject()(
         .flatMap(_ => getTemplateDto(uuid))
       )
   }
+
+  /**
+   * delete a template
+   */
+  override def deleteTemplate(uuid: String)(implicit request: Request[AnyContent]): Future[Unit] = {
+    db.run(this.templateService.delete(uuid))
+      .map(_ => Unit)
+  }
 }

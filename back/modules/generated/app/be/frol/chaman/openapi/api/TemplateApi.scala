@@ -14,6 +14,12 @@ trait TemplateApi {
 
 
   /**
+    * delete a template
+    */
+  def deleteTemplate(uuid: String)(implicit request:Request[AnyContent]): Future[Unit]
+
+
+  /**
     * get a template
     */
   def getTemplate(uuid: String)(implicit request:Request[AnyContent]): Future[Template]

@@ -76,6 +76,25 @@
       }
     },
     "/field/{uuid}" : {
+      "delete" : {
+        "operationId" : "deleteField",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "uuid",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : { },
+            "description" : "OK"
+          }
+        },
+        "summary" : "delete a field",
+        "tags" : [ "field" ]
+      },
       "put" : {
         "operationId" : "updateField",
         "parameters" : [ {
@@ -186,6 +205,25 @@
       }
     },
     "/template/{uuid}" : {
+      "delete" : {
+        "operationId" : "deleteTemplate",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "uuid",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : { },
+            "description" : "OK"
+          }
+        },
+        "summary" : "delete a template",
+        "tags" : [ "template" ]
+      },
       "get" : {
         "operationId" : "getTemplate",
         "parameters" : [ {
