@@ -17,8 +17,9 @@ class TemplateService @Inject()(
       into ((v, id) => v.copy(id = id))) += p)
   }
 
-  private def lastVersion = {
+  val lastVersion = {
     Tables.Template.filterNot(f => Tables.Template.filter(_.uuid === f.uuid).filter(_.id > f.id).exists)
+      .filterNot(f => Tables.TemplateDeleted.filter(f.id === _.fkTemplateId).exists)
   }
 
   def all() = lastVersion.result

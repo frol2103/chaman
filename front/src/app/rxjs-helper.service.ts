@@ -9,7 +9,6 @@ class RxjsHelperWrap<T> {
     private successMessage?: string,
     private errorMessage?: string,
   ) {
-    o.subscribe()
   }
 
   withErrorMessage(errorMessage: string) {

@@ -23,7 +23,10 @@
 
 
   <ul>
-    <li *ngFor="let field of template.content"><app-field [field]="field"></app-field></li>
+    <li *ngFor="let field of template.content">
+      <button class="btn" (click)="deleteField(field)"><i class="bi bi-trash"></i></button>
+      <app-field [field]="field"></app-field>
+    </li>
   </ul>
 
   <app-field-selector *ngIf="selectField" (selectField)="addField($event)"></app-field-selector>

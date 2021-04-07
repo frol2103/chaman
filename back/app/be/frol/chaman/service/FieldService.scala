@@ -25,6 +25,7 @@ class FieldService @Inject()(
 
   val lastVersionOfFields = {
     Tables.Field.filterNot(f => Tables.Field.filter(_.uuid === f.uuid).filter(_.id > f.id).exists)
+      .filterNot(f => Tables.FieldDeleted.filter(f.id === _.fkFieldId).exists)
   }
 }
 

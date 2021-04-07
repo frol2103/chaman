@@ -53,4 +53,8 @@ export class TemplateEditComponent implements OnInit {
     this.template.content.push(field)
     this.selectField = false
   }
+
+  deleteField(field: Field){
+    this.template.content.splice(this.template.content.indexOf(field),1)
+  }
 }

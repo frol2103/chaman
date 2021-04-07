@@ -14,7 +14,7 @@ trait Tables {
   import slick.jdbc.{GetResult => GR}
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema: profile.SchemaDescription = Field.schema ++ FieldData.schema ++ PlayEvolutions.schema ++ Template.schema ++ User.schema
+  lazy val schema: profile.SchemaDescription = Array(Field.schema, FieldData.schema, FieldDataDeleted.schema, FieldDeleted.schema, PlayEvolutions.schema, Template.schema, TemplateDeleted.schema, User.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
 
@@ -88,6 +88,58 @@ trait Tables {
   /** Collection-like TableQuery object for table FieldData */
   lazy val FieldData = new TableQuery(tag => new FieldData(tag))
 
+  /** Entity class storing rows of table FieldDataDeleted
+   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param fkFieldDataId Database column fk_field_data_id SqlType(BIGINT)
+   *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
+  case class FieldDataDeletedRow(id: Long, fkFieldDataId: Long, timestamp: java.sql.Timestamp)
+  /** GetResult implicit for fetching FieldDataDeletedRow objects using plain SQL queries */
+  implicit def GetResultFieldDataDeletedRow(implicit e0: GR[Long], e1: GR[java.sql.Timestamp]): GR[FieldDataDeletedRow] = GR{
+    prs => import prs._
+    FieldDataDeletedRow.tupled((<<[Long], <<[Long], <<[java.sql.Timestamp]))
+  }
+  /** Table description of table field_data_deleted. Objects of this class serve as prototypes for rows in queries. */
+  class FieldDataDeleted(_tableTag: Tag) extends profile.api.Table[FieldDataDeletedRow](_tableTag, Some("chaman"), "field_data_deleted") {
+    def * = (id, fkFieldDataId, timestamp) <> (FieldDataDeletedRow.tupled, FieldDataDeletedRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = ((Rep.Some(id), Rep.Some(fkFieldDataId), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> FieldDataDeletedRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column fk_field_data_id SqlType(BIGINT) */
+    val fkFieldDataId: Rep[Long] = column[Long]("fk_field_data_id")
+    /** Database column timestamp SqlType(TIMESTAMP) */
+    val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
+  }
+  /** Collection-like TableQuery object for table FieldDataDeleted */
+  lazy val FieldDataDeleted = new TableQuery(tag => new FieldDataDeleted(tag))
+
+  /** Entity class storing rows of table FieldDeleted
+   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param fkFieldId Database column fk_field_id SqlType(BIGINT)
+   *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
+  case class FieldDeletedRow(id: Long, fkFieldId: Long, timestamp: java.sql.Timestamp)
+  /** GetResult implicit for fetching FieldDeletedRow objects using plain SQL queries */
+  implicit def GetResultFieldDeletedRow(implicit e0: GR[Long], e1: GR[java.sql.Timestamp]): GR[FieldDeletedRow] = GR{
+    prs => import prs._
+    FieldDeletedRow.tupled((<<[Long], <<[Long], <<[java.sql.Timestamp]))
+  }
+  /** Table description of table field_deleted. Objects of this class serve as prototypes for rows in queries. */
+  class FieldDeleted(_tableTag: Tag) extends profile.api.Table[FieldDeletedRow](_tableTag, Some("chaman"), "field_deleted") {
+    def * = (id, fkFieldId, timestamp) <> (FieldDeletedRow.tupled, FieldDeletedRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = ((Rep.Some(id), Rep.Some(fkFieldId), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> FieldDeletedRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column fk_field_id SqlType(BIGINT) */
+    val fkFieldId: Rep[Long] = column[Long]("fk_field_id")
+    /** Database column timestamp SqlType(TIMESTAMP) */
+    val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
+  }
+  /** Collection-like TableQuery object for table FieldDeleted */
+  lazy val FieldDeleted = new TableQuery(tag => new FieldDeleted(tag))
+
   /** Entity class storing rows of table PlayEvolutions
    *  @param id Database column id SqlType(INT), PrimaryKey
    *  @param hash Database column hash SqlType(VARCHAR), Length(255,true)
@@ -157,6 +209,32 @@ trait Tables {
   }
   /** Collection-like TableQuery object for table Template */
   lazy val Template = new TableQuery(tag => new Template(tag))
+
+  /** Entity class storing rows of table TemplateDeleted
+   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param fkTemplateId Database column fk_template_id SqlType(BIGINT)
+   *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
+  case class TemplateDeletedRow(id: Long, fkTemplateId: Long, timestamp: java.sql.Timestamp)
+  /** GetResult implicit for fetching TemplateDeletedRow objects using plain SQL queries */
+  implicit def GetResultTemplateDeletedRow(implicit e0: GR[Long], e1: GR[java.sql.Timestamp]): GR[TemplateDeletedRow] = GR{
+    prs => import prs._
+    TemplateDeletedRow.tupled((<<[Long], <<[Long], <<[java.sql.Timestamp]))
+  }
+  /** Table description of table template_deleted. Objects of this class serve as prototypes for rows in queries. */
+  class TemplateDeleted(_tableTag: Tag) extends profile.api.Table[TemplateDeletedRow](_tableTag, Some("chaman"), "template_deleted") {
+    def * = (id, fkTemplateId, timestamp) <> (TemplateDeletedRow.tupled, TemplateDeletedRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = ((Rep.Some(id), Rep.Some(fkTemplateId), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> TemplateDeletedRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column fk_template_id SqlType(BIGINT) */
+    val fkTemplateId: Rep[Long] = column[Long]("fk_template_id")
+    /** Database column timestamp SqlType(TIMESTAMP) */
+    val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
+  }
+  /** Collection-like TableQuery object for table TemplateDeleted */
+  lazy val TemplateDeleted = new TableQuery(tag => new TemplateDeleted(tag))
 
   /** Entity class storing rows of table User
    *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
