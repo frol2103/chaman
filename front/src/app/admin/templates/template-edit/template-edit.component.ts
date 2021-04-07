@@ -6,7 +6,7 @@ import {TemplateImpl} from "../../../model/TemplateImpl";
 import {RxjsHelperService} from "../../../rxjs-helper.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {TemplateSelectorComponent} from "../template-selector/template-selector.component";
-import {FieldSelectorComponent} from "../field-selector/field-selector.component";
+import {FieldSelectorComponent} from "../../fields/field-selector/field-selector.component";
 
 @Component({
   selector: 'app-template-edit',
