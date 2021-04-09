@@ -1,6 +1,7 @@
 package be.frol.chaman.service
 
 import be.frol.chaman.api.DbContext
+import be.frol.chaman.error.ParentCycleError
 import be.frol.chaman.tables
 import be.frol.chaman.tables.Tables
 import be.frol.chaman.tables.Tables.{FieldRow, TemplateDeletedRow, TemplateParentRow}
@@ -60,5 +61,13 @@ class TemplateService @Inject()(
     } yield(add, remove)
   }
 
-
+  def assertNoCycles(baseUuid:String,map:Map[String, Seq[TemplateParentRow]]):Unit ={
+    def checkNoCycleFor(uuid:String) : Unit = {
+      map(uuid).foreach(v => {
+        if(v.parentReference == baseUuid) throw new ParentCycleError("Parent graph cannot have cycles")
+        else checkNoCycleFor(v.parentReference)
+      })
+    }
+    checkNoCycleFor(baseUuid)
+  }
 }

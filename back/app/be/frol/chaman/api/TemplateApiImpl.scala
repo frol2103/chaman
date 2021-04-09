@@ -84,6 +84,7 @@ class TemplateApiImpl @Inject()(
 
   private def updateParents(uuid: String, target : List[String]) = {
     templateService.allParents(Seq(uuid)).flatMap { allParents =>
+      templateService.assertNoCycles(uuid, allParents)
       templateService.updateParents(uuid, allParents(uuid), target.toSet)
     }
   }
