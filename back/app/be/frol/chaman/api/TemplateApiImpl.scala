@@ -9,8 +9,9 @@ import be.frol.chaman.service.{FieldDataService, FieldService, TemplateService}
 import be.frol.chaman.tables
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc.{AnyContent, ControllerComponents, Request}
-import slick.dbio.DBIOAction
+import slick.dbio.{DBIO, DBIOAction, Effect, NoStream}
 import be.frol.chaman.mapper.TraversableUtils._
+import be.frol.chaman.tables.Tables
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -44,7 +45,8 @@ class TemplateApiImpl @Inject()(
     for {
       template <- templateService.find(uuid)
       fields <- fieldDataService.fieldsFor(template.uuid)
-    } yield TemplateMapper.toDto(template, fields.toOpt)
+      parents <- templateService.allParents(List(uuid)).map(_(uuid)).flatMap(l =>templateService.find(l.map(_.parentReference)))
+    } yield TemplateMapper.toDto(template, fields.toOpt,parents)
   }
 
   /**
@@ -60,18 +62,30 @@ class TemplateApiImpl @Inject()(
     override def updateTemplate(uuid: String, template: Template)(implicit request: Request[AnyContent]): Future[Template] = {
 
       val targetFieldsData = template.content.getOrElse(Nil).map(FieldMapper.toDataRow(_, uuid))
-
-      db.run((for {
-        currentFields <- this.fieldDataService.fieldsFor(uuid).map(_.toMapBy(_.field.uuid));
-        missingFieldsDescriptors <- fieldService.getFields((targetFieldsData.map(_.fieldUuid).toSet -- (currentFields.keys.toSet)).toSeq:_*).map(_.toMapBy(_.uuid))
-      } yield (currentFields, missingFieldsDescriptors))
-        .flatMap{case (currentFields, missingFieldsDescriptors) =>
-          val fields = missingFieldsDescriptors ++ currentFields.mapValues(_.field)
-          this.fieldDataService.updateFields(currentFields, targetFieldsData.map(fd => new RichField(fields(fd.fieldUuid), fd.toOpt)))
-        }
-        .flatMap(_ => this.templateService.add(TemplateMapper.toRow(template)))
-        .flatMap(_ => getTemplateDto(uuid))
+      import api._
+      db.run(
+        updateParents(uuid, template.parents.getOrElse(Nil).flatMap(_.uuid))
+          .flatMap(_ => updateFields(uuid, targetFieldsData))
+          .flatMap(_ => this.templateService.add(TemplateMapper.toRow(template)))
+          .flatMap(_ => getTemplateDto(uuid)).transactionally
       )
+  }
+
+  private def updateFields(uuid: String, targetFieldsData: List[Tables.FieldDataRow]) = {
+    (for {
+      currentFields <- this.fieldDataService.fieldsFor(uuid).map(_.toMapBy(_.field.uuid));
+      missingFieldsDescriptors <- fieldService.getFields((targetFieldsData.map(_.fieldUuid).toSet -- (currentFields.keys.toSet)).toSeq: _*).map(_.toMapBy(_.uuid))
+    } yield (currentFields, missingFieldsDescriptors))
+      .flatMap { case (currentFields, missingFieldsDescriptors) =>
+        val fields = missingFieldsDescriptors ++ currentFields.mapValues(_.field)
+        this.fieldDataService.updateFields(currentFields, targetFieldsData.map(fd => new RichField(fields(fd.fieldUuid), fd.toOpt)))
+      }
+  }
+
+  private def updateParents(uuid: String, target : List[String]) = {
+    templateService.allParents(Seq(uuid)).flatMap { allParents =>
+      templateService.updateParents(uuid, allParents(uuid), target.toSet)
+    }
   }
 
   /**

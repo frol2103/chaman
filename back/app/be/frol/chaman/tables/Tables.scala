@@ -14,7 +14,7 @@ trait Tables {
   import slick.jdbc.{GetResult => GR}
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema: profile.SchemaDescription = Array(Field.schema, FieldData.schema, FieldDataDeleted.schema, FieldDeleted.schema, PlayEvolutions.schema, Template.schema, TemplateDeleted.schema, User.schema).reduceLeft(_ ++ _)
+  lazy val schema: profile.SchemaDescription = Array(Field.schema, FieldData.schema, FieldDataDeleted.schema, FieldDeleted.schema, PlayEvolutions.schema, Template.schema, TemplateDeleted.schema, TemplateParent.schema, TemplateParentDeleted.schema, User.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
 
@@ -235,6 +235,61 @@ trait Tables {
   }
   /** Collection-like TableQuery object for table TemplateDeleted */
   lazy val TemplateDeleted = new TableQuery(tag => new TemplateDeleted(tag))
+
+  /** Entity class storing rows of table TemplateParent
+   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param parentReference Database column parent_reference SqlType(VARCHAR), Length(255,true)
+   *  @param childReference Database column child_reference SqlType(VARCHAR), Length(255,true)
+   *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
+  case class TemplateParentRow(id: Long, parentReference: String, childReference: String, timestamp: java.sql.Timestamp)
+  /** GetResult implicit for fetching TemplateParentRow objects using plain SQL queries */
+  implicit def GetResultTemplateParentRow(implicit e0: GR[Long], e1: GR[String], e2: GR[java.sql.Timestamp]): GR[TemplateParentRow] = GR{
+    prs => import prs._
+    TemplateParentRow.tupled((<<[Long], <<[String], <<[String], <<[java.sql.Timestamp]))
+  }
+  /** Table description of table template_parent. Objects of this class serve as prototypes for rows in queries. */
+  class TemplateParent(_tableTag: Tag) extends profile.api.Table[TemplateParentRow](_tableTag, Some("chaman"), "template_parent") {
+    def * = (id, parentReference, childReference, timestamp) <> (TemplateParentRow.tupled, TemplateParentRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = ((Rep.Some(id), Rep.Some(parentReference), Rep.Some(childReference), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> TemplateParentRow.tupled((_1.get, _2.get, _3.get, _4.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column parent_reference SqlType(VARCHAR), Length(255,true) */
+    val parentReference: Rep[String] = column[String]("parent_reference", O.Length(255,varying=true))
+    /** Database column child_reference SqlType(VARCHAR), Length(255,true) */
+    val childReference: Rep[String] = column[String]("child_reference", O.Length(255,varying=true))
+    /** Database column timestamp SqlType(TIMESTAMP) */
+    val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
+  }
+  /** Collection-like TableQuery object for table TemplateParent */
+  lazy val TemplateParent = new TableQuery(tag => new TemplateParent(tag))
+
+  /** Entity class storing rows of table TemplateParentDeleted
+   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param fkTemplateParentId Database column fk_template_parent_id SqlType(BIGINT)
+   *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
+  case class TemplateParentDeletedRow(id: Long, fkTemplateParentId: Long, timestamp: java.sql.Timestamp)
+  /** GetResult implicit for fetching TemplateParentDeletedRow objects using plain SQL queries */
+  implicit def GetResultTemplateParentDeletedRow(implicit e0: GR[Long], e1: GR[java.sql.Timestamp]): GR[TemplateParentDeletedRow] = GR{
+    prs => import prs._
+    TemplateParentDeletedRow.tupled((<<[Long], <<[Long], <<[java.sql.Timestamp]))
+  }
+  /** Table description of table template_parent_deleted. Objects of this class serve as prototypes for rows in queries. */
+  class TemplateParentDeleted(_tableTag: Tag) extends profile.api.Table[TemplateParentDeletedRow](_tableTag, Some("chaman"), "template_parent_deleted") {
+    def * = (id, fkTemplateParentId, timestamp) <> (TemplateParentDeletedRow.tupled, TemplateParentDeletedRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = ((Rep.Some(id), Rep.Some(fkTemplateParentId), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> TemplateParentDeletedRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column fk_template_parent_id SqlType(BIGINT) */
+    val fkTemplateParentId: Rep[Long] = column[Long]("fk_template_parent_id")
+    /** Database column timestamp SqlType(TIMESTAMP) */
+    val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
+  }
+  /** Collection-like TableQuery object for table TemplateParentDeleted */
+  lazy val TemplateParentDeleted = new TableQuery(tag => new TemplateParentDeleted(tag))
 
   /** Entity class storing rows of table User
    *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey

@@ -40,6 +40,7 @@ export class TemplateEditComponent implements OnInit {
   }
 
   save() {
+    console.log("template", this.template)
     this.r.wrap((this.template.uuid) ?
       this.templateService.updateTemplate(this.template.uuid, this.template) :
       this.templateService.createTemplate(this.template))

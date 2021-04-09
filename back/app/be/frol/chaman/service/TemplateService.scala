@@ -1,8 +1,9 @@
 package be.frol.chaman.service
 
 import be.frol.chaman.api.DbContext
+import be.frol.chaman.tables
 import be.frol.chaman.tables.Tables
-import be.frol.chaman.tables.Tables.{FieldRow, TemplateDeletedRow}
+import be.frol.chaman.tables.Tables.{FieldRow, TemplateDeletedRow, TemplateParentRow}
 import be.frol.chaman.utils.DateUtils
 import play.api.db.slick.DatabaseConfigProvider
 
@@ -28,12 +29,36 @@ class TemplateService @Inject()(
 
   def find(uuid: String) = lastVersion.filter(_.uuid === uuid).result.head
 
+  def find(uuid: Seq[String]) = lastVersion.filter(_.uuid.inSet(uuid)).result
+
   def delete(uuid: String)(implicit executionContext: ExecutionContext) = {
     find(uuid).flatMap(lv =>
       Tables.TemplateDeleted += TemplateDeletedRow(0L, lv.id, DateUtils.ts)
     )
   }
 
+  def allParents(uuid: Seq[String], accumulators:Map[String,Seq[Tables.TemplateParentRow]]=Map())(implicit executionContext: ExecutionContext): DBIO[Map[String, Seq[Tables.TemplateParentRow]]] ={
+    val missing = (accumulators.values.flatMap(_.map(_.childReference)).toSet ++ uuid.toSet) -- accumulators.keySet
+    if(missing.isEmpty) {
+      DBIO.successful(accumulators)
+    } else {
+      Tables.TemplateParent
+        .filter(t => t.childReference.inSet(missing))
+        .filterNot(t => Tables.TemplateParentDeleted.filter(_.id === t.id).exists)
+        .result
+        .map(l => l.groupBy(_.childReference))
+        .map(map => map ++ (missing -- map.keySet).map(_ -> Seq()).toMap)
+        .flatMap(allParents(uuid, _))
+    }
+  }
+
+  def updateParents(template: String, current:Seq[TemplateParentRow], target:Set[String])(implicit executionContext: ExecutionContext) = {
+    for{
+      add <- Tables.TemplateParent ++= (target.toSet -- current.map(_.parentReference).toSet).map(parent => new TemplateParentRow(0L, parent,template, DateUtils.ts));
+      remove <- Tables.TemplateParentDeleted ++= current.filterNot(c => target.contains(c.parentReference))
+      .map(parent => new tables.Tables.TemplateParentDeletedRow(0L, parent.id, DateUtils.ts))
+    } yield(add, remove)
+  }
 
 
 }

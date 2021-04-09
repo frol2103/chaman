@@ -3,7 +3,7 @@ package be.frol.chaman.service
 import be.frol.chaman.api.DbContext
 import be.frol.chaman.model.RichField
 import be.frol.chaman.tables.Tables
-import be.frol.chaman.tables.Tables.TemplateDeletedRow
+import be.frol.chaman.tables.Tables.{TemplateDeletedRow, TemplateParent}
 import be.frol.chaman.utils.DateUtils
 import play.api.db.slick.DatabaseConfigProvider
 import slick.util.Logging
@@ -48,5 +48,6 @@ class FieldDataService @Inject()(
       })
 
   }
+
 
 }
