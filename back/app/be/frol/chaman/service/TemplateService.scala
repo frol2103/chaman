@@ -2,6 +2,7 @@ package be.frol.chaman.service
 
 import be.frol.chaman.api.DbContext
 import be.frol.chaman.error.ParentCycleError
+import be.frol.chaman.model.{ParentGraph, RichField}
 import be.frol.chaman.tables
 import be.frol.chaman.tables.Tables
 import be.frol.chaman.tables.Tables.{FieldRow, TemplateDeletedRow, TemplateParentRow}
@@ -10,10 +11,16 @@ import play.api.db.slick.DatabaseConfigProvider
 
 import javax.inject.Inject
 import scala.concurrent.{ExecutionContext, Future}
+import be.frol.chaman.mapper.TraversableUtils._
+import be.frol.chaman.utils.OptionUtils._
+import play.api.Logging
+
+
 
 class TemplateService @Inject()(
                               val dbConfigProvider: DatabaseConfigProvider,
-                            ) extends DbContext {
+                              val fieldDataService: FieldDataService,
+                            ) extends DbContext with Logging {
   import api._
 
   def add(p: Tables.TemplateRow) = {
@@ -38,8 +45,8 @@ class TemplateService @Inject()(
     )
   }
 
-  def allParents(uuid: Seq[String], accumulators:Map[String,Seq[Tables.TemplateParentRow]]=Map())(implicit executionContext: ExecutionContext): DBIO[Map[String, Seq[Tables.TemplateParentRow]]] ={
-    val missing = (accumulators.values.flatMap(_.map(_.childReference)).toSet ++ uuid.toSet) -- accumulators.keySet
+  def allParents(uuid: Seq[String], accumulators:ParentGraph=new ParentGraph())(implicit executionContext: ExecutionContext): DBIO[ParentGraph] ={
+    val missing = accumulators.missingFor(uuid)
     if(missing.isEmpty) {
       DBIO.successful(accumulators)
     } else {
@@ -47,9 +54,7 @@ class TemplateService @Inject()(
         .filter(t => t.childReference.inSet(missing))
         .filterNot(t => Tables.TemplateParentDeleted.filter(_.id === t.id).exists)
         .result
-        .map(l => l.groupBy(_.childReference))
-        .map(map => map ++ (missing -- map.keySet).map(_ -> Seq()).toMap)
-        .flatMap(allParents(uuid, _))
+        .flatMap(m => allParents(uuid, accumulators.addLinksFor(missing.toSet, m)))
     }
   }
 
@@ -70,4 +75,22 @@ class TemplateService @Inject()(
     }
     checkNoCycleFor(baseUuid)
   }
+
+  def mergedFields(uuid:String, parentsGraph:ParentGraph)(implicit executionContext: ExecutionContext) ={
+    fieldDataService.fieldsFor(parentsGraph.childrenCovered).map(_.groupBy(_.referenceUuid.get)).map(fields => {
+      def mergedTemplateFields(templateUuid: String) : Map[String, RichField] = parentsGraph.parentsFor(templateUuid) match {
+        case parents if parents.isEmpty => fields.get(templateUuid).getOrElse(Nil).toMapBy(_.fieldUuid)
+        case parents => mergeFields(parents.map(p => mergedTemplateFields(p)).reduce(mergeFields), fields.get(templateUuid).getOrElse(Nil).toMapBy(_.fieldUuid))
+      }
+      mergedTemplateFields(uuid).values
+    })
+
+  }
+
+  def mergeFields(parentFields : Map[String, RichField],childrenFields: Map[String, RichField] ): Map[String,RichField] = {
+    parentFields.keySet.union(childrenFields.keySet)
+      .map(key => key -> parentFields.get(key).map(_.merge(childrenFields.get(key))).getOrElse(childrenFields(key)))
+      .toMap
+  }
+
 }

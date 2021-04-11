@@ -29,8 +29,8 @@ object FieldMapper {
     Tables.FieldRow(
       0L,
       f.uuid.map(_.toString).getOrElse(UUID.randomUUID().toString),
-      f.reference.getOrThrow("missing reference"),
-      f.dataType.getOrThrow("missing datatype"),
+      f.reference.getOrThrowM("missing reference"),
+      f.dataType.getOrThrowM("missing datatype"),
       f.label.getOrElse(""),
       f.value.flatMap(_.value.get("data").map(_.toString())),
       DateUtils.ts,

@@ -3,10 +3,16 @@ package be.frol.chaman.model
 import be.frol.chaman.tables.Tables.{FieldDataRow, FieldRow}
 import be.frol.chaman.utils.OptionUtils._
 
-case class RichField(field: FieldRow, fieldData: Option[FieldDataRow]) {
+case class RichField(field: FieldRow, fieldData: Option[FieldDataRow], historyData : List[RichField] = Nil) {
   def fieldUuid = field.uuid
+  def referenceUuid = fieldData.map(_.referenceUuid)
 
   def serializedValue = fieldData.flatMap(_.value).orElse(field.defaultValue)
+
+  def merge(child:Option[RichField]) : RichField = {
+    if(child.isDefined) copy(fieldData = child.flatMap(_.fieldData).orElse(fieldData), historyData = this::historyData)
+    else this
+  }
 
   def equivalent(other: RichField) = {
     def removeNonImportant(f: FieldRow) = f.copy(id = 0L, timestamp = null, defaultValue = None)

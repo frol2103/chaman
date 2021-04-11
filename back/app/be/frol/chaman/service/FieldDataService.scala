@@ -31,8 +31,12 @@ class FieldDataService @Inject()(
   }
 
 
-  def fieldsFor(uuid:String) (implicit executionContext: ExecutionContext)= {
-    lastVersion.filter(_.referenceUuid === uuid)
+  def fieldsFor(uuid:String) (implicit executionContext: ExecutionContext): DBIO[Seq[RichField]]= {
+    fieldsFor(Seq(uuid))
+  }
+
+  def fieldsFor(uuid:Iterable[String]) (implicit executionContext: ExecutionContext): DBIO[Seq[RichField]]= {
+    lastVersion.filter(_.referenceUuid .inSet(uuid))
       .join(fieldService.lastVersionOfFields).on(_.fieldUuid === _.uuid)
       .result
       .map(_.map(RichField(_)))

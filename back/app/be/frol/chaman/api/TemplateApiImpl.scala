@@ -44,9 +44,10 @@ class TemplateApiImpl @Inject()(
   private def getTemplateDto(uuid: String) = {
     for {
       template <- templateService.find(uuid)
-      fields <- fieldDataService.fieldsFor(template.uuid)
-      parents <- templateService.allParents(List(uuid)).map(_(uuid)).flatMap(l =>templateService.find(l.map(_.parentReference)))
-    } yield TemplateMapper.toDto(template, fields.toOpt,parents)
+      allParents <- templateService.allParents(List(uuid))
+      directParents <- templateService.find(allParents.parentsFor(uuid))
+      fields <- templateService.mergedFields(uuid,allParents)
+    } yield TemplateMapper.toDto(template, fields.toOpt,directParents)
   }
 
   /**
@@ -67,9 +68,11 @@ class TemplateApiImpl @Inject()(
         updateParents(uuid, template.parents.getOrElse(Nil).flatMap(_.uuid))
           .flatMap(_ => updateFields(uuid, targetFieldsData))
           .flatMap(_ => this.templateService.add(TemplateMapper.toRow(template)))
-          .flatMap(_ => getTemplateDto(uuid)).transactionally
-      )
-  }
+          .transactionally
+      ).flatMap(_ => db.run(
+        getTemplateDto(uuid)
+      ))
+    }
 
   private def updateFields(uuid: String, targetFieldsData: List[Tables.FieldDataRow]) = {
     (for {
@@ -83,9 +86,9 @@ class TemplateApiImpl @Inject()(
   }
 
   private def updateParents(uuid: String, target : List[String]) = {
-    templateService.allParents(Seq(uuid)).flatMap { allParents =>
-      templateService.assertNoCycles(uuid, allParents)
-      templateService.updateParents(uuid, allParents(uuid), target.toSet)
+    templateService.allParents(uuid :: target).flatMap { allParents =>
+      allParents.assertNoCycles(uuid, parents=target)
+      templateService.updateParents(uuid, allParents.parentsRowsFor(uuid), target.toSet)
     }
   }
 

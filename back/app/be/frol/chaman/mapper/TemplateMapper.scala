@@ -13,7 +13,7 @@ import java.util.UUID
 object TemplateMapper {
 
 
-  def toDto(f:Tables.TemplateRow, fields:Option[Seq[RichField]]=None, parents:Seq[Tables.TemplateRow]=Nil) : Template = {
+  def toDto(f:Tables.TemplateRow, fields:Option[Iterable[RichField]]=None, parents:Seq[Tables.TemplateRow]=Nil) : Template = {
     Template(
       f.uuid.toOpt,
       parents.map(toDto(_)).toList.toOpt(),
@@ -27,7 +27,7 @@ object TemplateMapper {
     Tables.TemplateRow(
       0L,
       f.uuid.map(_.toString).getOrElse(UUID.randomUUID().toString),
-      f.reference.getOrThrow("missing reference"),
+      f.reference.getOrThrowM("missing reference"),
       f.label.getOrElse(""),
       DateUtils.ts,
     )
