@@ -44,7 +44,8 @@ class FieldDataService @Inject()(
 
 
   def updateFields(current: Map[String,RichField],target: List[RichField])(implicit executionContext: ExecutionContext) = {
-    (Tables.FieldData ++= target.filter(t => !current.contains(t.fieldUuid) || !current(t.fieldUuid).equivalent(t)).map(_.fieldData).flatten)
+    (Tables.FieldData ++= target.filter(t => !current.contains(t.fieldUuid) || !current(t.fieldUuid).equivalent(t))
+      .map(_.removeValueIfEquivalentToPrevious().fieldData).flatten)
       .flatMap(_ => {
         val targetFields = target.map(_.fieldUuid).toSet
         val toRemove : Iterable[Long] = current.values.filterNot(c => targetFields.contains(c.fieldUuid)).map(_.fieldData.get.id)

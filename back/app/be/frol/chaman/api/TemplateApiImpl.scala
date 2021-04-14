@@ -17,6 +17,7 @@ import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import be.frol.chaman.utils.OptionUtils._
+import play.api.Logging
 
 class TemplateApiImpl @Inject()(
                               val cc: ControllerComponents,
@@ -24,12 +25,13 @@ class TemplateApiImpl @Inject()(
                               val templateService: TemplateService,
                               val fieldDataService: FieldDataService,
                               val fieldService: FieldService,
-                  ) extends TemplateApi with DbContext {
+                  ) extends TemplateApi with DbContext with Logging{
   /**
    * create a template
    */
   override def createTemplate(template: Template)(implicit request: Request[AnyContent]): Future[Template] = {
-    db.run(this.templateService.add(TemplateMapper.toRow(template))).map(TemplateMapper.toDto(_))
+    db.run(this.templateService.add(TemplateMapper.toRow(template)))
+      .flatMap(r => db.run(getTemplateDto(r.uuid)))
   }
 
   /**
@@ -43,11 +45,10 @@ class TemplateApiImpl @Inject()(
 
   private def getTemplateDto(uuid: String) = {
     for {
-      template <- templateService.find(uuid)
-      allParents <- templateService.allParents(List(uuid))
-      directParents <- templateService.find(allParents.parentsFor(uuid))
-      fields <- templateService.mergedFields(uuid,allParents)
-    } yield TemplateMapper.toDto(template, fields.toOpt,directParents)
+      form <- templateService.richFormWithParents(uuid)
+    } yield  {
+      TemplateMapper.toDto(form)
+    }
   }
 
   /**
@@ -76,12 +77,12 @@ class TemplateApiImpl @Inject()(
 
   private def updateFields(uuid: String, targetFieldsData: List[Tables.FieldDataRow]) = {
     (for {
-      currentFields <- this.fieldDataService.fieldsFor(uuid).map(_.toMapBy(_.field.uuid));
-      missingFieldsDescriptors <- fieldService.getFields((targetFieldsData.map(_.fieldUuid).toSet -- (currentFields.keys.toSet)).toSeq: _*).map(_.toMapBy(_.uuid))
-    } yield (currentFields, missingFieldsDescriptors))
-      .flatMap { case (currentFields, missingFieldsDescriptors) =>
-        val fields = missingFieldsDescriptors ++ currentFields.mapValues(_.field)
-        this.fieldDataService.updateFields(currentFields, targetFieldsData.map(fd => new RichField(fields(fd.fieldUuid), fd.toOpt)))
+      currentForm <- templateService.richFormWithParents(uuid)
+      missingFieldsDescriptors <- fieldService.getFields((targetFieldsData.map(_.fieldUuid).toSet -- (currentForm.fields.keys.toSet)).toSeq: _*).map(_.toMapBy(_.uuid))
+    } yield (currentForm, missingFieldsDescriptors))
+      .flatMap { case (currentForm, missingFieldsDescriptors) =>
+        val fields = missingFieldsDescriptors ++ currentForm.fields.values.map(_.field).toMapBy(_.uuid)
+        this.fieldDataService.updateFields(currentForm.fields, targetFieldsData.map(fd => new RichField(fields(fd.fieldUuid), fd.toOpt)))
       }
   }
 

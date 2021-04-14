@@ -12,15 +12,13 @@ import java.util.UUID
 object FieldMapper {
 
 
-  def toDto(f: RichField): Field = toDto(f.field, f.fieldData)
-
-  def toDto(f: Tables.FieldRow, fd: Option[Tables.FieldDataRow] = None): Field = {
+  def toDto(f: RichField): Field = {
     Field(
-      f.uuid.toOpt,
-      f.label.toOpt,
-      f.reference.toOpt,
-      f.datatype.toOpt,
-      fd.flatMap(_.value).orElse(f.defaultValue).map(v => JsObject(Seq("data" -> Json.parse(v)))),
+      f.field.uuid.toOpt,
+      f.field.label.toOpt,
+      f.field.reference.toOpt,
+      f.field.datatype.toOpt,
+      f.serializedValue.map(v => JsObject(Seq("data" -> Json.parse(v)))),
       None,
     )
   }

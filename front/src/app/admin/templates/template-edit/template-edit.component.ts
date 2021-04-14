@@ -50,6 +50,7 @@ export class TemplateEditComponent implements OnInit {
   }
 
   startAddField(){
+    if(!this.template.content) this.template.content = []
     this.modalService.open(FieldSelectorComponent).result.then((result) => {
       this.template.content.push(result)
     });
@@ -60,6 +61,7 @@ export class TemplateEditComponent implements OnInit {
   }
 
   addParent(){
+    if(!this.template.parents) this.template.parents = []
     this.modalService.open(TemplateSelectorComponent).result.then((result) => {
       this.template.parents.push(result)
     });

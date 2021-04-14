@@ -2,10 +2,10 @@ package be.frol.chaman.service
 
 import be.frol.chaman.api.DbContext
 import be.frol.chaman.error.ParentCycleError
-import be.frol.chaman.model.{ParentGraph, RichField}
+import be.frol.chaman.mapper.TemplateMapper
+import be.frol.chaman.model.{ParentGraph, RichField, RichForm}
 import be.frol.chaman.tables
 import be.frol.chaman.tables.Tables
-import be.frol.chaman.tables.Tables.{FieldRow, TemplateDeletedRow, TemplateParentRow}
 import be.frol.chaman.utils.DateUtils
 import play.api.db.slick.DatabaseConfigProvider
 
@@ -14,8 +14,8 @@ import scala.concurrent.{ExecutionContext, Future}
 import be.frol.chaman.mapper.TraversableUtils._
 import be.frol.chaman.utils.OptionUtils._
 import play.api.Logging
-
-
+import Tables._
+import be.frol.chaman.utils.TraversableUtils._
 
 class TemplateService @Inject()(
                               val dbConfigProvider: DatabaseConfigProvider,
@@ -76,21 +76,16 @@ class TemplateService @Inject()(
     checkNoCycleFor(baseUuid)
   }
 
-  def mergedFields(uuid:String, parentsGraph:ParentGraph)(implicit executionContext: ExecutionContext) ={
-    fieldDataService.fieldsFor(parentsGraph.childrenCovered).map(_.groupBy(_.referenceUuid.get)).map(fields => {
-      def mergedTemplateFields(templateUuid: String) : Map[String, RichField] = parentsGraph.parentsFor(templateUuid) match {
-        case parents if parents.isEmpty => fields.get(templateUuid).getOrElse(Nil).toMapBy(_.fieldUuid)
-        case parents => mergeFields(parents.map(p => mergedTemplateFields(p)).reduce(mergeFields), fields.get(templateUuid).getOrElse(Nil).toMapBy(_.fieldUuid))
-      }
-      mergedTemplateFields(uuid).values
-    })
 
+
+  def richFormWithParents(uuid:String)(implicit executionContext: ExecutionContext) : DBIO[RichForm] = {
+    for {
+      template <- find(uuid)
+      allParents <- allParents(List(uuid))
+      fields <- fieldDataService.fieldsFor(allParents.childrenCovered).map(_.groupBy(_.referenceUuid.get))
+      templates <- find(allParents.childrenCovered.toSeq).map(_.toMapBy(_.uuid))
+    } yield {
+      RichForm.build(template.uuid, allParents, fields, templates)
+    }
   }
-
-  def mergeFields(parentFields : Map[String, RichField],childrenFields: Map[String, RichField] ): Map[String,RichField] = {
-    parentFields.keySet.union(childrenFields.keySet)
-      .map(key => key -> parentFields.get(key).map(_.merge(childrenFields.get(key))).getOrElse(childrenFields(key)))
-      .toMap
-  }
-
 }

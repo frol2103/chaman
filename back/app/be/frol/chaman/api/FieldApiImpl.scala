@@ -49,7 +49,7 @@ class FieldApiImpl @Inject()(
     val newField = FieldMapper.toRow(field).copy(uuid = uuid)
 
     def updateIfNeeded(f: tables.Tables.FieldRow) = {
-      if (!f.equivalent(newField)) fieldService.add(newField)
+      if (!f.equivalent(newField)) fieldService.add(newField.field)
       else DBIOAction.successful(f)
     }
 
