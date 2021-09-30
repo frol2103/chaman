@@ -2,14 +2,22 @@ package be.frol.chaman.model
 
 import be.frol.chaman.tables.Tables.{FieldDataRow, FieldRow}
 import be.frol.chaman.utils.OptionUtils._
+import play.api.Logging
+import play.api.mvc.BodyParsers.utils
 
-case class RichField(field: FieldRow, fieldData: Option[FieldDataRow], parents : Seq[RichField] = Nil) {
+case class RichField(field: FieldRow, fieldData: Option[FieldDataRow], parents : Seq[RichField] = Nil) extends Logging{
   def fieldUuid = field.uuid
   def referenceUuid = fieldData.map(_.referenceUuid)
 
-  def serializedValue:Option[String] = fieldData.flatMap(_.value)
-    .orElse(parents.find(_.serializedValue.isDefined).flatMap(_.serializedValue))
-    .orElse(field.defaultValue)
+  def serializedValue:Option[String] = {
+
+    logger.error("field serialized value " + field.uuid + "\n direct value data : " + fieldData.flatMap(_.value)  +
+      "\n parents" + parents.map(f => f.fieldUuid + ":" + f.serializedValue).mkString(" ;; ")
+    )
+    fieldData.flatMap(_.value)
+      .orElse(parents.find(_.serializedValue.isDefined).flatMap(_.serializedValue))
+      .orElse(field.defaultValue)
+  }
 
   def removeValueIfEquivalentToPrevious() : RichField = {
     val fieldWithDataEmpty = copy(fieldData = fieldData.map(_.copy(value = None)))
