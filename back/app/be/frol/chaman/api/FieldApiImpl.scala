@@ -1,28 +1,28 @@
 package be.frol.chaman.api
 
 import be.frol.chaman.mapper.FieldMapper
+import be.frol.chaman.model.RichField
+import be.frol.chaman.model.RichModelConversions._
 import be.frol.chaman.openapi.api.FieldApi
 import be.frol.chaman.openapi.model.Field
-import be.frol.chaman.service.FieldService
-import be.frol.chaman.tables.Tables
+import be.frol.chaman.service.{FieldDataService, FieldService}
+import be.frol.chaman.tables
+import be.frol.chaman.utils.OptionUtils._
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc.{AnyContent, ControllerComponents, Request}
+import slick.dbio.DBIOAction
 
-import java.util.UUID
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
-import be.frol.chaman.utils.OptionUtils._
-import play.api.libs.json.Json
-import be.frol.chaman.model.RichModelConversions._
-import be.frol.chaman.tables
-import slick.dbio.DBIOAction
 
 class FieldApiImpl @Inject()(
                               val cc: ControllerComponents,
                               val dbConfigProvider: DatabaseConfigProvider,
                               val fieldService: FieldService,
-                  ) extends FieldApi with DbContext {
+                              val fieldDataService: FieldDataService,
+                            ) extends FieldApi with DbContext {
+
   import api._
 
   /**
@@ -30,7 +30,9 @@ class FieldApiImpl @Inject()(
    */
   override def createField(field: Field)(implicit request: Request[AnyContent]): Future[Field] = {
     db.run(
-      fieldService.add(FieldMapper.toRow(field))
+      fieldService.add(FieldMapper.toRow(field)).flatMap { f =>
+        fieldService.addValues(FieldMapper.toDataRows(field.copy(uuid = f.uuid.toOpt()), f.uuid)).map(v => RichField(f, v))
+      }
     ).map(FieldMapper.toDto(_))
   }
 
@@ -38,8 +40,12 @@ class FieldApiImpl @Inject()(
    * Get a field
    */
   override def getField()(implicit request: Request[AnyContent]): Future[List[Field]] = {
-    db.run(fieldService.allFields)
-      .map(_.map(FieldMapper.toDto(_)).toList)
+    db.run(
+      for {
+        fields <- fieldService.allFields
+        defaultValues <- fieldDataService.fieldDefaultData(fields.map(_.fieldUuid)).result.map(_.groupBy(_.fieldUuid))
+      } yield (fields.map(f => RichField(f, defaultValues.get(f.uuid).getOrElse(Nil))))
+    ).map(_.map(FieldMapper.toDto(_)).toList)
   }
 
   /**
@@ -54,10 +60,12 @@ class FieldApiImpl @Inject()(
     }
 
     db.run(
-      for{
+      for {
         f <- fieldService.getField(uuid)
+        fd <- fieldDataService.fieldData(uuid, uuid).result
         nf <- updateIfNeeded(f)
-      } yield(nf)
+        nd <- fieldDataService.updateFieldValues(fd.toList, FieldMapper.toDataRows(field, uuid))
+      } yield (RichField(nf, nd))
     ).map(FieldMapper.toDto(_))
   }
 

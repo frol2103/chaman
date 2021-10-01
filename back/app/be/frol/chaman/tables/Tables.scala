@@ -14,7 +14,7 @@ trait Tables {
   import slick.jdbc.{GetResult => GR}
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema: profile.SchemaDescription = Array(Field.schema, FieldData.schema, FieldDataDeleted.schema, FieldDeleted.schema, PlayEvolutions.schema, Template.schema, TemplateDeleted.schema, TemplateParent.schema, TemplateParentDeleted.schema, User.schema).reduceLeft(_ ++ _)
+  lazy val schema: profile.SchemaDescription = Array(Field.schema, FieldData.schema, FieldDataDeleted.schema, FieldDeleted.schema, Item.schema, ItemDeleted.schema, PlayEvolutions.schema, User.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
 
@@ -24,19 +24,18 @@ trait Tables {
    *  @param reference Database column reference SqlType(VARCHAR), Length(255,true)
    *  @param datatype Database column datatype SqlType(VARCHAR), Length(255,true)
    *  @param label Database column label SqlType(VARCHAR), Length(255,true)
-   *  @param defaultValue Database column default_value SqlType(TEXT), Default(None)
    *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
-  case class FieldRow(id: Long, uuid: String, reference: String, datatype: String, label: String, defaultValue: Option[String] = None, timestamp: java.sql.Timestamp)
+  case class FieldRow(id: Long, uuid: String, reference: String, datatype: String, label: String, timestamp: java.sql.Timestamp)
   /** GetResult implicit for fetching FieldRow objects using plain SQL queries */
-  implicit def GetResultFieldRow(implicit e0: GR[Long], e1: GR[String], e2: GR[Option[String]], e3: GR[java.sql.Timestamp]): GR[FieldRow] = GR{
+  implicit def GetResultFieldRow(implicit e0: GR[Long], e1: GR[String], e2: GR[java.sql.Timestamp]): GR[FieldRow] = GR{
     prs => import prs._
-    FieldRow.tupled((<<[Long], <<[String], <<[String], <<[String], <<[String], <<?[String], <<[java.sql.Timestamp]))
+    FieldRow.tupled((<<[Long], <<[String], <<[String], <<[String], <<[String], <<[java.sql.Timestamp]))
   }
   /** Table description of table field. Objects of this class serve as prototypes for rows in queries. */
   class Field(_tableTag: Tag) extends profile.api.Table[FieldRow](_tableTag, Some("chaman"), "field") {
-    def * = (id, uuid, reference, datatype, label, defaultValue, timestamp) <> (FieldRow.tupled, FieldRow.unapply)
+    def * = (id, uuid, reference, datatype, label, timestamp) <> (FieldRow.tupled, FieldRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(id), Rep.Some(uuid), Rep.Some(reference), Rep.Some(datatype), Rep.Some(label), defaultValue, Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> FieldRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6, _7.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = ((Rep.Some(id), Rep.Some(uuid), Rep.Some(reference), Rep.Some(datatype), Rep.Some(label), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> FieldRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
     val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
@@ -48,8 +47,6 @@ trait Tables {
     val datatype: Rep[String] = column[String]("datatype", O.Length(255,varying=true))
     /** Database column label SqlType(VARCHAR), Length(255,true) */
     val label: Rep[String] = column[String]("label", O.Length(255,varying=true))
-    /** Database column default_value SqlType(TEXT), Default(None) */
-    val defaultValue: Rep[Option[String]] = column[Option[String]]("default_value", O.Default(None))
     /** Database column timestamp SqlType(TIMESTAMP) */
     val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
   }
@@ -59,27 +56,30 @@ trait Tables {
   /** Entity class storing rows of table FieldData
    *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
    *  @param fieldUuid Database column field_uuid SqlType(VARCHAR), Length(36,true)
-   *  @param referenceUuid Database column reference_uuid SqlType(VARCHAR), Length(36,true)
+   *  @param ownerUuid Database column owner_uuid SqlType(VARCHAR), Length(36,true)
+   *  @param valueUuid Database column value_uuid SqlType(VARCHAR), Length(36,true)
    *  @param value Database column value SqlType(TEXT), Default(None)
    *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
-  case class FieldDataRow(id: Long, fieldUuid: String, referenceUuid: String, value: Option[String] = None, timestamp: java.sql.Timestamp)
+  case class FieldDataRow(id: Long, fieldUuid: String, ownerUuid: String, valueUuid: String, value: Option[String] = None, timestamp: java.sql.Timestamp)
   /** GetResult implicit for fetching FieldDataRow objects using plain SQL queries */
   implicit def GetResultFieldDataRow(implicit e0: GR[Long], e1: GR[String], e2: GR[Option[String]], e3: GR[java.sql.Timestamp]): GR[FieldDataRow] = GR{
     prs => import prs._
-    FieldDataRow.tupled((<<[Long], <<[String], <<[String], <<?[String], <<[java.sql.Timestamp]))
+    FieldDataRow.tupled((<<[Long], <<[String], <<[String], <<[String], <<?[String], <<[java.sql.Timestamp]))
   }
   /** Table description of table field_data. Objects of this class serve as prototypes for rows in queries. */
   class FieldData(_tableTag: Tag) extends profile.api.Table[FieldDataRow](_tableTag, Some("chaman"), "field_data") {
-    def * = (id, fieldUuid, referenceUuid, value, timestamp) <> (FieldDataRow.tupled, FieldDataRow.unapply)
+    def * = (id, fieldUuid, ownerUuid, valueUuid, value, timestamp) <> (FieldDataRow.tupled, FieldDataRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(id), Rep.Some(fieldUuid), Rep.Some(referenceUuid), value, Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> FieldDataRow.tupled((_1.get, _2.get, _3.get, _4, _5.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = ((Rep.Some(id), Rep.Some(fieldUuid), Rep.Some(ownerUuid), Rep.Some(valueUuid), value, Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> FieldDataRow.tupled((_1.get, _2.get, _3.get, _4.get, _5, _6.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
     val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
     /** Database column field_uuid SqlType(VARCHAR), Length(36,true) */
     val fieldUuid: Rep[String] = column[String]("field_uuid", O.Length(36,varying=true))
-    /** Database column reference_uuid SqlType(VARCHAR), Length(36,true) */
-    val referenceUuid: Rep[String] = column[String]("reference_uuid", O.Length(36,varying=true))
+    /** Database column owner_uuid SqlType(VARCHAR), Length(36,true) */
+    val ownerUuid: Rep[String] = column[String]("owner_uuid", O.Length(36,varying=true))
+    /** Database column value_uuid SqlType(VARCHAR), Length(36,true) */
+    val valueUuid: Rep[String] = column[String]("value_uuid", O.Length(36,varying=true))
     /** Database column value SqlType(TEXT), Default(None) */
     val value: Rep[Option[String]] = column[Option[String]]("value", O.Default(None))
     /** Database column timestamp SqlType(TIMESTAMP) */
@@ -140,6 +140,64 @@ trait Tables {
   /** Collection-like TableQuery object for table FieldDeleted */
   lazy val FieldDeleted = new TableQuery(tag => new FieldDeleted(tag))
 
+  /** Entity class storing rows of table Item
+   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param uuid Database column uuid SqlType(VARCHAR), Length(36,true)
+   *  @param title Database column title SqlType(VARCHAR), Length(255,true)
+   *  @param description Database column description SqlType(VARCHAR), Length(100,true)
+   *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
+  case class ItemRow(id: Long, uuid: String, title: String, description: String, timestamp: java.sql.Timestamp)
+  /** GetResult implicit for fetching ItemRow objects using plain SQL queries */
+  implicit def GetResultItemRow(implicit e0: GR[Long], e1: GR[String], e2: GR[java.sql.Timestamp]): GR[ItemRow] = GR{
+    prs => import prs._
+    ItemRow.tupled((<<[Long], <<[String], <<[String], <<[String], <<[java.sql.Timestamp]))
+  }
+  /** Table description of table item. Objects of this class serve as prototypes for rows in queries. */
+  class Item(_tableTag: Tag) extends profile.api.Table[ItemRow](_tableTag, Some("chaman"), "item") {
+    def * = (id, uuid, title, description, timestamp) <> (ItemRow.tupled, ItemRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = ((Rep.Some(id), Rep.Some(uuid), Rep.Some(title), Rep.Some(description), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> ItemRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column uuid SqlType(VARCHAR), Length(36,true) */
+    val uuid: Rep[String] = column[String]("uuid", O.Length(36,varying=true))
+    /** Database column title SqlType(VARCHAR), Length(255,true) */
+    val title: Rep[String] = column[String]("title", O.Length(255,varying=true))
+    /** Database column description SqlType(VARCHAR), Length(100,true) */
+    val description: Rep[String] = column[String]("description", O.Length(100,varying=true))
+    /** Database column timestamp SqlType(TIMESTAMP) */
+    val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
+  }
+  /** Collection-like TableQuery object for table Item */
+  lazy val Item = new TableQuery(tag => new Item(tag))
+
+  /** Entity class storing rows of table ItemDeleted
+   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param fkItemId Database column fk_item_id SqlType(BIGINT)
+   *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
+  case class ItemDeletedRow(id: Long, fkItemId: Long, timestamp: java.sql.Timestamp)
+  /** GetResult implicit for fetching ItemDeletedRow objects using plain SQL queries */
+  implicit def GetResultItemDeletedRow(implicit e0: GR[Long], e1: GR[java.sql.Timestamp]): GR[ItemDeletedRow] = GR{
+    prs => import prs._
+    ItemDeletedRow.tupled((<<[Long], <<[Long], <<[java.sql.Timestamp]))
+  }
+  /** Table description of table item_deleted. Objects of this class serve as prototypes for rows in queries. */
+  class ItemDeleted(_tableTag: Tag) extends profile.api.Table[ItemDeletedRow](_tableTag, Some("chaman"), "item_deleted") {
+    def * = (id, fkItemId, timestamp) <> (ItemDeletedRow.tupled, ItemDeletedRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = ((Rep.Some(id), Rep.Some(fkItemId), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> ItemDeletedRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column fk_item_id SqlType(BIGINT) */
+    val fkItemId: Rep[Long] = column[Long]("fk_item_id")
+    /** Database column timestamp SqlType(TIMESTAMP) */
+    val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
+  }
+  /** Collection-like TableQuery object for table ItemDeleted */
+  lazy val ItemDeleted = new TableQuery(tag => new ItemDeleted(tag))
+
   /** Entity class storing rows of table PlayEvolutions
    *  @param id Database column id SqlType(INT), PrimaryKey
    *  @param hash Database column hash SqlType(VARCHAR), Length(255,true)
@@ -177,119 +235,6 @@ trait Tables {
   }
   /** Collection-like TableQuery object for table PlayEvolutions */
   lazy val PlayEvolutions = new TableQuery(tag => new PlayEvolutions(tag))
-
-  /** Entity class storing rows of table Template
-   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
-   *  @param uuid Database column uuid SqlType(VARCHAR), Length(36,true)
-   *  @param reference Database column reference SqlType(VARCHAR), Length(255,true)
-   *  @param label Database column label SqlType(VARCHAR), Length(255,true)
-   *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
-  case class TemplateRow(id: Long, uuid: String, reference: String, label: String, timestamp: java.sql.Timestamp)
-  /** GetResult implicit for fetching TemplateRow objects using plain SQL queries */
-  implicit def GetResultTemplateRow(implicit e0: GR[Long], e1: GR[String], e2: GR[java.sql.Timestamp]): GR[TemplateRow] = GR{
-    prs => import prs._
-    TemplateRow.tupled((<<[Long], <<[String], <<[String], <<[String], <<[java.sql.Timestamp]))
-  }
-  /** Table description of table template. Objects of this class serve as prototypes for rows in queries. */
-  class Template(_tableTag: Tag) extends profile.api.Table[TemplateRow](_tableTag, Some("chaman"), "template") {
-    def * = (id, uuid, reference, label, timestamp) <> (TemplateRow.tupled, TemplateRow.unapply)
-    /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(id), Rep.Some(uuid), Rep.Some(reference), Rep.Some(label), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> TemplateRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
-
-    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
-    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
-    /** Database column uuid SqlType(VARCHAR), Length(36,true) */
-    val uuid: Rep[String] = column[String]("uuid", O.Length(36,varying=true))
-    /** Database column reference SqlType(VARCHAR), Length(255,true) */
-    val reference: Rep[String] = column[String]("reference", O.Length(255,varying=true))
-    /** Database column label SqlType(VARCHAR), Length(255,true) */
-    val label: Rep[String] = column[String]("label", O.Length(255,varying=true))
-    /** Database column timestamp SqlType(TIMESTAMP) */
-    val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
-  }
-  /** Collection-like TableQuery object for table Template */
-  lazy val Template = new TableQuery(tag => new Template(tag))
-
-  /** Entity class storing rows of table TemplateDeleted
-   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
-   *  @param fkTemplateId Database column fk_template_id SqlType(BIGINT)
-   *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
-  case class TemplateDeletedRow(id: Long, fkTemplateId: Long, timestamp: java.sql.Timestamp)
-  /** GetResult implicit for fetching TemplateDeletedRow objects using plain SQL queries */
-  implicit def GetResultTemplateDeletedRow(implicit e0: GR[Long], e1: GR[java.sql.Timestamp]): GR[TemplateDeletedRow] = GR{
-    prs => import prs._
-    TemplateDeletedRow.tupled((<<[Long], <<[Long], <<[java.sql.Timestamp]))
-  }
-  /** Table description of table template_deleted. Objects of this class serve as prototypes for rows in queries. */
-  class TemplateDeleted(_tableTag: Tag) extends profile.api.Table[TemplateDeletedRow](_tableTag, Some("chaman"), "template_deleted") {
-    def * = (id, fkTemplateId, timestamp) <> (TemplateDeletedRow.tupled, TemplateDeletedRow.unapply)
-    /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(id), Rep.Some(fkTemplateId), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> TemplateDeletedRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
-
-    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
-    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
-    /** Database column fk_template_id SqlType(BIGINT) */
-    val fkTemplateId: Rep[Long] = column[Long]("fk_template_id")
-    /** Database column timestamp SqlType(TIMESTAMP) */
-    val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
-  }
-  /** Collection-like TableQuery object for table TemplateDeleted */
-  lazy val TemplateDeleted = new TableQuery(tag => new TemplateDeleted(tag))
-
-  /** Entity class storing rows of table TemplateParent
-   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
-   *  @param parentReference Database column parent_reference SqlType(VARCHAR), Length(255,true)
-   *  @param childReference Database column child_reference SqlType(VARCHAR), Length(255,true)
-   *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
-  case class TemplateParentRow(id: Long, parentReference: String, childReference: String, timestamp: java.sql.Timestamp)
-  /** GetResult implicit for fetching TemplateParentRow objects using plain SQL queries */
-  implicit def GetResultTemplateParentRow(implicit e0: GR[Long], e1: GR[String], e2: GR[java.sql.Timestamp]): GR[TemplateParentRow] = GR{
-    prs => import prs._
-    TemplateParentRow.tupled((<<[Long], <<[String], <<[String], <<[java.sql.Timestamp]))
-  }
-  /** Table description of table template_parent. Objects of this class serve as prototypes for rows in queries. */
-  class TemplateParent(_tableTag: Tag) extends profile.api.Table[TemplateParentRow](_tableTag, Some("chaman"), "template_parent") {
-    def * = (id, parentReference, childReference, timestamp) <> (TemplateParentRow.tupled, TemplateParentRow.unapply)
-    /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(id), Rep.Some(parentReference), Rep.Some(childReference), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> TemplateParentRow.tupled((_1.get, _2.get, _3.get, _4.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
-
-    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
-    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
-    /** Database column parent_reference SqlType(VARCHAR), Length(255,true) */
-    val parentReference: Rep[String] = column[String]("parent_reference", O.Length(255,varying=true))
-    /** Database column child_reference SqlType(VARCHAR), Length(255,true) */
-    val childReference: Rep[String] = column[String]("child_reference", O.Length(255,varying=true))
-    /** Database column timestamp SqlType(TIMESTAMP) */
-    val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
-  }
-  /** Collection-like TableQuery object for table TemplateParent */
-  lazy val TemplateParent = new TableQuery(tag => new TemplateParent(tag))
-
-  /** Entity class storing rows of table TemplateParentDeleted
-   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
-   *  @param fkTemplateParentId Database column fk_template_parent_id SqlType(BIGINT)
-   *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
-  case class TemplateParentDeletedRow(id: Long, fkTemplateParentId: Long, timestamp: java.sql.Timestamp)
-  /** GetResult implicit for fetching TemplateParentDeletedRow objects using plain SQL queries */
-  implicit def GetResultTemplateParentDeletedRow(implicit e0: GR[Long], e1: GR[java.sql.Timestamp]): GR[TemplateParentDeletedRow] = GR{
-    prs => import prs._
-    TemplateParentDeletedRow.tupled((<<[Long], <<[Long], <<[java.sql.Timestamp]))
-  }
-  /** Table description of table template_parent_deleted. Objects of this class serve as prototypes for rows in queries. */
-  class TemplateParentDeleted(_tableTag: Tag) extends profile.api.Table[TemplateParentDeletedRow](_tableTag, Some("chaman"), "template_parent_deleted") {
-    def * = (id, fkTemplateParentId, timestamp) <> (TemplateParentDeletedRow.tupled, TemplateParentDeletedRow.unapply)
-    /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(id), Rep.Some(fkTemplateParentId), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> TemplateParentDeletedRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
-
-    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
-    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
-    /** Database column fk_template_parent_id SqlType(BIGINT) */
-    val fkTemplateParentId: Rep[Long] = column[Long]("fk_template_parent_id")
-    /** Database column timestamp SqlType(TIMESTAMP) */
-    val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
-  }
-  /** Collection-like TableQuery object for table TemplateParentDeleted */
-  lazy val TemplateParentDeleted = new TableQuery(tag => new TemplateParentDeleted(tag))
 
   /** Entity class storing rows of table User
    *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey

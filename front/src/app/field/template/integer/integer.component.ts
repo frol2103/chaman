@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {Field} from "../../../../generated/api";
+import {Field, FieldValue} from "../../../../generated/api";
 import {FieldParent} from "../../core/fieldParent";
 
 @Component({
@@ -12,8 +12,6 @@ export class IntegerComponent extends FieldParent implements OnInit {
   constructor() {
     super();
   }
-
-  public field: Field;
 
   ngOnInit(): void {
   }

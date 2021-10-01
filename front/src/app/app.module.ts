@@ -19,13 +19,10 @@ import { FieldComponent } from './field/core/field/field.component';
 import {FieldDirective} from "./field/core/field.directive";
 import { StringComponent } from './field/template/string/string.component';
 import { IntegerComponent } from './field/template/integer/integer.component';
-import { TemplatesComponent } from './admin/templates/templates/templates.component';
-import { TemplateTableComponent } from './admin/templates/template-table/template-table.component';
-import { TemplateEditComponent } from './admin/templates/template-edit/template-edit.component';
 import { WaitComponent } from './wait/wait.component';
 import { WaitDirective } from './wait/wait.directive';
 import { FieldSelectorComponent } from './admin/fields/field-selector/field-selector.component';
-import { TemplateSelectorComponent } from './admin/templates/template-selector/template-selector.component';
+import { FieldValueComponent } from './field/core/field-value/field-value.component';
 
 @NgModule({
   declarations: [
@@ -42,13 +39,10 @@ import { TemplateSelectorComponent } from './admin/templates/template-selector/t
     FieldDirective,
     StringComponent,
     IntegerComponent,
-    TemplatesComponent,
-    TemplateTableComponent,
-    TemplateEditComponent,
     WaitComponent,
     WaitDirective,
     FieldSelectorComponent,
-    TemplateSelectorComponent,
+    FieldValueComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,7 @@
 package be.frol.chaman.mapper
 
 import be.frol.chaman.model.RichField
-import be.frol.chaman.openapi.model.Field
+import be.frol.chaman.openapi.model.{Field, FieldValue}
 import be.frol.chaman.tables.Tables
 import be.frol.chaman.utils.DateUtils
 import be.frol.chaman.utils.OptionUtils._
@@ -18,10 +18,10 @@ object FieldMapper {
       f.field.label.toOpt,
       f.field.reference.toOpt,
       f.field.datatype.toOpt,
-      f.serializedValue.map(v => JsObject(Seq("data" -> Json.parse(v)))),
-      None,
+      f.fieldData.map(v => FieldValue(v.valueUuid.toOpt(), v.value.map(v => JsObject(Map("data" -> Json.parse(v)))))).toList.toOpt()
     )
   }
+
 
   def toRow(f: Field) = {
     Tables.FieldRow(
@@ -30,19 +30,21 @@ object FieldMapper {
       f.reference.getOrThrowM("missing reference"),
       f.dataType.getOrThrowM("missing datatype"),
       f.label.getOrElse(""),
-      f.value.flatMap(_.value.get("data").map(_.toString())),
       DateUtils.ts,
     )
 
   }
 
-  def toDataRow(f: Field, referenceUuid:String) = {
-    Tables.FieldDataRow(
-      0L,
-      f.uuid.get,
-      referenceUuid,
-      f.value.flatMap(_.value.get("data").map(_.toString())),
-      DateUtils.ts,
+  def toDataRows(f: Field, ownerUuid: String) = {
+    f.value.getOrElse(Nil).map(v =>
+      Tables.FieldDataRow(
+        0L,
+        f.uuid.get,
+        ownerUuid,
+        v.uuid.getOrElse(UUID.randomUUID().toString),
+        v.value.flatMap(o => o.value.get("data").map(_.toString())),
+        DateUtils.ts,
+      )
     )
   }
 }

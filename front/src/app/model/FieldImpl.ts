@@ -9,8 +9,7 @@ export class FieldImpl implements Field {
     public label?: string,
     public reference?: string,
     public dataType?: string,
-    public value?: object,
-    public valueOrigin?: string,
+    public value?: [],
   ) {
   }
 

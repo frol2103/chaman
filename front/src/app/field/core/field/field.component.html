@@ -1,2 +1,16 @@
-{{field.label}}
-<ng-template fieldDirective></ng-template>
+<span *ngIf="showLabel">{{field.label}}</span>
+<ul>
+  <li *ngFor="let v of field.value">
+    <div class="container">
+      <div class="row">
+        <div class="col-10">
+          <app-field-value [field]="field" [fieldValue]="v"></app-field-value>
+        </div>
+        <div class="col-1">
+          <button class="btn" (click)="remove(v)"><i class="bi bi-trash"></i></button>
+        </div>
+      </div>
+    </div>
+  </li>
+  <button class="btn btn-primary" (click)="addValue()"><i class="bi bi-plus"></i></button>
+</ul>

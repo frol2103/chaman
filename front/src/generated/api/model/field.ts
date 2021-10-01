@@ -9,6 +9,7 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { FieldValue } from './fieldValue';
 
 
 export interface Field { 
@@ -19,10 +20,6 @@ export interface Field {
     label?: string;
     reference?: string;
     dataType?: string;
-    /**
-     * value of the type
-     */
-    value?: any;
-    valueOrigin?: string;
+    value?: Array<FieldValue>;
 }
 

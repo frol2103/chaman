@@ -12,10 +12,10 @@
 import { Field } from './field';
 
 
-export interface Section { 
+export interface Item { 
     uuid?: string;
-    label?: string;
-    reference?: string;
+    title?: string;
+    description?: string;
     content?: Array<Field>;
 }
 

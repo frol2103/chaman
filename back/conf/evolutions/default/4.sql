@@ -9,9 +9,9 @@ CREATE TABLE field_data_deleted (
                       PRIMARY KEY (id)
 );
 
-CREATE TABLE template_deleted (
+CREATE TABLE item_deleted (
                                   id bigint(20) NOT NULL AUTO_INCREMENT,
-                                  fk_template_id bigint(20) NOT NULL REFERENCES template(id),
+                                  fk_item_id bigint(20) NOT NULL REFERENCES item(id),
                                   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                                   PRIMARY KEY (id)
 );

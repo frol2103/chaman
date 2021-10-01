@@ -21,6 +21,15 @@ class FieldService @Inject()(
       into ((v, id) => v.copy(id = id))) += p)
   }
 
+  def add(p: Tables.FieldDataRow) = {
+    ((Tables.FieldData returning Tables.FieldData.map(_.id)
+      into ((v, id) => v.copy(id = id))) += p)
+  }
+
+  def addValues(v : Iterable[Tables.FieldDataRow])(implicit executionContext: ExecutionContext) ={
+    DBIO.sequence(v.map(add(_)))
+  }
+
   def allFields = lastVersionOfFields.result
 
   def getField(uuid:String) : DBIO[FieldRow]= lastVersionOfFields.filter(_.uuid === uuid).result.head

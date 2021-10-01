@@ -40,10 +40,7 @@ export class FieldEditComponent implements OnInit {
   }
 
   updateField(){
-    this.field.value = undefined;
-    if(this.fieldComponent){
-      this.fieldComponent.refresh();
-    }
+    this.field.value = [];
   }
 
 }

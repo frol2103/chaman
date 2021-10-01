@@ -2,7 +2,8 @@ import {Component, ComponentFactoryResolver, Input, OnInit, ViewChild} from '@an
 import {FieldsService} from "../fields.service";
 import {FieldDirective} from "../field.directive";
 import {FieldParent} from "../fieldParent";
-import {Field} from "../../../../generated/api";
+import {Field, FieldValue} from "../../../../generated/api";
+import {FieldValueImpl} from "../../../model/FieldValueImpl";
 
 @Component({
   selector: 'app-field',
@@ -12,31 +13,24 @@ import {Field} from "../../../../generated/api";
 export class FieldComponent implements OnInit {
 
   constructor(
-    private fieldsService: FieldsService,
-    private componentFactoryResolver: ComponentFactoryResolver
   ) {
   }
 
 
   @Input() field: Field
-  @ViewChild(FieldDirective, {static: true}) fieldDirective: FieldDirective;
+  @Input() showLabel: Boolean = true
 
   ngOnInit(): void {
-    this.refresh()
   }
 
-  refresh(): void{
 
-    const fieldComponent = this.fieldsService.getFieldComponent(this.field.dataType);
+  addValue() {
+    if(! this.field.value) { this.field.value = []}
+    this.field.value.push(new FieldValueImpl(null, {data:""}))
+  }
 
-    const componentFactory = this.componentFactoryResolver.resolveComponentFactory(fieldComponent);
+  remove(v: FieldValue) {
+    this.field.value.splice(this.field.value.indexOf(v),1)
 
-    const viewContainerRef = this.fieldDirective.viewContainerRef;
-    viewContainerRef.clear();
-    const componentRef = viewContainerRef.createComponent(componentFactory);
-    if(!this.field.value){
-      this.field.value = {"data":null}
-    }
-    (<FieldParent>componentRef.instance).field = this.field;
   }
 }

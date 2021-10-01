@@ -13,8 +13,6 @@ export class StringComponent extends FieldParent implements OnInit {
     super();
   }
 
-  public field: Field;
-
   ngOnInit(): void {
   }
 

@@ -11,8 +11,6 @@ basePath: "/api"
 tags:
   - name: "field"
     description: "Field information"
-  - name: "template"
-    description: "Template information"
   - name: "item"
     description: "complete item form"
 schemes:
@@ -117,13 +115,13 @@ paths:
             items:
               $ref: "#/definitions/FieldType"
 
-  /template:
+  /item:
     get:
       tags:
-        - "template"
-      summary: "Get all templates"
+        - "item"
+      summary: "Get all items"
       description: ""
-      operationId: "getTemplates"
+      operationId: "getItems"
       produces:
         - "application/json"
       responses:
@@ -132,36 +130,36 @@ paths:
           schema:
             type: array
             items:
-              $ref: "#/definitions/Template"
+              $ref: "#/definitions/Item"
     post:
       tags:
-        - "template"
-      summary: "create a template"
+        - "item"
+      summary: "create an item"
       description: ""
-      operationId: "createTemplate"
+      operationId: "createItem"
       consumes:
         - "application/json"
       produces:
         - "application/json"
       parameters:
         - in: "body"
-          name: "template"
+          name: "item"
           required: true
           schema:
-            $ref : "#/definitions/Template"
+            $ref : "#/definitions/Item"
       responses:
         "200":
           description: "OK"
           schema:
-            $ref: "#/definitions/Template"
+            $ref: "#/definitions/Item"
 
-  /template/{uuid}:
+  /item/{uuid}:
     get:
       tags:
-        - "template"
-      summary: "get a template"
+        - "item"
+      summary: "get a item"
       description: ""
-      operationId: "getTemplate"
+      operationId: "getItem"
       produces:
         - "application/json"
       parameters:
@@ -173,14 +171,14 @@ paths:
         "200":
           description: "OK"
           schema:
-            $ref: "#/definitions/Template"
+            $ref: "#/definitions/Item"
 
     delete:
       tags:
-        - "template"
-      summary: "delete a template"
+        - "item"
+      summary: "delete a item"
       description: ""
-      operationId: "deleteTemplate"
+      operationId: "deleteItem"
       parameters:
         - in: "path"
           name: "uuid"
@@ -192,10 +190,10 @@ paths:
 
     put:
       tags:
-        - "template"
-      summary: "update a template"
+        - "item"
+      summary: "update a item"
       description: ""
-      operationId: "updateTemplate"
+      operationId: "updateItem"
       consumes:
         - "application/json"
       produces:
@@ -206,15 +204,15 @@ paths:
           required: true
           type: string
         - in: "body"
-          name: "template"
+          name: "item"
           required: true
           schema:
-            $ref : "#/definitions/Template"
+            $ref : "#/definitions/Item"
       responses:
         "200":
           description: "OK"
           schema:
-            $ref: "#/definitions/Template"
+            $ref: "#/definitions/Item"
 
 definitions:
   FieldType:
@@ -238,26 +236,29 @@ definitions:
       dataType:
         type: "string"
       value:
-        description: "value of the type"
-      valueOrigin:
-        type: string
+        type: array
+        items:
+          $ref: "#/definitions/FieldValue"
 
+  FieldValue:
+    type: "object"
+    properties:
+      uuid:
+        type: "string"
+        description: "identifier of the value"
+      value:
+        description: "value"
 
-  Template:
+  Item:
     type: "object"
     properties:
       uuid:
         type: string
-      parents:
-        type: array
-        items:
-          $ref: "#/definitions/Template"
-      label:
-        type: "string"
-      reference:
-        type: "string"
+      title:
+        type: string
+      description:
+        type: string
       content:
         type: array
         items:
           $ref: "#/definitions/Field"
-

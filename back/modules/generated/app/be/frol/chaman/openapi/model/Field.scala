@@ -5,7 +5,6 @@ import play.api.libs.json._
 /**
   * Represents the Swagger definition for Field.
   * @param uuid single uuid acrross all version of the field
-  * @param value value of the type
   */
 @javax.annotation.Generated(value = Array("org.openapitools.codegen.languages.ScalaPlayFrameworkServerCodegen"))
 case class Field(
@@ -13,8 +12,7 @@ case class Field(
   label: Option[String],
   reference: Option[String],
   dataType: Option[String],
-  value: Option[JsObject],
-  valueOrigin: Option[String]
+  value: Option[List[FieldValue]]
 )
 
 object Field {

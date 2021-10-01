@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { DatatypesService } from './api/datatypes.service';
 import { FieldService } from './api/field.service';
-import { TemplateService } from './api/template.service';
+import { ItemService } from './api/item.service';
 
 @NgModule({
   imports:      [],

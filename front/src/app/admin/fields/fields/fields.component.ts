@@ -1,6 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {DatatypesService, Field, FieldService, Template} from "../../../../generated/api";
-import {Observable} from "rxjs";
+import {Component, OnInit} from '@angular/core';
+import {Field, FieldService} from "../../../../generated/api";
 import {FieldImpl} from "../../../model/FieldImpl";
 import * as _ from 'lodash';
 
@@ -13,10 +12,11 @@ export class FieldsComponent implements OnInit {
 
   constructor(
     private fieldService: FieldService,
-  ) { }
+  ) {
+  }
 
   fields: Array<Field>
-  editionField : Field
+  editionField: Field
 
   ngOnInit(): void {
     this.fieldService.getField().toPromise().then(l => this.fields = l)
@@ -26,11 +26,11 @@ export class FieldsComponent implements OnInit {
     this.editionField = new FieldImpl();
   }
 
-  fieldUpdated(field : Field) : void {
+  fieldUpdated(field: Field): void {
     this.editionField = undefined
-    let indexInArray = _.findIndex(this.fields, {uuid:field.uuid})
+    let indexInArray = _.findIndex(this.fields, {uuid: field.uuid})
     console.log("indexInArray", indexInArray)
-    if(indexInArray != -1){
+    if (indexInArray != -1) {
       this.fields[indexInArray] = field;
     } else {
       this.fields.push(field)
@@ -38,7 +38,7 @@ export class FieldsComponent implements OnInit {
   }
 
 
-  startEdit(field:Field) {
+  startEdit(field: Field) {
     this.editionField = (JSON.parse(JSON.stringify(field)));
   }
 

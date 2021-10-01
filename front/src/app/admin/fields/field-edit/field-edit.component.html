@@ -19,7 +19,7 @@
 
   <div class="form-group" *ngIf="field.dataType">
     <label [for]="field.reference">Default value</label>
-    <app-field [field]="field"></app-field>
+    <app-field [showLabel]="false" [field]="field"></app-field>
   </div>
 
   <button type="submit" class="btn btn-primary" (click)="submit()">Submit</button>
