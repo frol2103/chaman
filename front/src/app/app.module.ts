@@ -23,6 +23,8 @@ import { WaitComponent } from './wait/wait.component';
 import { WaitDirective } from './wait/wait.directive';
 import { FieldSelectorComponent } from './admin/fields/field-selector/field-selector.component';
 import { FieldValueComponent } from './field/core/field-value/field-value.component';
+import { ItemSearchComponent } from './item/item-search/item-search.component';
+import { ItemCardComponent } from './item/item-card/item-card.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +45,8 @@ import { FieldValueComponent } from './field/core/field-value/field-value.compon
     WaitDirective,
     FieldSelectorComponent,
     FieldValueComponent,
+    ItemSearchComponent,
+    ItemCardComponent,
   ],
   imports: [
     BrowserModule,

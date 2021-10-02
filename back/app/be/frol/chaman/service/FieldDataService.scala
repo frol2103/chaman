@@ -38,6 +38,7 @@ class FieldDataService @Inject()(
     fieldsFor(Seq(uuid))
   }
 
+
   def fieldsFor(uuid:Iterable[String]) (implicit executionContext: ExecutionContext): DBIO[Seq[RichField]]= {
     lastVersion.filter(_.ownerUuid .inSet(uuid))
       .join(fieldService.lastVersionOfFields).on(_.fieldUuid === _.uuid)
@@ -52,10 +53,11 @@ class FieldDataService @Inject()(
     lastVersion
       .filter(_.fieldUuid === fieldUuid)
       .filter(_.ownerUuid === ownerUuid)
-
   }
 
-  def updateFieldValues(current:List[FieldDataRow], target:List[FieldDataRow])(implicit executionContext: ExecutionContext) = {
+  def fieldDataRow(ownerUuid: String) = lastVersion.filter(_.ownerUuid === ownerUuid).result
+
+  def updateFieldValues(current:Iterable[FieldDataRow], target:Iterable[FieldDataRow])(implicit executionContext: ExecutionContext) = {
     val currentMap = current.toMapBy(_.valueUuid)
     val targetMap = target.toMapBy(_.valueUuid)
     val toDelete = currentMap.filterNot(c => targetMap.contains(c._1)).map(_._2).map(r => new FieldDataDeletedRow(0L, r.id, DateUtils.ts))

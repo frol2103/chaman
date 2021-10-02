@@ -1,0 +1,20 @@
+<h1>Items</h1>
+<app-wait *ngIf="!items"></app-wait>
+<div *ngIf="items">
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">Title</th>
+      <th scope="col">Description</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let item of items" [routerLink]="['/item/', item.uuid]">
+      <td>{{ item.title }}</td>
+      <td>{{ item.description }}</td>
+    </tr>
+    </tbody>
+  </table>
+  <button (click)="newItem()" type="button" class="btn btn-primary">+</button>
+</div>

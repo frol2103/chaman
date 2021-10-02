@@ -1,0 +1,8 @@
+
+<app-wait *ngIf="!item"></app-wait>
+<div *ngIf="item">
+
+  <h1>Item : {{item.title}}</h1>
+</div>
+
+<div> <button class="btn btn-primary" (click)="save()">Save</button> </div>
