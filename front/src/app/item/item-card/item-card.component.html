@@ -1,8 +1,39 @@
-
-<app-wait *ngIf="!item"></app-wait>
-<div *ngIf="item">
+<div *wait="item">
 
   <h1>Item : {{item.title}}</h1>
+
+
+  <div class="bd-callout bd-callout-meta">
+    <strong>Meta data</strong>
+    <div class="row input-group mb-3">
+      <div class="col-2">
+        <label>title</label>
+      </div>
+      <div class="col-10">
+        <input type="text" class="form-control" [(ngModel)]="item.title">
+      </div>
+    </div>
+    <div class="row input-group mb-3">
+      <div class="col-2">
+        <label>description</label>
+      </div>
+      <div class="col-10">
+        <input type="text" class="form-control" [(ngModel)]="item.description">
+      </div>
+    </div>
+  </div>
+
+
+  <ul>
+    <li *ngFor="let field of item.content">
+      <button class="btn" (click)="deleteField(field)"><i class="bi bi-trash"></i></button>
+      <app-field [field]="field"></app-field>
+    </li>
+  </ul>
+
+
+  <button class="btn btn-primary" (click)="save()">save</button>
+  <button class="btn btn-primary" (click)="startAddField()">addField</button>
 </div>
 
-<div> <button class="btn btn-primary" (click)="save()">Save</button> </div>
+
