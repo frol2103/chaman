@@ -239,11 +239,11 @@ trait Tables {
   /** Entity class storing rows of table User
    *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
    *  @param uuid Database column uuid SqlType(VARCHAR), Length(36,true)
-   *  @param firstname Database column firstname SqlType(VARCHAR), Length(255,true)
-   *  @param lastname Database column lastname SqlType(VARCHAR), Length(255,true)
-   *  @param reference Database column reference SqlType(VARCHAR), Length(255,true)
+   *  @param username Database column username SqlType(VARCHAR), Length(255,true)
+   *  @param openidconnectiss Database column openidconnectiss SqlType(VARCHAR), Length(255,true)
+   *  @param openidconnectsub Database column openidconnectsub SqlType(VARCHAR), Length(255,true)
    *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
-  case class UserRow(id: Long, uuid: String, firstname: String, lastname: String, reference: String, timestamp: java.sql.Timestamp)
+  case class UserRow(id: Long, uuid: String, username: String, openidconnectiss: String, openidconnectsub: String, timestamp: java.sql.Timestamp)
   /** GetResult implicit for fetching UserRow objects using plain SQL queries */
   implicit def GetResultUserRow(implicit e0: GR[Long], e1: GR[String], e2: GR[java.sql.Timestamp]): GR[UserRow] = GR{
     prs => import prs._
@@ -251,20 +251,20 @@ trait Tables {
   }
   /** Table description of table user. Objects of this class serve as prototypes for rows in queries. */
   class User(_tableTag: Tag) extends profile.api.Table[UserRow](_tableTag, Some("chaman"), "user") {
-    def * = (id, uuid, firstname, lastname, reference, timestamp) <> (UserRow.tupled, UserRow.unapply)
+    def * = (id, uuid, username, openidconnectiss, openidconnectsub, timestamp) <> (UserRow.tupled, UserRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(id), Rep.Some(uuid), Rep.Some(firstname), Rep.Some(lastname), Rep.Some(reference), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> UserRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = ((Rep.Some(id), Rep.Some(uuid), Rep.Some(username), Rep.Some(openidconnectiss), Rep.Some(openidconnectsub), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> UserRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
     val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
     /** Database column uuid SqlType(VARCHAR), Length(36,true) */
     val uuid: Rep[String] = column[String]("uuid", O.Length(36,varying=true))
-    /** Database column firstname SqlType(VARCHAR), Length(255,true) */
-    val firstname: Rep[String] = column[String]("firstname", O.Length(255,varying=true))
-    /** Database column lastname SqlType(VARCHAR), Length(255,true) */
-    val lastname: Rep[String] = column[String]("lastname", O.Length(255,varying=true))
-    /** Database column reference SqlType(VARCHAR), Length(255,true) */
-    val reference: Rep[String] = column[String]("reference", O.Length(255,varying=true))
+    /** Database column username SqlType(VARCHAR), Length(255,true) */
+    val username: Rep[String] = column[String]("username", O.Length(255,varying=true))
+    /** Database column openidconnectiss SqlType(VARCHAR), Length(255,true) */
+    val openidconnectiss: Rep[String] = column[String]("openidconnectiss", O.Length(255,varying=true))
+    /** Database column openidconnectsub SqlType(VARCHAR), Length(255,true) */
+    val openidconnectsub: Rep[String] = column[String]("openidconnectsub", O.Length(255,varying=true))
     /** Database column timestamp SqlType(TIMESTAMP) */
     val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
   }

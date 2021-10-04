@@ -16,6 +16,8 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
       "mysql" % "mysql-connector-java" % "5.1.44",
       "org.webjars" % "swagger-ui" % "3.36.2",
       "com.typesafe.play" %% "play-json" % "2.6.0",
+      "com.github.jwt-scala" %% "jwt-play-json" % "9.0.2",
+      "joda-time" % "joda-time" % "2.10.12",
     )
 
   )
