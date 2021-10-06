@@ -18,6 +18,8 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
       "com.typesafe.play" %% "play-json" % "2.6.0",
       "com.github.jwt-scala" %% "jwt-play-json" % "9.0.2",
       "joda-time" % "joda-time" % "2.10.12",
+      "com.google.zxing" % "javase" % "3.3.0",
+      "com.google.zxing" % "core" % "3.3.0",
     )
 
   )

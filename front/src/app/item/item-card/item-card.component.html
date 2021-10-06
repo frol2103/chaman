@@ -1,7 +1,26 @@
 <div *wait="item">
 
   <h1>Item : {{item.title}}</h1>
+  <button type="button" class="btn btn-primary" *ngIf="item.uuid" (click)="openSticker(sticker)">
+    <i class="bi bi-upc-scan"></i> Sticker
+  </button>
 
+  <ng-template #sticker let-modal>
+    <div class="container">
+      <div class="row">
+        <div class="col-5">
+          <img src="/api/item/{{item.uuid}}/qr" />
+        </div>
+        <div class="col-7">
+          <div class="stickerText">
+            <b>{{item.title}}</b>
+            <p>{{item.description}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </ng-template>
 
   <div class="bd-callout bd-callout-meta">
     <strong>Meta data</strong>

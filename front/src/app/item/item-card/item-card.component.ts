@@ -36,6 +36,9 @@ export class ItemCardComponent implements OnInit {
 
   }
 
+  openSticker(content){
+    this.modalService.open(content)
+  }
 
   save(){
     this.r.wrap((this.item.uuid) ?

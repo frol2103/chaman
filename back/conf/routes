@@ -7,3 +7,5 @@
 
 GET        /api/connect/login           be.frol.chaman.api.IdController.login()
 GET        /api/connect/callback        be.frol.chaman.api.IdController.openIdCallback()
+
+GET        /api/item/:id/qr             be.frol.chaman.api.Media.itemQr(id)
