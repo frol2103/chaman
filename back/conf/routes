@@ -3,9 +3,10 @@
 # https://www.playframework.com/documentation/latest/ScalaRouting
 # ~~~~
 
-->         /                            be.frol.chaman.generated.Routes
+->         /                                be.frol.chaman.generated.Routes
 
-GET        /api/connect/login           be.frol.chaman.api.IdController.login()
-GET        /api/connect/callback        be.frol.chaman.api.IdController.openIdCallback()
+GET        /api/connect/login               be.frol.chaman.api.IdController.login()
+GET        /api/connect/callback            be.frol.chaman.api.IdController.openIdCallback()
 
-GET        /api/item/:id/qr             be.frol.chaman.api.Media.itemQr(id)
+GET        /api/item/:id/qr                 be.frol.chaman.api.Media.itemQr(id)
+GET        /api/item/:id/sticker            be.frol.chaman.api.Media.sticker(id)

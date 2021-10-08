@@ -20,6 +20,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
       "joda-time" % "joda-time" % "2.10.12",
       "com.google.zxing" % "javase" % "3.3.0",
       "com.google.zxing" % "core" % "3.3.0",
+      "org.xhtmlrenderer" % "flying-saucer-pdf-openpdf" % "9.1.20",
     )
 
   )

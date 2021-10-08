@@ -36,10 +36,6 @@ export class ItemCardComponent implements OnInit {
 
   }
 
-  openSticker(content){
-    this.modalService.open(content)
-  }
-
   save(){
     this.r.wrap((this.item.uuid) ?
       this.itemService.updateItem(this.item.uuid, this.item) :
@@ -62,4 +58,7 @@ export class ItemCardComponent implements OnInit {
     this.item.content.splice(this.item.content.indexOf(field),1)
   }
 
+  dlSticker() {
+    window.location.href = "/api/item/" + this.item.uuid + "/sticker"
+  }
 }

@@ -1,0 +1,51 @@
+@(base64Qr:String, title: String, description:String, width:Float, height:Float)
+
+<html>
+    <head>
+        <style>
+
+			#wrapper {
+                overflow: hidden;
+                height: @(height-1)mm;
+                width: @(width-1)mm;
+            }
+            table, tr, td {
+                margin:0;
+                padding:0;
+            }
+            #qr {
+                height: @(height-2)mm;
+                width: @(height-2)mm;
+            }
+            #qr img {
+                height: @(height-2)mm;
+                width: @(height-2)mm;
+            }
+            #text {
+                overflow: hidden;
+            }
+            @@page{
+              size: @(width)mm @(height)mm;
+              margin: 0;
+              padding: 0;
+            }
+            body {
+                margin: 0;
+                padding: 0;
+            }
+		</style>
+    </head>
+    <body>
+        <table id="wrapper">
+            <tr>
+                <td id="qr">
+                    <img src="data:image/png;base64,@base64Qr" />
+                </td>
+                <td id="text">
+                    <b>@title</b>
+                    <p>@description</p>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>
