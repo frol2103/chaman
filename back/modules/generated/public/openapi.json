@@ -1,7 +1,6 @@
 {
   "openapi" : "3.0.1",
   "info" : {
-    "description" : "",
     "license" : {
       "name" : "Apache 2.0",
       "url" : "http://www.apache.org/licenses/LICENSE-2.0.html"
@@ -68,20 +67,21 @@
           }
         },
         "summary" : "create a field",
-        "tags" : [ "field" ],
-        "x-codegen-request-body-name" : "field"
+        "tags" : [ "field" ]
       }
     },
     "/field/{uuid}" : {
       "delete" : {
         "operationId" : "deleteField",
         "parameters" : [ {
+          "explode" : false,
           "in" : "path",
           "name" : "uuid",
           "required" : true,
           "schema" : {
             "type" : "string"
-          }
+          },
+          "style" : "simple"
         } ],
         "responses" : {
           "200" : {
@@ -95,12 +95,14 @@
       "put" : {
         "operationId" : "updateField",
         "parameters" : [ {
+          "explode" : false,
           "in" : "path",
           "name" : "uuid",
           "required" : true,
           "schema" : {
             "type" : "string"
-          }
+          },
+          "style" : "simple"
         } ],
         "requestBody" : {
           "content" : {
@@ -125,8 +127,7 @@
           }
         },
         "summary" : "update a field",
-        "tags" : [ "field" ],
-        "x-codegen-request-body-name" : "field"
+        "tags" : [ "field" ]
       }
     },
     "/data-types/" : {
@@ -197,20 +198,21 @@
           }
         },
         "summary" : "create an item",
-        "tags" : [ "item" ],
-        "x-codegen-request-body-name" : "item"
+        "tags" : [ "item" ]
       }
     },
     "/item/{uuid}" : {
       "delete" : {
         "operationId" : "deleteItem",
         "parameters" : [ {
+          "explode" : false,
           "in" : "path",
           "name" : "uuid",
           "required" : true,
           "schema" : {
             "type" : "string"
-          }
+          },
+          "style" : "simple"
         } ],
         "responses" : {
           "200" : {
@@ -224,12 +226,14 @@
       "get" : {
         "operationId" : "getItem",
         "parameters" : [ {
+          "explode" : false,
           "in" : "path",
           "name" : "uuid",
           "required" : true,
           "schema" : {
             "type" : "string"
-          }
+          },
+          "style" : "simple"
         } ],
         "responses" : {
           "200" : {
@@ -249,12 +253,14 @@
       "put" : {
         "operationId" : "updateItem",
         "parameters" : [ {
+          "explode" : false,
           "in" : "path",
           "name" : "uuid",
           "required" : true,
           "schema" : {
             "type" : "string"
-          }
+          },
+          "style" : "simple"
         } ],
         "requestBody" : {
           "content" : {
@@ -279,8 +285,7 @@
           }
         },
         "summary" : "update a item",
-        "tags" : [ "item" ],
-        "x-codegen-request-body-name" : "item"
+        "tags" : [ "item" ]
       }
     }
   },
@@ -403,6 +408,5 @@
         "type" : "object"
       }
     }
-  },
-  "x-original-swagger-version" : "2.0"
+  }
 }

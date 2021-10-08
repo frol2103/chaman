@@ -1,264 +1,246 @@
-swagger: "2.0"
+openapi: 3.0.1
 info:
+  title: Chaman
   description: ""
-  version: "1.0.0"
-  title: "Chaman"
   license:
-    name: "Apache 2.0"
-    url: "http://www.apache.org/licenses/LICENSE-2.0.html"
-host: "chaman.frol.be"
-basePath: "/api"
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+  - url: https://chaman.frol.be/api
+  - url: http://chaman.frol.be/api
 tags:
-  - name: "field"
-    description: "Field information"
-  - name: "item"
-    description: "complete item form"
-schemes:
-  - "https"
-  - "http"
-
+  - name: field
+    description: Field information
+  - name: item
+    description: complete item form
 paths:
   /field:
     get:
       tags:
-        - "field"
-      summary: "Get a field"
-      description: ""
-      operationId: "getField"
-      produces:
-        - "application/json"
+        - field
+      summary: Get a field
+      operationId: getField
       responses:
-        "200":
-          description: "OK"
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/Field"
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Field'
     post:
       tags:
-        - "field"
-      summary: "create a field"
-      description: ""
-      operationId: "createField"
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      parameters:
-        - in: "body"
-          name: "field"
-          required: true
-          schema:
-            $ref : "#/definitions/Field"
+        - field
+      summary: create a field
+      operationId: createField
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Field'
+        required: true
       responses:
-        "200":
-          description: "OK"
-          schema:
-            $ref: "#/definitions/Field"
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Field'
 
   /field/{uuid}:
     put:
       tags:
-        - "field"
-      summary: "update a field"
-      description: ""
-      operationId: "updateField"
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
+        - field
+      summary: update a field
+      operationId: updateField
       parameters:
-        - in: "path"
-          name: "uuid"
-          required: true
-          type: string
-        - in: "body"
-          name: "field"
+        - name: uuid
+          in: path
           required: true
           schema:
-            $ref : "#/definitions/Field"
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Field'
+        required: true
       responses:
-        "200":
-          description: "OK"
-          schema:
-            $ref: "#/definitions/Field"
-
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Field'
     delete:
       tags:
-        - "field"
-      summary: "delete a field"
-      description: ""
-      operationId: "deleteField"
+        - field
+      summary: delete a field
+      operationId: deleteField
       parameters:
-        - in: "path"
-          name: "uuid"
+        - name: uuid
+          in: path
           required: true
-          type: string
+          schema:
+            type: string
       responses:
-        "200":
-          description: "OK"
-
+        200:
+          description: OK
+          content: {}
   /data-types/:
     get:
       tags:
-        - "datatypes"
-      summary: "get data type"
-      description: ""
-      operationId: "getDataTypes"
-      produces:
-        - "application/json"
+        - datatypes
+      summary: get data type
+      operationId: getDataTypes
       responses:
-        "200":
-          description: "OK"
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/FieldType"
-
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FieldType'
   /item:
     get:
       tags:
-        - "item"
-      summary: "Get all items"
-      description: ""
-      operationId: "getItems"
-      produces:
-        - "application/json"
+        - item
+      summary: Get all items
+      operationId: getItems
       responses:
-        "200":
-          description: "OK"
-          schema:
-            type: array
-            items:
-              $ref: "#/definitions/Item"
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Item'
     post:
       tags:
-        - "item"
-      summary: "create an item"
-      description: ""
-      operationId: "createItem"
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      parameters:
-        - in: "body"
-          name: "item"
-          required: true
-          schema:
-            $ref : "#/definitions/Item"
+        - item
+      summary: create an item
+      operationId: createItem
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+        required: true
       responses:
-        "200":
-          description: "OK"
-          schema:
-            $ref: "#/definitions/Item"
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
 
   /item/{uuid}:
     get:
       tags:
-        - "item"
-      summary: "get a item"
-      description: ""
-      operationId: "getItem"
-      produces:
-        - "application/json"
+        - item
+      summary: get a item
+      operationId: getItem
       parameters:
-        - in: "path"
-          name: "uuid"
+        - name: uuid
+          in: path
           required: true
-          type: string
-      responses:
-        "200":
-          description: "OK"
           schema:
-            $ref: "#/definitions/Item"
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+    put:
+      tags:
+        - item
+      summary: update a item
+      operationId: updateItem
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Item'
+        required: true
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
 
     delete:
       tags:
-        - "item"
-      summary: "delete a item"
-      description: ""
-      operationId: "deleteItem"
+        - item
+      summary: delete a item
+      operationId: deleteItem
       parameters:
-        - in: "path"
-          name: "uuid"
-          required: true
-          type: string
-      responses:
-        "200":
-          description: "OK"
-
-    put:
-      tags:
-        - "item"
-      summary: "update a item"
-      description: ""
-      operationId: "updateItem"
-      consumes:
-        - "application/json"
-      produces:
-        - "application/json"
-      parameters:
-        - in: "path"
-          name: "uuid"
-          required: true
-          type: string
-        - in: "body"
-          name: "item"
+        - name: uuid
+          in: path
           required: true
           schema:
-            $ref : "#/definitions/Item"
+            type: string
       responses:
-        "200":
-          description: "OK"
-          schema:
-            $ref: "#/definitions/Item"
-
-definitions:
-  FieldType:
-    type: "object"
-    required:
-      - identifier
-    properties:
-      identifier:
-        type: "string"
-
-  Field:
-    type: "object"
-    properties:
-      uuid:
-        type: "string"
-        description: "single uuid acrross all version of the field"
-      label:
-        type: "string"
-      reference:
-        type: "string"
-      dataType:
-        type: "string"
-      value:
-        type: array
-        items:
-          $ref: "#/definitions/FieldValue"
-
-  FieldValue:
-    type: "object"
-    properties:
-      uuid:
-        type: "string"
-        description: "identifier of the value"
-      value:
-        description: "value"
-
-  Item:
-    type: "object"
-    properties:
-      uuid:
-        type: string
-      title:
-        type: string
-      description:
-        type: string
-      content:
-        type: array
-        items:
-          $ref: "#/definitions/Field"
+        200:
+          description: OK
+          content: {}
+components:
+  schemas:
+    FieldType:
+      required:
+        - identifier
+      type: object
+      properties:
+        identifier:
+          type: string
+    Field:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: single uuid acrross all version of the field
+        label:
+          type: string
+        reference:
+          type: string
+        dataType:
+          type: string
+        value:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldValue'
+    FieldValue:
+      type: object
+      properties:
+        uuid:
+          type: string
+          description: identifier of the value
+        value:
+          type: object
+          description: value
+    Item:
+      type: object
+      properties:
+        uuid:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
