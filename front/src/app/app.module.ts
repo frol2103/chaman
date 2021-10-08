@@ -9,7 +9,6 @@ import { MenuGroupComponent } from './menu/menu-group/menu-group.component';
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { FieldTableComponent } from './admin/fields/field-table/field-table.component';
 import { FieldsComponent } from './admin/fields/fields/fields.component';
-import { HomeComponent } from './home/home.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import {BASE_PATH} from "../generated/api";
@@ -35,7 +34,6 @@ import {ErrorInterceptor} from "./ErrorInterceptor";
     MenuGroupComponent,
     FieldTableComponent,
     FieldsComponent,
-    HomeComponent,
     FieldEditComponent,
     ToastComponent,
     FieldComponent,
