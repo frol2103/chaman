@@ -20,11 +20,11 @@ class ItemApiImpl @Inject()(
                              val dbConfigProvider: DatabaseConfigProvider,
                              val itemService: ItemService,
                              val fieldDataService: FieldDataService,
-                           ) extends ItemApi with DbContext {
+                           ) extends ItemApi with DbContext with ParentController {
 
   import api._
 
-  override def createItem(item: Item)(implicit request: Request[AnyContent]): Future[Item] = {
+  override def createItem(item: Item)(implicit request: Request[AnyContent]): Future[Item] = run { implicit u =>
     db.run(
       for {
         i <- itemService.add(ItemMapper.toRow(item))
@@ -34,11 +34,11 @@ class ItemApiImpl @Inject()(
     )
   }
 
-  override def deleteItem(uuid: String)(implicit request: Request[AnyContent]): Future[Unit] = {
+  override def deleteItem(uuid: String)(implicit request: Request[AnyContent]): Future[Unit] = run { implicit u =>
     db.run(itemService.delete(uuid)).map(_ => None)
   }
 
-  override def getItem(uuid: String)(implicit request: Request[AnyContent]): Future[Item] = {
+  override def getItem(uuid: String)(implicit request: Request[AnyContent]): Future[Item] =  run { implicit u =>
     db.run(
       getSavedItem(uuid)
     )
@@ -51,11 +51,11 @@ class ItemApiImpl @Inject()(
     } yield ItemMapper.toDto(i, fields)
   }
 
-  override def getItems()(implicit request: Request[AnyContent]): Future[List[Item]] = {
+  override def getItems()(implicit request: Request[AnyContent]): Future[List[Item]] =  run { implicit u =>
     db.run(itemService.all()).map(_.map(ItemMapper.toDto(_)).toList)
   }
 
-  override def updateItem(uuid: String, item: Item)(implicit request: Request[AnyContent]): Future[Item] = {
+  override def updateItem(uuid: String, item: Item)(implicit request: Request[AnyContent]): Future[Item] =  run { implicit u =>
     def updateBaseIfNeeded(current: Tables.ItemRow) = {
       val target = ItemMapper.toRow(item)
       if (target.baseEquivalent(current)) DBIO.successful(current)

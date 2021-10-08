@@ -10,7 +10,7 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { FieldTableComponent } from './admin/fields/field-table/field-table.component';
 import { FieldsComponent } from './admin/fields/fields/fields.component';
 import { HomeComponent } from './home/home.component';
-import {HttpClientModule} from "@angular/common/http";
+import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {FormsModule} from "@angular/forms";
 import {BASE_PATH} from "../generated/api";
 import { FieldEditComponent } from './admin/fields/field-edit/field-edit.component';
@@ -25,6 +25,7 @@ import { FieldSelectorComponent } from './admin/fields/field-selector/field-sele
 import { FieldValueComponent } from './field/core/field-value/field-value.component';
 import { ItemSearchComponent } from './item/item-search/item-search.component';
 import { ItemCardComponent } from './item/item-card/item-card.component';
+import {ErrorInterceptor} from "./ErrorInterceptor";
 
 @NgModule({
   declarations: [
@@ -57,6 +58,7 @@ import { ItemCardComponent } from './item/item-card/item-card.component';
   ],
   providers: [
     {provide: BASE_PATH, useValue: '/api'},
+    {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},
   ],
   bootstrap: [AppComponent]
 })

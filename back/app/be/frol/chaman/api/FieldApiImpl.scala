@@ -21,14 +21,14 @@ class FieldApiImpl @Inject()(
                               val dbConfigProvider: DatabaseConfigProvider,
                               val fieldService: FieldService,
                               val fieldDataService: FieldDataService,
-                            ) extends FieldApi with DbContext {
+                            ) extends FieldApi with DbContext with ParentController {
 
   import api._
 
   /**
    * create a field
    */
-  override def createField(field: Field)(implicit request: Request[AnyContent]): Future[Field] = {
+  override def createField(field: Field)(implicit request: Request[AnyContent]): Future[Field] = run{ implicit u =>
     db.run(
       fieldService.add(FieldMapper.toRow(field)).flatMap { f =>
         fieldService.addValues(FieldMapper.toDataRows(field.copy(uuid = f.uuid.toOpt()), f.uuid)).map(v => RichField(f, v))
@@ -39,7 +39,7 @@ class FieldApiImpl @Inject()(
   /**
    * Get a field
    */
-  override def getField()(implicit request: Request[AnyContent]): Future[List[Field]] = {
+  override def getField()(implicit request: Request[AnyContent]): Future[List[Field]] = run { implicit u =>
     db.run(
       for {
         fields <- fieldService.allFields
@@ -51,7 +51,7 @@ class FieldApiImpl @Inject()(
   /**
    * update a field
    */
-  override def updateField(uuid: String, field: Field)(implicit request: Request[AnyContent]): Future[Field] = {
+  override def updateField(uuid: String, field: Field)(implicit request: Request[AnyContent]): Future[Field] = run { implicit u =>
     val newField = FieldMapper.toRow(field).copy(uuid = uuid)
 
     def updateIfNeeded(f: tables.Tables.FieldRow) = {
@@ -72,7 +72,7 @@ class FieldApiImpl @Inject()(
   /**
    * delete a field
    */
-  override def deleteField(uuid: String)(implicit request: Request[AnyContent]): Future[Unit] = {
+  override def deleteField(uuid: String)(implicit request: Request[AnyContent]): Future[Unit] = run { implicit u =>
     db.run(this.fieldService.delete(uuid))
       .map(_ => Unit)
   }

@@ -38,7 +38,7 @@ class IdController @Inject()(
       DBIO.from(openIdClient.getToken(config, routes.IdController.openIdCallback.absoluteURL(), request.queryString.get("code").flatMap(_.headOption).getOrThrowM("missing code"))
         .map(_.validate[OpenConnectId](OpenConnectId.format).getOrThrow()))
         .flatMap(userService.user(_))
-    ).map(v => Ok(v.uuid).withSession("user" -> v.uuid))
+    ).map(v => Redirect(Conf.frontRootUrl).withSession("user" -> v.uuid))
   }
 }
 

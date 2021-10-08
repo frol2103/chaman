@@ -1,5 +1,5 @@
 package be.frol.chaman.error
 
-class AuthentificationError(s:String, e:Exception=null) extends RuntimeException(s,e){
+class AuthentificationError(s:String = "Not authenticated", e:Exception=null) extends RuntimeException(s,e){
 
 }
