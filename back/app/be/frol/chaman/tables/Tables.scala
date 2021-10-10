@@ -24,18 +24,19 @@ trait Tables {
    *  @param reference Database column reference SqlType(VARCHAR), Length(255,true)
    *  @param datatype Database column datatype SqlType(VARCHAR), Length(255,true)
    *  @param label Database column label SqlType(VARCHAR), Length(255,true)
+   *  @param author Database column author SqlType(VARCHAR), Length(36,true)
    *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
-  case class FieldRow(id: Long, uuid: String, reference: String, datatype: String, label: String, timestamp: java.sql.Timestamp)
+  case class FieldRow(id: Long, uuid: String, reference: String, datatype: String, label: String, author: String, timestamp: java.sql.Timestamp)
   /** GetResult implicit for fetching FieldRow objects using plain SQL queries */
   implicit def GetResultFieldRow(implicit e0: GR[Long], e1: GR[String], e2: GR[java.sql.Timestamp]): GR[FieldRow] = GR{
     prs => import prs._
-    FieldRow.tupled((<<[Long], <<[String], <<[String], <<[String], <<[String], <<[java.sql.Timestamp]))
+    FieldRow.tupled((<<[Long], <<[String], <<[String], <<[String], <<[String], <<[String], <<[java.sql.Timestamp]))
   }
   /** Table description of table field. Objects of this class serve as prototypes for rows in queries. */
   class Field(_tableTag: Tag) extends profile.api.Table[FieldRow](_tableTag, Some("chaman"), "field") {
-    def * = (id, uuid, reference, datatype, label, timestamp) <> (FieldRow.tupled, FieldRow.unapply)
+    def * = (id, uuid, reference, datatype, label, author, timestamp) <> (FieldRow.tupled, FieldRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(id), Rep.Some(uuid), Rep.Some(reference), Rep.Some(datatype), Rep.Some(label), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> FieldRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = ((Rep.Some(id), Rep.Some(uuid), Rep.Some(reference), Rep.Some(datatype), Rep.Some(label), Rep.Some(author), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> FieldRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
     val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
@@ -47,6 +48,8 @@ trait Tables {
     val datatype: Rep[String] = column[String]("datatype", O.Length(255,varying=true))
     /** Database column label SqlType(VARCHAR), Length(255,true) */
     val label: Rep[String] = column[String]("label", O.Length(255,varying=true))
+    /** Database column author SqlType(VARCHAR), Length(36,true) */
+    val author: Rep[String] = column[String]("author", O.Length(36,varying=true))
     /** Database column timestamp SqlType(TIMESTAMP) */
     val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
   }
@@ -59,18 +62,19 @@ trait Tables {
    *  @param ownerUuid Database column owner_uuid SqlType(VARCHAR), Length(36,true)
    *  @param valueUuid Database column value_uuid SqlType(VARCHAR), Length(36,true)
    *  @param value Database column value SqlType(TEXT), Default(None)
+   *  @param author Database column author SqlType(VARCHAR), Length(36,true)
    *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
-  case class FieldDataRow(id: Long, fieldUuid: String, ownerUuid: String, valueUuid: String, value: Option[String] = None, timestamp: java.sql.Timestamp)
+  case class FieldDataRow(id: Long, fieldUuid: String, ownerUuid: String, valueUuid: String, value: Option[String] = None, author: String, timestamp: java.sql.Timestamp)
   /** GetResult implicit for fetching FieldDataRow objects using plain SQL queries */
   implicit def GetResultFieldDataRow(implicit e0: GR[Long], e1: GR[String], e2: GR[Option[String]], e3: GR[java.sql.Timestamp]): GR[FieldDataRow] = GR{
     prs => import prs._
-    FieldDataRow.tupled((<<[Long], <<[String], <<[String], <<[String], <<?[String], <<[java.sql.Timestamp]))
+    FieldDataRow.tupled((<<[Long], <<[String], <<[String], <<[String], <<?[String], <<[String], <<[java.sql.Timestamp]))
   }
   /** Table description of table field_data. Objects of this class serve as prototypes for rows in queries. */
   class FieldData(_tableTag: Tag) extends profile.api.Table[FieldDataRow](_tableTag, Some("chaman"), "field_data") {
-    def * = (id, fieldUuid, ownerUuid, valueUuid, value, timestamp) <> (FieldDataRow.tupled, FieldDataRow.unapply)
+    def * = (id, fieldUuid, ownerUuid, valueUuid, value, author, timestamp) <> (FieldDataRow.tupled, FieldDataRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(id), Rep.Some(fieldUuid), Rep.Some(ownerUuid), Rep.Some(valueUuid), value, Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> FieldDataRow.tupled((_1.get, _2.get, _3.get, _4.get, _5, _6.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = ((Rep.Some(id), Rep.Some(fieldUuid), Rep.Some(ownerUuid), Rep.Some(valueUuid), value, Rep.Some(author), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> FieldDataRow.tupled((_1.get, _2.get, _3.get, _4.get, _5, _6.get, _7.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
     val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
@@ -82,6 +86,8 @@ trait Tables {
     val valueUuid: Rep[String] = column[String]("value_uuid", O.Length(36,varying=true))
     /** Database column value SqlType(TEXT), Default(None) */
     val value: Rep[Option[String]] = column[Option[String]]("value", O.Default(None))
+    /** Database column author SqlType(VARCHAR), Length(36,true) */
+    val author: Rep[String] = column[String]("author", O.Length(36,varying=true))
     /** Database column timestamp SqlType(TIMESTAMP) */
     val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
   }
@@ -91,23 +97,26 @@ trait Tables {
   /** Entity class storing rows of table FieldDataDeleted
    *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
    *  @param fkFieldDataId Database column fk_field_data_id SqlType(BIGINT)
+   *  @param author Database column author SqlType(VARCHAR), Length(36,true)
    *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
-  case class FieldDataDeletedRow(id: Long, fkFieldDataId: Long, timestamp: java.sql.Timestamp)
+  case class FieldDataDeletedRow(id: Long, fkFieldDataId: Long, author: String, timestamp: java.sql.Timestamp)
   /** GetResult implicit for fetching FieldDataDeletedRow objects using plain SQL queries */
-  implicit def GetResultFieldDataDeletedRow(implicit e0: GR[Long], e1: GR[java.sql.Timestamp]): GR[FieldDataDeletedRow] = GR{
+  implicit def GetResultFieldDataDeletedRow(implicit e0: GR[Long], e1: GR[String], e2: GR[java.sql.Timestamp]): GR[FieldDataDeletedRow] = GR{
     prs => import prs._
-    FieldDataDeletedRow.tupled((<<[Long], <<[Long], <<[java.sql.Timestamp]))
+    FieldDataDeletedRow.tupled((<<[Long], <<[Long], <<[String], <<[java.sql.Timestamp]))
   }
   /** Table description of table field_data_deleted. Objects of this class serve as prototypes for rows in queries. */
   class FieldDataDeleted(_tableTag: Tag) extends profile.api.Table[FieldDataDeletedRow](_tableTag, Some("chaman"), "field_data_deleted") {
-    def * = (id, fkFieldDataId, timestamp) <> (FieldDataDeletedRow.tupled, FieldDataDeletedRow.unapply)
+    def * = (id, fkFieldDataId, author, timestamp) <> (FieldDataDeletedRow.tupled, FieldDataDeletedRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(id), Rep.Some(fkFieldDataId), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> FieldDataDeletedRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = ((Rep.Some(id), Rep.Some(fkFieldDataId), Rep.Some(author), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> FieldDataDeletedRow.tupled((_1.get, _2.get, _3.get, _4.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
     val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
     /** Database column fk_field_data_id SqlType(BIGINT) */
     val fkFieldDataId: Rep[Long] = column[Long]("fk_field_data_id")
+    /** Database column author SqlType(VARCHAR), Length(36,true) */
+    val author: Rep[String] = column[String]("author", O.Length(36,varying=true))
     /** Database column timestamp SqlType(TIMESTAMP) */
     val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
   }
@@ -117,23 +126,26 @@ trait Tables {
   /** Entity class storing rows of table FieldDeleted
    *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
    *  @param fkFieldId Database column fk_field_id SqlType(BIGINT)
+   *  @param author Database column author SqlType(VARCHAR), Length(36,true)
    *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
-  case class FieldDeletedRow(id: Long, fkFieldId: Long, timestamp: java.sql.Timestamp)
+  case class FieldDeletedRow(id: Long, fkFieldId: Long, author: String, timestamp: java.sql.Timestamp)
   /** GetResult implicit for fetching FieldDeletedRow objects using plain SQL queries */
-  implicit def GetResultFieldDeletedRow(implicit e0: GR[Long], e1: GR[java.sql.Timestamp]): GR[FieldDeletedRow] = GR{
+  implicit def GetResultFieldDeletedRow(implicit e0: GR[Long], e1: GR[String], e2: GR[java.sql.Timestamp]): GR[FieldDeletedRow] = GR{
     prs => import prs._
-    FieldDeletedRow.tupled((<<[Long], <<[Long], <<[java.sql.Timestamp]))
+    FieldDeletedRow.tupled((<<[Long], <<[Long], <<[String], <<[java.sql.Timestamp]))
   }
   /** Table description of table field_deleted. Objects of this class serve as prototypes for rows in queries. */
   class FieldDeleted(_tableTag: Tag) extends profile.api.Table[FieldDeletedRow](_tableTag, Some("chaman"), "field_deleted") {
-    def * = (id, fkFieldId, timestamp) <> (FieldDeletedRow.tupled, FieldDeletedRow.unapply)
+    def * = (id, fkFieldId, author, timestamp) <> (FieldDeletedRow.tupled, FieldDeletedRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(id), Rep.Some(fkFieldId), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> FieldDeletedRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = ((Rep.Some(id), Rep.Some(fkFieldId), Rep.Some(author), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> FieldDeletedRow.tupled((_1.get, _2.get, _3.get, _4.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
     val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
     /** Database column fk_field_id SqlType(BIGINT) */
     val fkFieldId: Rep[Long] = column[Long]("fk_field_id")
+    /** Database column author SqlType(VARCHAR), Length(36,true) */
+    val author: Rep[String] = column[String]("author", O.Length(36,varying=true))
     /** Database column timestamp SqlType(TIMESTAMP) */
     val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
   }
@@ -145,18 +157,19 @@ trait Tables {
    *  @param uuid Database column uuid SqlType(VARCHAR), Length(36,true)
    *  @param title Database column title SqlType(VARCHAR), Length(255,true)
    *  @param description Database column description SqlType(VARCHAR), Length(100,true)
+   *  @param author Database column author SqlType(VARCHAR), Length(36,true)
    *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
-  case class ItemRow(id: Long, uuid: String, title: String, description: String, timestamp: java.sql.Timestamp)
+  case class ItemRow(id: Long, uuid: String, title: String, description: String, author: String, timestamp: java.sql.Timestamp)
   /** GetResult implicit for fetching ItemRow objects using plain SQL queries */
   implicit def GetResultItemRow(implicit e0: GR[Long], e1: GR[String], e2: GR[java.sql.Timestamp]): GR[ItemRow] = GR{
     prs => import prs._
-    ItemRow.tupled((<<[Long], <<[String], <<[String], <<[String], <<[java.sql.Timestamp]))
+    ItemRow.tupled((<<[Long], <<[String], <<[String], <<[String], <<[String], <<[java.sql.Timestamp]))
   }
   /** Table description of table item. Objects of this class serve as prototypes for rows in queries. */
   class Item(_tableTag: Tag) extends profile.api.Table[ItemRow](_tableTag, Some("chaman"), "item") {
-    def * = (id, uuid, title, description, timestamp) <> (ItemRow.tupled, ItemRow.unapply)
+    def * = (id, uuid, title, description, author, timestamp) <> (ItemRow.tupled, ItemRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(id), Rep.Some(uuid), Rep.Some(title), Rep.Some(description), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> ItemRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = ((Rep.Some(id), Rep.Some(uuid), Rep.Some(title), Rep.Some(description), Rep.Some(author), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> ItemRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
     val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
@@ -166,6 +179,8 @@ trait Tables {
     val title: Rep[String] = column[String]("title", O.Length(255,varying=true))
     /** Database column description SqlType(VARCHAR), Length(100,true) */
     val description: Rep[String] = column[String]("description", O.Length(100,varying=true))
+    /** Database column author SqlType(VARCHAR), Length(36,true) */
+    val author: Rep[String] = column[String]("author", O.Length(36,varying=true))
     /** Database column timestamp SqlType(TIMESTAMP) */
     val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
   }
@@ -175,23 +190,26 @@ trait Tables {
   /** Entity class storing rows of table ItemDeleted
    *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
    *  @param fkItemId Database column fk_item_id SqlType(BIGINT)
+   *  @param author Database column author SqlType(VARCHAR), Length(36,true)
    *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
-  case class ItemDeletedRow(id: Long, fkItemId: Long, timestamp: java.sql.Timestamp)
+  case class ItemDeletedRow(id: Long, fkItemId: Long, author: String, timestamp: java.sql.Timestamp)
   /** GetResult implicit for fetching ItemDeletedRow objects using plain SQL queries */
-  implicit def GetResultItemDeletedRow(implicit e0: GR[Long], e1: GR[java.sql.Timestamp]): GR[ItemDeletedRow] = GR{
+  implicit def GetResultItemDeletedRow(implicit e0: GR[Long], e1: GR[String], e2: GR[java.sql.Timestamp]): GR[ItemDeletedRow] = GR{
     prs => import prs._
-    ItemDeletedRow.tupled((<<[Long], <<[Long], <<[java.sql.Timestamp]))
+    ItemDeletedRow.tupled((<<[Long], <<[Long], <<[String], <<[java.sql.Timestamp]))
   }
   /** Table description of table item_deleted. Objects of this class serve as prototypes for rows in queries. */
   class ItemDeleted(_tableTag: Tag) extends profile.api.Table[ItemDeletedRow](_tableTag, Some("chaman"), "item_deleted") {
-    def * = (id, fkItemId, timestamp) <> (ItemDeletedRow.tupled, ItemDeletedRow.unapply)
+    def * = (id, fkItemId, author, timestamp) <> (ItemDeletedRow.tupled, ItemDeletedRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(id), Rep.Some(fkItemId), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> ItemDeletedRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = ((Rep.Some(id), Rep.Some(fkItemId), Rep.Some(author), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> ItemDeletedRow.tupled((_1.get, _2.get, _3.get, _4.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
     val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
     /** Database column fk_item_id SqlType(BIGINT) */
     val fkItemId: Rep[Long] = column[Long]("fk_item_id")
+    /** Database column author SqlType(VARCHAR), Length(36,true) */
+    val author: Rep[String] = column[String]("author", O.Length(36,varying=true))
     /** Database column timestamp SqlType(TIMESTAMP) */
     val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
   }

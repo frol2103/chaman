@@ -1,6 +1,6 @@
 package be.frol.chaman.mapper
 
-import be.frol.chaman.model.RichField
+import be.frol.chaman.model.{RichField, UserInfo}
 import be.frol.chaman.openapi.model.{Field, FieldValue}
 import be.frol.chaman.tables.Tables
 import be.frol.chaman.utils.DateUtils
@@ -23,19 +23,20 @@ object FieldMapper {
   }
 
 
-  def toRow(f: Field) = {
+  def toRow(f: Field)(implicit userInfo: UserInfo) = {
     Tables.FieldRow(
       0L,
       f.uuid.map(_.toString).getOrElse(UUID.randomUUID().toString),
       f.reference.getOrThrowM("missing reference"),
       f.dataType.getOrThrowM("missing datatype"),
       f.label.getOrElse(""),
+      userInfo.uuid,
       DateUtils.ts,
     )
 
   }
 
-  def toDataRows(f: Field, ownerUuid: String) = {
+  def toDataRows(f: Field, ownerUuid: String)(implicit userInfo: UserInfo) = {
     f.value.getOrElse(Nil).map(v =>
       Tables.FieldDataRow(
         0L,
@@ -43,6 +44,7 @@ object FieldMapper {
         ownerUuid,
         v.uuid.getOrElse(UUID.randomUUID().toString),
         v.value.flatMap(o => o.value.get("data").map(_.toString())),
+        userInfo.uuid,
         DateUtils.ts,
       )
     )

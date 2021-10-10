@@ -1,6 +1,7 @@
 package be.frol.chaman.service
 
 import be.frol.chaman.api.DbContext
+import be.frol.chaman.model.UserInfo
 import be.frol.chaman.tables.Tables
 import be.frol.chaman.tables.Tables.{FieldDataDeletedRow, FieldRow}
 import be.frol.chaman.utils.DateUtils
@@ -41,9 +42,9 @@ class FieldService @Inject()(
       .filterNot(f => Tables.FieldDeleted.filter(f.id === _.fkFieldId).exists)
   }
 
-  def delete(uuid: String)(implicit executionContext: ExecutionContext) = {
+  def delete(uuid: String)(implicit executionContext: ExecutionContext, userInfo: UserInfo) = {
     getField(uuid).flatMap(lv =>
-      Tables.FieldDeleted += Tables.FieldDeletedRow(0L, lv.id, DateUtils.ts)
+      Tables.FieldDeleted += Tables.FieldDeletedRow(0L, lv.id,userInfo.uuid, DateUtils.ts)
     )
   }
 }

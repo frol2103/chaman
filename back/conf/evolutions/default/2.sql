@@ -8,6 +8,7 @@ CREATE TABLE field (
                       reference varchar(255) NOT NULL,
                       datatype varchar(255) NOT NULL,
                       label varchar(255) NOT NULL,
+                      author varchar(36) NOT NULL,
                       `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
                       PRIMARY KEY (id)
 );
