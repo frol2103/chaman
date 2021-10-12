@@ -9,9 +9,6 @@ export class MenuGroupComponent implements OnInit {
 
   constructor() { }
 
-  @Input() title: string;
-  @Input() headerRouterLink;
-
   ngOnInit(): void {
   }
 

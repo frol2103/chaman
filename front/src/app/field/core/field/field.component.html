@@ -1,16 +1,17 @@
-<span *ngIf="showLabel">{{field.label}}</span>
-<ul>
-  <li *ngFor="let v of field.value">
-    <div class="container">
-      <div class="row">
-        <div class="col-10">
-          <app-field-value [field]="field" [fieldValue]="v"></app-field-value>
-        </div>
-        <div class="col-1">
-          <button class="btn" (click)="remove(v)"><i class="bi bi-trash"></i></button>
-        </div>
+<div class="container">
+  <div class="row">
+    <div class="label col-3" *ngIf="showLabel">
+      {{field.label}}
+    </div>
+
+    <div class="col-6">
+      <div *ngIf="!inEdit" (click)="edit()" class="valueContainer valueContainerNotEdit">
+        <span *ngFor="let v of field.value">v</span>
+      </div>
+
+      <div *ngIf="inEdit" class="valueContainer valueContainerEdit">
+        <tag-input></tag-input>
       </div>
     </div>
-  </li>
-  <button class="btn btn-primary" (click)="addValue()"><i class="bi bi-plus"></i></button>
-</ul>
+  </div>
+</div>
