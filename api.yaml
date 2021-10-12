@@ -197,57 +197,6 @@ paths:
         200:
           description: OK
           content: {}
-
-  /item/{itemUuid}/field/{fieldUuid}:
-    put:
-      tags:
-        - item
-      summary: update an item field
-      operationId: setItemField
-      parameters:
-        - name: itemUuid
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: fieldUuid
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: array
-              items:
-                $ref: '#/components/schemas/FieldValue'
-        required: true
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/FieldValue'
-    delete:
-      tags:
-        - item
-      summary: delete a item
-      operationId: deleteItem
-      parameters:
-        - name: uuid
-          in: path
-          required: true
-          schema:
-            type: string
-      responses:
-        200:
-          description: OK
-          content: {}
-
 components:
   schemas:
     FieldType:

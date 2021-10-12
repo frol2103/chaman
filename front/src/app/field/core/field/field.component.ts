@@ -20,27 +20,13 @@ export class FieldComponent implements OnInit {
   @Input() field: Field
   @Input() showLabel: Boolean = true
 
-  inEdit = false
-  addPending = false
-  addPendingValue = ""
-
   ngOnInit(): void {
   }
 
-  edit() {
-    this.inEdit = true;
-  }
 
-
-  startAddValue() {
-    this.addPending = true;
-    this.addPendingValue = ""
-  }
-
-  addValue(){
+  addValue() {
     if(! this.field.value) { this.field.value = []}
-    this.field.value.push(new FieldValueImpl(null, {data:this.addPendingValue}))
-    this.addPending = false
+    this.field.value.push(new FieldValueImpl(null, {data:""}))
   }
 
   remove(v: FieldValue) {

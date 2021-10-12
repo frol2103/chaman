@@ -1,37 +1,3 @@
-.valueContainerNotEdit:hover {
-  border: 1px solid gray;
-  background-color: #fdfcfc;
-}
-
-.valueContainerEdit {
-  border: 1px solid black;
-  background-color: #fdfcfc;
-}
-
-.valueContainer {
-  padding: 5px;
-}
-
-.actions {
-  position: absolute;
-  right: 0;
-  top: 100%;
-  z-index: 1;
-}
-
-.close-btn {
-  background-color: gray;
-  width: 30px;
-  height: 30px;
-  padding: 6px 0px;
-  border-radius: 15px;
-  font-size: 8px;
-  text-align: center;
-}
-.close-btn:hover {
-  background-color: lightgray;
-}
-
-.badge-value {
-  margin-right: 5px;
+ul li {
+  list-style: none;
 }
