@@ -10,7 +10,7 @@ import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { FieldTableComponent } from './admin/fields/field-table/field-table.component';
 import { FieldsComponent } from './admin/fields/fields/fields.component';
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
-import {FormsModule} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {BASE_PATH} from "../generated/api";
 import { FieldEditComponent } from './admin/fields/field-edit/field-edit.component';
 import { ToastComponent } from './toast/toast.component';
@@ -25,6 +25,10 @@ import { FieldValueComponent } from './field/core/field-value/field-value.compon
 import { ItemSearchComponent } from './item/item-search/item-search.component';
 import { ItemCardComponent } from './item/item-card/item-card.component';
 import {ErrorInterceptor} from "./ErrorInterceptor";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {MatChipsModule} from "@angular/material/chips";
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatIconModule} from "@angular/material/icon";
 
 @NgModule({
   declarations: [
@@ -53,6 +57,11 @@ import {ErrorInterceptor} from "./ErrorInterceptor";
     AppRoutingModule,
     NgbModule,
     HttpClientModule,
+    BrowserAnimationsModule,
+    MatChipsModule,
+    MatFormFieldModule,
+    MatIconModule,
+    ReactiveFormsModule,
   ],
   providers: [
     {provide: BASE_PATH, useValue: '/api'},

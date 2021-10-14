@@ -1,3 +1,29 @@
-ul li {
-  list-style: none;
+.field-value-chip {
+  width: 100%;
+}
+
+.field {
+  display: flex;
+}
+
+.field .label {
+  vertical-align: center;
+}
+
+.field-content{
+  width: 100%;
+}
+
+.field-edit-actions {
+  padding:5px;
+  position: relative;
+  float:left;
+  right:20px;
+  background-color: white;
+  border: 1px solid rgba(0,0,0,.2);
+  border-radius: 2px;
+}
+.field-edit-action {
+  margin:5px;
+  display: inline-block;
 }

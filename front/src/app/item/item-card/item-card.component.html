@@ -5,7 +5,7 @@
     <i class="bi bi-upc-scan"></i> Sticker
   </button>
 
-    <div class="bd-callout bd-callout-meta">
+  <div class="bd-callout bd-callout-meta">
     <strong>Meta data</strong>
     <div class="row input-group mb-3">
       <div class="col-2">
@@ -26,12 +26,9 @@
   </div>
 
 
-  <ul>
-    <li *ngFor="let field of item.content">
-      <button class="btn" (click)="deleteField(field)"><i class="bi bi-trash"></i></button>
-      <app-field [field]="field"></app-field>
-    </li>
-  </ul>
+  <div *ngFor="let field of item.content">
+    <app-field (onDelete)="deleteField(field)" [field]="field"></app-field>
+  </div>
 
 
   <button class="btn btn-primary" (click)="save()">save</button>

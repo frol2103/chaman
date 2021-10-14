@@ -29,7 +29,7 @@ export class FieldsComponent implements OnInit {
   fieldUpdated(field: Field): void {
     this.editionField = undefined
     let indexInArray = _.findIndex(this.fields, {uuid: field.uuid})
-    console.log("indexInArray", indexInArray)
+
     if (indexInArray != -1) {
       this.fields[indexInArray] = field;
     } else {

@@ -1,16 +1,36 @@
-<span *ngIf="showLabel">{{field.label}}</span>
-<ul>
-  <li *ngFor="let v of field.value">
-    <div class="container">
-      <div class="row">
-        <div class="col-10">
-          <app-field-value [field]="field" [fieldValue]="v"></app-field-value>
-        </div>
-        <div class="col-1">
-          <button class="btn" (click)="remove(v)"><i class="bi bi-trash"></i></button>
-        </div>
+<div class="field">
+  <div class="label" *ngIf="showLabel">{{field.label}}</div>
+
+  <div class="field-content" >
+    <div *ngIf="!edition" (click)="startEdit()">
+      <span *ngFor="let v of field.value; last as isLast">
+        {{v.value.data}}
+        <span *ngIf="!isLast">,</span>
+      </span>
+    </div>
+
+    <div *ngIf="edition">
+      <mat-form-field class="field-value-chip">
+        <mat-chip-list (keyup.escape)="cancel()" #valueList>
+          <mat-chip
+            *ngFor="let v of field.value"
+            [removable]="true"
+            [selectable]="false"
+            (removed)="remove(v)">
+            {{v.value.data}}
+            <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+          <input
+            #valueInput
+            [matChipInputFor]="valueList"
+            (matChipInputTokenEnd)="addValue($event)">
+        </mat-chip-list>
+      </mat-form-field>
+      <div class="field-edit-actions">
+        <button class="btn" (click)="save()"><i class="bi bi-save"></i></button>
+        <button class="btn" (click)="cancel()"><i class="bi bi-x"></i></button>
+        <button class="btn" (click)="deleteField()"><i class="bi bi-trash"></i></button>
       </div>
     </div>
-  </li>
-  <button class="btn btn-primary" (click)="addValue()"><i class="bi bi-plus"></i></button>
-</ul>
+  </div>
+</div>
