@@ -27,7 +27,7 @@ export class FieldValueComponent implements OnInit {
 
   refresh(): void{
     console.log("refresh")
-    const fieldComponent = this.fieldsService.getFieldComponent(this.field.dataType);
+    const fieldComponent = this.fieldsService.getFieldComponent(this.field.inputType);
 
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(fieldComponent);
 

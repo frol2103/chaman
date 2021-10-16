@@ -12,8 +12,8 @@ export class FieldsService {
 
 
   constructor() {
-    this.fields.set("String", StringComponent)
-    this.fields.set("Integer", IntegerComponent)
+    this.fields.set("string", StringComponent)
+    this.fields.set("integer", IntegerComponent)
   }
 
   getFieldComponent(fieldType: string){

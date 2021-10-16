@@ -18,6 +18,7 @@ import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
 import { Field } from '../model/models';
+import { FieldConfig } from '../model/models';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -86,16 +87,16 @@ export class FieldService {
 
     /**
      * create a field
-     * @param field 
+     * @param fieldConfig 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public createField(field: Field, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Field>;
-    public createField(field: Field, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Field>>;
-    public createField(field: Field, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Field>>;
-    public createField(field: Field, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
-        if (field === null || field === undefined) {
-            throw new Error('Required parameter field was null or undefined when calling createField.');
+    public createField(fieldConfig: FieldConfig, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Field>;
+    public createField(fieldConfig: FieldConfig, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Field>>;
+    public createField(fieldConfig: FieldConfig, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Field>>;
+    public createField(fieldConfig: FieldConfig, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
+        if (fieldConfig === null || fieldConfig === undefined) {
+            throw new Error('Required parameter fieldConfig was null or undefined when calling createField.');
         }
 
         let headers = this.defaultHeaders;
@@ -128,7 +129,7 @@ export class FieldService {
         }
 
         return this.httpClient.post<Field>(`${this.configuration.basePath}/field`,
-            field,
+            fieldConfig,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
@@ -225,21 +226,66 @@ export class FieldService {
     }
 
     /**
-     * update a field
+     * get a field config
      * @param uuid 
-     * @param field 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateField(uuid: string, field: Field, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Field>;
-    public updateField(uuid: string, field: Field, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Field>>;
-    public updateField(uuid: string, field: Field, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Field>>;
-    public updateField(uuid: string, field: Field, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
+    public getFieldConfig(uuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<FieldConfig>;
+    public getFieldConfig(uuid: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<FieldConfig>>;
+    public getFieldConfig(uuid: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<FieldConfig>>;
+    public getFieldConfig(uuid: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
+        if (uuid === null || uuid === undefined) {
+            throw new Error('Required parameter uuid was null or undefined when calling getFieldConfig.');
+        }
+
+        let headers = this.defaultHeaders;
+
+        let httpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (httpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (httpHeaderAcceptSelected !== undefined) {
+            headers = headers.set('Accept', httpHeaderAcceptSelected);
+        }
+
+
+        let responseType_: 'text' | 'json' = 'json';
+        if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
+            responseType_ = 'text';
+        }
+
+        return this.httpClient.get<FieldConfig>(`${this.configuration.basePath}/field/${encodeURIComponent(String(uuid))}`,
+            {
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: headers,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * update a field
+     * @param uuid 
+     * @param fieldConfig 
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updateField(uuid: string, fieldConfig: FieldConfig, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Field>;
+    public updateField(uuid: string, fieldConfig: FieldConfig, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Field>>;
+    public updateField(uuid: string, fieldConfig: FieldConfig, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Field>>;
+    public updateField(uuid: string, fieldConfig: FieldConfig, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (uuid === null || uuid === undefined) {
             throw new Error('Required parameter uuid was null or undefined when calling updateField.');
         }
-        if (field === null || field === undefined) {
-            throw new Error('Required parameter field was null or undefined when calling updateField.');
+        if (fieldConfig === null || fieldConfig === undefined) {
+            throw new Error('Required parameter fieldConfig was null or undefined when calling updateField.');
         }
 
         let headers = this.defaultHeaders;
@@ -272,7 +318,7 @@ export class FieldService {
         }
 
         return this.httpClient.put<Field>(`${this.configuration.basePath}/field/${encodeURIComponent(String(uuid))}`,
-            field,
+            fieldConfig,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,

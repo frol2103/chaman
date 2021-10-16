@@ -11,8 +11,9 @@ case class Field(
   uuid: Option[String],
   label: Option[String],
   reference: Option[String],
-  dataType: Option[String],
-  value: Option[List[FieldValue]]
+  inputType: Option[String],
+  value: Option[List[FieldValue]],
+  params: Option[JsObject]
 )
 
 object Field {

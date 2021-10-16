@@ -12,6 +12,7 @@ GET /api/data-types/       be.frol.chaman.openapi.api.DatatypesApiController.get
 POST /api/field            be.frol.chaman.openapi.api.FieldApiController.createField()
 GET /api/field             be.frol.chaman.openapi.api.FieldApiController.getField()
 DELETE /api/field/:uuid    be.frol.chaman.openapi.api.FieldApiController.deleteField(uuid: String)
+GET /api/field/:uuid       be.frol.chaman.openapi.api.FieldApiController.getFieldConfig(uuid: String)
 PUT /api/field/:uuid       be.frol.chaman.openapi.api.FieldApiController.updateField(uuid: String)
 
 # Routes for Item API

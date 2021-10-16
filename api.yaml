@@ -15,6 +15,7 @@ tags:
   - name: item
     description: complete item form
 paths:
+
   /field:
     get:
       tags:
@@ -39,7 +40,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Field'
+              $ref: '#/components/schemas/FieldConfig'
         required: true
       responses:
         200:
@@ -50,6 +51,24 @@ paths:
                 $ref: '#/components/schemas/Field'
 
   /field/{uuid}:
+    get:
+      tags:
+        - field
+      summary: get a field config
+      operationId: getFieldConfig
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FieldConfig'
     put:
       tags:
         - field
@@ -65,7 +84,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Field'
+              $ref: '#/components/schemas/FieldConfig'
         required: true
       responses:
         200:
@@ -103,7 +122,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/FieldType'
+                  $ref: '#/components/schemas/FieldConfig'
   /item:
     get:
       tags:
@@ -206,6 +225,7 @@ components:
       properties:
         identifier:
           type: string
+
     Field:
       type: object
       properties:
@@ -216,12 +236,30 @@ components:
           type: string
         reference:
           type: string
-        dataType:
+        inputType:
           type: string
         value:
           type: array
           items:
             $ref: '#/components/schemas/FieldValue'
+        params:
+          type: object
+
+    FieldConfig:
+      type: object
+      properties:
+        label:
+          type: string
+        reference:
+          type: string
+        datatype:
+          type: string
+        config:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
+
+
     FieldValue:
       type: object
       properties:

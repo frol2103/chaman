@@ -63,6 +63,5 @@ export class FieldComponent implements OnInit {
 
   cancel() {
     this.edition = false;
-    this.test = "ahah"
   }
 }

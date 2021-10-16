@@ -17,7 +17,7 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
-import { FieldType } from '../model/models';
+import { FieldConfig } from '../model/models';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -89,9 +89,9 @@ export class DatatypesService {
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getDataTypes(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<FieldType>>;
-    public getDataTypes(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<FieldType>>>;
-    public getDataTypes(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<FieldType>>>;
+    public getDataTypes(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Array<FieldConfig>>;
+    public getDataTypes(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Array<FieldConfig>>>;
+    public getDataTypes(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Array<FieldConfig>>>;
     public getDataTypes(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
 
         let headers = this.defaultHeaders;
@@ -114,7 +114,7 @@ export class DatatypesService {
             responseType_ = 'text';
         }
 
-        return this.httpClient.get<Array<FieldType>>(`${this.configuration.basePath}/data-types/`,
+        return this.httpClient.get<Array<FieldConfig>>(`${this.configuration.basePath}/data-types/`,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,

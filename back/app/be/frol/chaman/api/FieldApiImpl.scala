@@ -1,10 +1,11 @@
 package be.frol.chaman.api
 
+import be.frol.chaman.core.field.FieldTypes
 import be.frol.chaman.mapper.FieldMapper
 import be.frol.chaman.model.RichField
 import be.frol.chaman.model.RichModelConversions._
 import be.frol.chaman.openapi.api.FieldApi
-import be.frol.chaman.openapi.model.Field
+import be.frol.chaman.openapi.model.{Field, FieldConfig}
 import be.frol.chaman.service.{FieldDataService, FieldService}
 import be.frol.chaman.tables
 import be.frol.chaman.utils.OptionUtils._
@@ -28,7 +29,7 @@ class FieldApiImpl @Inject()(
   /**
    * create a field
    */
-  override def createField(field: Field)(implicit request: Request[AnyContent]): Future[Field] = run{ implicit u =>
+  def createField(field: Field)(implicit request: Request[AnyContent]): Future[Field] = run{ implicit u =>
     db.run(
       fieldService.add(FieldMapper.toRow(field)).flatMap { f =>
         fieldService.addValues(FieldMapper.toDataRows(field.copy(uuid = f.uuid.toOpt()), f.uuid)).map(v => RichField(f, v))
@@ -39,7 +40,7 @@ class FieldApiImpl @Inject()(
   /**
    * Get a field
    */
-  override def getField()(implicit request: Request[AnyContent]): Future[List[Field]] = run { implicit u =>
+  def getField()(implicit request: Request[AnyContent]): Future[List[Field]] = run { implicit u =>
     db.run(
       for {
         fields <- fieldService.allFields
@@ -51,7 +52,7 @@ class FieldApiImpl @Inject()(
   /**
    * update a field
    */
-  override def updateField(uuid: String, field: Field)(implicit request: Request[AnyContent]): Future[Field] = run { implicit u =>
+  def updateField(uuid: String, field: Field)(implicit request: Request[AnyContent]): Future[Field] = run { implicit u =>
     val newField = FieldMapper.toRow(field).copy(uuid = uuid)
 
     def updateIfNeeded(f: tables.Tables.FieldRow) = {
@@ -76,4 +77,11 @@ class FieldApiImpl @Inject()(
     db.run(this.fieldService.delete(uuid))
       .map(_ => Unit)
   }
+
+
+  override def createField(fieldConfig: List[FieldConfig])(implicit request: Request[AnyContent]): Future[FieldConfig] = ???
+
+  override def getFieldConfig(uuid: String)(implicit request: Request[AnyContent]): Future[FieldConfig] = ???
+
+  override def updateField(uuid: String, fieldConfig: FieldConfig)(implicit request: Request[AnyContent]): Future[FieldConfig] = ???
 }

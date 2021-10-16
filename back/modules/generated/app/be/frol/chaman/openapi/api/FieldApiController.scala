@@ -6,6 +6,7 @@ import play.api.libs.json._
 import play.api.mvc._
 import scala.concurrent.{ExecutionContext, Future}
 import be.frol.chaman.openapi.model.Field
+import be.frol.chaman.openapi.model.FieldConfig
 
 @javax.annotation.Generated(value = Array("org.openapitools.codegen.languages.ScalaPlayFrameworkServerCodegen"))
 @Singleton
@@ -15,10 +16,10 @@ class FieldApiController @Inject()(cc: ControllerComponents, api: FieldApi)(impl
     */
   def createField(): Action[AnyContent] = Action.async { request =>
     def executeApi(): Future[Field] = {
-      val field = request.body.asJson.map(_.as[Field]).getOrElse {
-        throw new OpenApiExceptions.MissingRequiredParameterException("body", "field")
+      val fieldConfig = request.body.asJson.map(_.as[FieldConfig]).getOrElse {
+        throw new OpenApiExceptions.MissingRequiredParameterException("body", "fieldConfig")
       }
-      api.createField(field)(request)
+      api.createField(fieldConfig)(request)
     }
 
     executeApi().map { result =>
@@ -55,14 +56,28 @@ class FieldApiController @Inject()(cc: ControllerComponents, api: FieldApi)(impl
   }
 
   /**
+    * GET /api/field/:uuid
+    */
+  def getFieldConfig(uuid: String): Action[AnyContent] = Action.async { request =>
+    def executeApi(): Future[FieldConfig] = {
+      api.getFieldConfig(uuid)(request)
+    }
+
+    executeApi().map { result =>
+      val json = Json.toJson(result)
+      Ok(json)
+    }
+  }
+
+  /**
     * PUT /api/field/:uuid
     */
   def updateField(uuid: String): Action[AnyContent] = Action.async { request =>
     def executeApi(): Future[Field] = {
-      val field = request.body.asJson.map(_.as[Field]).getOrElse {
-        throw new OpenApiExceptions.MissingRequiredParameterException("body", "field")
+      val fieldConfig = request.body.asJson.map(_.as[FieldConfig]).getOrElse {
+        throw new OpenApiExceptions.MissingRequiredParameterException("body", "fieldConfig")
       }
-      api.updateField(uuid, field)(request)
+      api.updateField(uuid, fieldConfig)(request)
     }
 
     executeApi().map { result =>

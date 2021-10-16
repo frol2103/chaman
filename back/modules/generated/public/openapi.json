@@ -48,7 +48,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/Field"
+                "$ref" : "#/components/schemas/FieldConfig"
               }
             }
           },
@@ -92,6 +92,33 @@
         "summary" : "delete a field",
         "tags" : [ "field" ]
       },
+      "get" : {
+        "operationId" : "getFieldConfig",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "uuid",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/FieldConfig"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "get a field config",
+        "tags" : [ "field" ]
+      },
       "put" : {
         "operationId" : "updateField",
         "parameters" : [ {
@@ -108,7 +135,7 @@
           "content" : {
             "application/json" : {
               "schema" : {
-                "$ref" : "#/components/schemas/Field"
+                "$ref" : "#/components/schemas/FieldConfig"
               }
             }
           },
@@ -139,7 +166,7 @@
               "application/json" : {
                 "schema" : {
                   "items" : {
-                    "$ref" : "#/components/schemas/FieldType"
+                    "$ref" : "#/components/schemas/FieldConfig"
                   },
                   "type" : "array"
                 }
@@ -292,9 +319,6 @@
   "components" : {
     "schemas" : {
       "FieldType" : {
-        "example" : {
-          "identifier" : "identifier"
-        },
         "properties" : {
           "identifier" : {
             "type" : "string"
@@ -306,8 +330,9 @@
       "Field" : {
         "example" : {
           "reference" : "reference",
-          "dataType" : "dataType",
+          "inputType" : "inputType",
           "label" : "label",
+          "params" : "{}",
           "uuid" : "uuid",
           "value" : [ {
             "uuid" : "uuid",
@@ -328,12 +353,67 @@
           "reference" : {
             "type" : "string"
           },
-          "dataType" : {
+          "inputType" : {
             "type" : "string"
           },
           "value" : {
             "items" : {
               "$ref" : "#/components/schemas/FieldValue"
+            },
+            "type" : "array"
+          },
+          "params" : {
+            "type" : "object"
+          }
+        },
+        "type" : "object"
+      },
+      "FieldConfig" : {
+        "example" : {
+          "reference" : "reference",
+          "datatype" : "datatype",
+          "label" : "label",
+          "config" : [ {
+            "reference" : "reference",
+            "inputType" : "inputType",
+            "label" : "label",
+            "params" : "{}",
+            "uuid" : "uuid",
+            "value" : [ {
+              "uuid" : "uuid",
+              "value" : "{}"
+            }, {
+              "uuid" : "uuid",
+              "value" : "{}"
+            } ]
+          }, {
+            "reference" : "reference",
+            "inputType" : "inputType",
+            "label" : "label",
+            "params" : "{}",
+            "uuid" : "uuid",
+            "value" : [ {
+              "uuid" : "uuid",
+              "value" : "{}"
+            }, {
+              "uuid" : "uuid",
+              "value" : "{}"
+            } ]
+          } ]
+        },
+        "properties" : {
+          "label" : {
+            "type" : "string"
+          },
+          "reference" : {
+            "type" : "string"
+          },
+          "datatype" : {
+            "type" : "string"
+          },
+          "config" : {
+            "items" : {
+              "$ref" : "#/components/schemas/Field"
             },
             "type" : "array"
           }
@@ -364,8 +444,9 @@
           "uuid" : "uuid",
           "content" : [ {
             "reference" : "reference",
-            "dataType" : "dataType",
+            "inputType" : "inputType",
             "label" : "label",
+            "params" : "{}",
             "uuid" : "uuid",
             "value" : [ {
               "uuid" : "uuid",
@@ -376,8 +457,9 @@
             } ]
           }, {
             "reference" : "reference",
-            "dataType" : "dataType",
+            "inputType" : "inputType",
             "label" : "label",
+            "params" : "{}",
             "uuid" : "uuid",
             "value" : [ {
               "uuid" : "uuid",

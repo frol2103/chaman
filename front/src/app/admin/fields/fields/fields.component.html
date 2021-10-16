@@ -3,8 +3,8 @@
              (editField)="startEdit($event)"
              (removeField)="delete($event)" ></field-table>
 
-<button *ngIf="!editionField" (click)="newField()" type="button" class="btn btn-primary">+</button>
+<button *ngIf="!inEdit" (click)="newField()" type="button" class="btn btn-primary">+</button>
 
-<app-field-edit *ngIf="editionField" [field]="editionField"
+<app-field-edit *ngIf="inEdit" [uuid]="editionFieldUuid"
                 (fieldSaved)="fieldUpdated($event)"></app-field-edit>
 

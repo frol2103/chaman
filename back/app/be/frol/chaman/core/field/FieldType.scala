@@ -4,6 +4,6 @@ import play.api.libs.json.Format
 
 
 case class FieldType[T](
-                         identifier: String,
-                         formatter: Format[T]
+                       basicFieldType: BasicFieldType[T],
+                       configFields: List[ConfigFieldType[_]]
                        )

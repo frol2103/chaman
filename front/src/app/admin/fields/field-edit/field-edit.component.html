@@ -11,15 +11,16 @@
 
   <div class="form-group">
     <label for="dataType">Data type</label>
-    <select class="form-control" id="dataType" name="dataType" (change)="updateField()" [(ngModel)]="field.dataType">
-      <option *ngIf="!field.dataType" selected></option>
-      <option *ngFor="let t of dataTypes | async">{{t.identifier}}</option>
+    <select class="form-control" id="dataType" name="dataType" (change)="updateField()" [(ngModel)]="field.datatype">
+      <option *ngIf="!field.datatype" selected></option>
+      <option *ngFor="let t of dataTypes | async">{{t.datatype}}</option>
     </select>
   </div>
 
-  <div class="form-group" *ngIf="field.dataType">
-    <label [for]="field.reference">Default value</label>
-    <app-field [showLabel]="false" [field]="field"></app-field>
+  <div class="config">
+    <ng-container *ngFor="let c of field.config">
+      <app-field [field]="c"></app-field>
+    </ng-container>
   </div>
 
   <button type="submit" class="btn btn-primary" (click)="submit()">Submit</button>

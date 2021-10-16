@@ -16,18 +16,21 @@ export class FieldsComponent implements OnInit {
   }
 
   fields: Array<Field>
-  editionField: Field
+  editionFieldUuid: string
+  inEdit = false
 
   ngOnInit(): void {
     this.fieldService.getField().toPromise().then(l => this.fields = l)
   }
 
   newField() {
-    this.editionField = new FieldImpl();
+    this.editionFieldUuid = undefined;
+    this.inEdit = true;
   }
 
   fieldUpdated(field: Field): void {
-    this.editionField = undefined
+    this.editionFieldUuid = undefined
+    this.inEdit = false;
     let indexInArray = _.findIndex(this.fields, {uuid: field.uuid})
 
     if (indexInArray != -1) {
@@ -39,7 +42,9 @@ export class FieldsComponent implements OnInit {
 
 
   startEdit(field: Field) {
-    this.editionField = (JSON.parse(JSON.stringify(field)));
+    console.log("start edit")
+    this.editionFieldUuid = field.uuid
+    this.inEdit = true
   }
 
   delete(field: Field): void {

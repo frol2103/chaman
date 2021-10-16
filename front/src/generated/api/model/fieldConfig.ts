@@ -9,18 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { FieldValue } from './fieldValue';
+import { Field } from './field';
 
 
-export interface Field { 
-    /**
-     * single uuid acrross all version of the field
-     */
-    uuid?: string;
+export interface FieldConfig { 
     label?: string;
     reference?: string;
-    inputType?: string;
-    value?: Array<FieldValue>;
-    params?: object;
+    datatype?: string;
+    config?: Array<Field>;
 }
 

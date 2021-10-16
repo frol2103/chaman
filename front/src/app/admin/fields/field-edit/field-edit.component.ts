@@ -1,10 +1,9 @@
-import {Component, Input, OnInit, Output, EventEmitter, ViewChild} from '@angular/core';
-import {DatatypesService, Field, FieldService} from "../../../../generated/api";
-import {FieldImpl} from "../../../model/FieldImpl";
+import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
+import {DatatypesService, Field, FieldConfig, FieldService} from "../../../../generated/api";
 import {ToastService} from "../../../toast/toast.service";
-import {Subject} from "rxjs";
-import {FieldDirective} from "../../../field/core/field.directive";
 import {FieldComponent} from "../../../field/core/field/field.component";
+import {Copy} from "../../../utils/Copy";
+import {FieldConfigImpl} from "../../../model/FielConfigImpl";
 
 @Component({
   selector: 'app-field-edit',
@@ -17,10 +16,13 @@ export class FieldEditComponent implements OnInit {
     private fieldService: FieldService,
     private datatypesService: DatatypesService,
     private toastService: ToastService,
-  ) { }
+  ) {
+  }
 
 
-  @Input() field : Field = new FieldImpl();
+  @Input() uuid: string;
+
+  field: FieldConfig = new FieldConfigImpl();
 
   @Output() fieldSaved = new EventEmitter<Field>();
 
@@ -30,17 +32,26 @@ export class FieldEditComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.updateField()
+    if(this.uuid){
+      this.fieldService.getFieldConfig(this.uuid).toPromise().then(v => this.field = v)
+    } else {
+      this.field = new FieldConfigImpl();
+    }
   }
 
   submit(): void {
-    ((this.field.uuid)? this.fieldService.updateField(this.field.uuid,this.field):this.fieldService.createField(this.field))
+    ((this.uuid) ? this.fieldService.updateField(this.uuid, this.field) : this.fieldService.createField(this.field))
       .toPromise()
       .then(v => this.fieldSaved.emit(v))
-      .catch(e =>  this.toastService.showError('Error while saving field',e) )
+      .catch(e => this.toastService.showError('Error while saving field', e))
   }
 
-  updateField(){
-    this.field.value = [];
-  }
+  updateField() {
+    this.dataTypes.then(v => {
 
+      let typeConfig = v.find(d => d.datatype === this.field?.datatype);
+      this.field.config = (typeConfig)?Copy.copy(typeConfig?.config):[];
+    })
+  }
 }
