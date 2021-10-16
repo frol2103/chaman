@@ -8,6 +8,7 @@ import be.frol.chaman.openapi.api.FieldApi
 import be.frol.chaman.openapi.model.{Field, FieldConfig}
 import be.frol.chaman.service.{FieldDataService, FieldService}
 import be.frol.chaman.tables
+import be.frol.chaman.utils.OptionUtils.enrichedObject
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc.{AnyContent, ControllerComponents, Request}
 import slick.dbio.DBIOAction
@@ -70,24 +71,24 @@ class FieldApiImpl @Inject()(
 
   override def updateField(uuid: String, fieldConfig: FieldConfig)(implicit request: Request[AnyContent]): Future[Field] = {
 
-//    run { implicit u =>
-//      val newField = FieldMapper.toRow(field).copy(uuid = uuid)
-//
-//      def updateIfNeeded(f: tables.Tables.FieldRow) = {
-//        if (!f.equivalent(newField)) fieldService.add(newField.field)
-//        else DBIOAction.successful(f)
-//      }
-//
-//      db.run(
-//        for {
-//          f <- fieldService.getField(uuid)
-//          fd <- fieldDataService.fieldData(uuid, uuid).result
-//          nf <- updateIfNeeded(f)
-//          nd <- fieldDataService.updateFieldValues(fd.toList, FieldMapper.toDataRows(field, uuid))
-//        } yield (RichField(nf, nd))
-//      ).map(FieldMapper.toDto(_))
-//    }
+    run { implicit u =>
+      val newField = FieldMapper.toRow(fieldConfig, uuid.toOpt())
 
-    ???
+      def updateIfNeeded(f: tables.Tables.FieldRow) = {
+        if (!f.equivalent(newField)) fieldService.add(newField.field)
+        else DBIOAction.successful(f)
+      }
+
+      db.run(
+        for {
+          f <- fieldService.getField(uuid)
+          fd <- fieldDataService.dataFor(Seq(uuid)).result
+          nf <- updateIfNeeded(f)
+          nd <- fieldDataService.updateFieldValuesMaps(fd.toList.groupBy(_.fieldUuid),
+            fieldConfig.config.getOrElse(Nil).flatMap(FieldMapper.toDataRows(_, uuid)).groupBy(_.fieldUuid))
+        } yield (RichField(nf, nd))
+      ).map(FieldMapper.toDto(_))
+    }
+
   }
 }

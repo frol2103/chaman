@@ -59,6 +59,11 @@ class FieldDataService @Inject()(
 
   def fieldDataRow(ownerUuid: String) = lastVersion.filter(_.ownerUuid === ownerUuid).result
 
+  def updateFieldValuesMaps(current: Map[String, Iterable[FieldDataRow]], target: Map[String, Iterable[FieldDataRow]])(implicit executionContext: ExecutionContext, userInfo: UserInfo)=  {
+    DBIO.sequence((current.keySet union target.keySet).map(v => updateFieldValues(current.get(v).getOrElse(Nil), target.get(v).getOrElse(Nil))).toList)
+      .map(_.flatten)
+  }
+
   def updateFieldValues(current: Iterable[FieldDataRow], target: Iterable[FieldDataRow])(implicit executionContext: ExecutionContext, userInfo: UserInfo) = {
     val currentMap = current.toMapBy(_.valueUuid)
     val targetMap = target.toMapBy(_.valueUuid)
