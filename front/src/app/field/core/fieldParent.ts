@@ -1,14 +1,18 @@
 import {Field, FieldValue} from "../../../generated/api";
+import {FieldValueImpl} from "../../model/FieldValueImpl";
 
 export abstract class FieldParent {
-  public _fieldValue: FieldValue;
+  public field: Field;
 
-  public set fieldValue(v) {
-    this._fieldValue = v;
+  public get fieldValue() : FieldValue{
+    if(!this.field.value) this.field.value = []
+    if(this.field.value.length === 0) this.field.value.push(new FieldValueImpl())
+    return this.field.value[0];
   }
 
-  public get fieldValue() {
-    return this._fieldValue;
+  public get fieldValues() {
+    if(!this.field.value) this.field.value = []
+    return this.field.value;
   }
 
 }

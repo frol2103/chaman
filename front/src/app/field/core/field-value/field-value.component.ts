@@ -18,7 +18,6 @@ export class FieldValueComponent implements OnInit {
 
 
   @Input() field: Field
-  @Input() fieldValue: FieldValue
   @ViewChild(FieldDirective, {static: true}) fieldDirective: FieldDirective;
 
   ngOnInit(): void {
@@ -26,7 +25,6 @@ export class FieldValueComponent implements OnInit {
   }
 
   refresh(): void{
-    console.log("refresh")
     const fieldComponent = this.fieldsService.getFieldComponent(this.field.inputType);
 
     const componentFactory = this.componentFactoryResolver.resolveComponentFactory(fieldComponent);
@@ -34,6 +32,6 @@ export class FieldValueComponent implements OnInit {
     const viewContainerRef = this.fieldDirective.viewContainerRef;
     viewContainerRef.clear();
     const componentRef = viewContainerRef.createComponent(componentFactory);
-    (<FieldParent>componentRef.instance).fieldValue = this.fieldValue;
+    (<FieldParent>componentRef.instance).field = this.field;
   }
 }

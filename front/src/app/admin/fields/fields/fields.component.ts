@@ -42,7 +42,6 @@ export class FieldsComponent implements OnInit {
 
 
   startEdit(field: Field) {
-    console.log("start edit")
     this.editionFieldUuid = field.uuid
     this.inEdit = true
   }

@@ -29,6 +29,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatChipsModule} from "@angular/material/chips";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatIconModule} from "@angular/material/icon";
+import { MultipleIntegerComponent } from './field/template/multiple-integer/multiple-integer.component';
+import { MultipleStringComponent } from './field/template/multiple-string/multiple-string.component';
+import { SelectComponent } from './field/template/select/select.component';
+import { MultipleParentComponent } from './field/template/multiple-parent/multiple-parent.component';
 
 @NgModule({
   declarations: [
@@ -50,6 +54,10 @@ import {MatIconModule} from "@angular/material/icon";
     FieldValueComponent,
     ItemSearchComponent,
     ItemCardComponent,
+    MultipleIntegerComponent,
+    MultipleStringComponent,
+    SelectComponent,
+    MultipleParentComponent,
   ],
   imports: [
     BrowserModule,

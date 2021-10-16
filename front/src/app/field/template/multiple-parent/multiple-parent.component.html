@@ -1,0 +1,16 @@
+<mat-form-field class="field-value-chip">
+  <mat-chip-list #valueList>
+    <mat-chip
+      *ngFor="let v of field.value"
+      [removable]="true"
+      [selectable]="false"
+      (removed)="remove(v)">
+      {{v.value.data}}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+    <input
+      #valueInput
+      [matChipInputFor]="valueList"
+      (matChipInputTokenEnd)="addValue($event)">
+  </mat-chip-list>
+</mat-form-field>
