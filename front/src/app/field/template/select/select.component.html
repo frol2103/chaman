@@ -1,1 +1,4 @@
-<p>select works!</p>
+<select class="form-control" [id]="field.reference" [(ngModel)]="fieldValue.value.data">
+  <option *ngIf="!fieldValue.value.data" selected></option>
+  <option *ngFor="let t of field.params.staticValues">{{t}}</option>
+</select>

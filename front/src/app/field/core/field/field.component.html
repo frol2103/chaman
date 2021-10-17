@@ -1,7 +1,6 @@
-<div class="field">
-  <div class="label" *ngIf="showLabel">{{field.label}}</div>
-
-  <div class="field-content" >
+<div class="form-group">
+  <label [for]="field.reference" *ngIf="showLabel">{{field.label}}</label>
+  <div >
     <app-field-value [field]="field"></app-field-value>
   </div>
 </div>

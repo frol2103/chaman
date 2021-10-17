@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {Field, FieldService} from "../../../../generated/api";
 import {FieldImpl} from "../../../model/FieldImpl";
 import * as _ from 'lodash';
+import {NgbModal, NgbModalConfig, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'fields',
@@ -12,9 +13,13 @@ export class FieldsComponent implements OnInit {
 
   constructor(
     private fieldService: FieldService,
+    private modalService: NgbModal,
+    private config: NgbModalConfig,
   ) {
+    this.config.size = 'xl'
   }
 
+  modalRef: NgbModalRef
   fields: Array<Field>
   editionFieldUuid: string
   inEdit = false
@@ -23,14 +28,17 @@ export class FieldsComponent implements OnInit {
     this.fieldService.getField().toPromise().then(l => this.fields = l)
   }
 
-  newField() {
+  newField(tpl) {
     this.editionFieldUuid = undefined;
     this.inEdit = true;
+    this.modalRef = this.modalService.open(tpl)
   }
 
   fieldUpdated(field: Field): void {
     this.editionFieldUuid = undefined
     this.inEdit = false;
+    this.modalRef.close()
+    this.modalRef = undefined
     let indexInArray = _.findIndex(this.fields, {uuid: field.uuid})
 
     if (indexInArray != -1) {
@@ -41,9 +49,10 @@ export class FieldsComponent implements OnInit {
   }
 
 
-  startEdit(field: Field) {
+  startEdit(field: Field, tpl) {
     this.editionFieldUuid = field.uuid
     this.inEdit = true
+    this.modalRef = this.modalService.open(tpl)
   }
 
   delete(field: Field): void {
