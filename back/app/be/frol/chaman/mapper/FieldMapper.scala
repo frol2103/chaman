@@ -7,8 +7,10 @@ import be.frol.chaman.tables
 import be.frol.chaman.tables.Tables
 import be.frol.chaman.tables.Tables.{FieldDataRow, FieldRow}
 import be.frol.chaman.utils.DateUtils
+import be.frol.chaman.utils.JsonUtils.richJsResult
 import be.frol.chaman.utils.OptionUtils._
-import play.api.libs.json.{JsObject, Json}
+import play.api.libs.json.{JsObject, JsValue, Json}
+import be.frol.chaman.utils.TraversableUtils._
 
 import java.util.UUID
 
@@ -50,7 +52,10 @@ object FieldMapper {
       f.field.reference.toOpt,
       f.field.datatype.toOpt,
       f.fieldData.map(v => toDto(v)).toList.toOpt(),
-      None
+      f.field.config.map(Json.parse(_) match {
+        case v : JsObject => v
+        case _ => JsObject(Nil)
+      })
     )
   }
 
@@ -68,7 +73,15 @@ object FieldMapper {
       f.label.getOrElse(""),
       userInfo.uuid,
       DateUtils.ts,
+      Json.toJsObject(toConfigMap(f.config.getOrElse(Nil))).toString().toOpt()
     )
+
+  }
+
+  def toConfigMap(fields : List[Field]) : Map[String, JsValue] = {
+    fields.toMapBy(_.reference.getOrThrowM("Missing config field reference")).mapValues{f =>
+      ConfigFieldTypes.mapUuid(f.uuid.getOrThrowM("Missing config field uuid")).basicFieldType.directValue(f.value.getOrElse(Nil).flatMap(_.value))
+    }
 
   }
 

@@ -25,18 +25,19 @@ trait Tables {
    *  @param datatype Database column datatype SqlType(VARCHAR), Length(255,true)
    *  @param label Database column label SqlType(VARCHAR), Length(255,true)
    *  @param author Database column author SqlType(VARCHAR), Length(36,true)
-   *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
-  case class FieldRow(id: Long, uuid: String, reference: String, datatype: String, label: String, author: String, timestamp: java.sql.Timestamp)
+   *  @param timestamp Database column timestamp SqlType(TIMESTAMP)
+   *  @param config Database column config SqlType(TEXT), Default(None) */
+  case class FieldRow(id: Long, uuid: String, reference: String, datatype: String, label: String, author: String, timestamp: java.sql.Timestamp, config: Option[String] = None)
   /** GetResult implicit for fetching FieldRow objects using plain SQL queries */
-  implicit def GetResultFieldRow(implicit e0: GR[Long], e1: GR[String], e2: GR[java.sql.Timestamp]): GR[FieldRow] = GR{
+  implicit def GetResultFieldRow(implicit e0: GR[Long], e1: GR[String], e2: GR[java.sql.Timestamp], e3: GR[Option[String]]): GR[FieldRow] = GR{
     prs => import prs._
-    FieldRow.tupled((<<[Long], <<[String], <<[String], <<[String], <<[String], <<[String], <<[java.sql.Timestamp]))
+    FieldRow.tupled((<<[Long], <<[String], <<[String], <<[String], <<[String], <<[String], <<[java.sql.Timestamp], <<?[String]))
   }
   /** Table description of table field. Objects of this class serve as prototypes for rows in queries. */
   class Field(_tableTag: Tag) extends profile.api.Table[FieldRow](_tableTag, Some("chaman"), "field") {
-    def * = (id, uuid, reference, datatype, label, author, timestamp) <> (FieldRow.tupled, FieldRow.unapply)
+    def * = (id, uuid, reference, datatype, label, author, timestamp, config) <> (FieldRow.tupled, FieldRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(id), Rep.Some(uuid), Rep.Some(reference), Rep.Some(datatype), Rep.Some(label), Rep.Some(author), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> FieldRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = ((Rep.Some(id), Rep.Some(uuid), Rep.Some(reference), Rep.Some(datatype), Rep.Some(label), Rep.Some(author), Rep.Some(timestamp), config)).shaped.<>({r=>import r._; _1.map(_=> FieldRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7.get, _8)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
     val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
@@ -52,6 +53,8 @@ trait Tables {
     val author: Rep[String] = column[String]("author", O.Length(36,varying=true))
     /** Database column timestamp SqlType(TIMESTAMP) */
     val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
+    /** Database column config SqlType(TEXT), Default(None) */
+    val config: Rep[Option[String]] = column[Option[String]]("config", O.Default(None))
   }
   /** Collection-like TableQuery object for table Field */
   lazy val Field = new TableQuery(tag => new Field(tag))
