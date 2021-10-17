@@ -61,7 +61,7 @@ object FieldMapper {
 
 
   private def toDto(v: tables.Tables.FieldDataRow) = {
-    FieldValue(v.valueUuid.toOpt(), v.value.map(v => JsObject(Map("data" -> Json.parse(v)))))
+    FieldValue(v.valueUuid.toOpt(), v.value.map(v => Json.parse(v)))
   }
 
   def toRow(f: FieldConfig, uuid:Option[String])(implicit userInfo: UserInfo) = {
@@ -92,7 +92,7 @@ object FieldMapper {
         f.uuid.get,
         ownerUuid,
         v.uuid.getOrElse(UUID.randomUUID().toString),
-        v.value.flatMap(o => o.value.get("data").map(_.toString())),
+        v.value.map(_.toString),
         userInfo.uuid,
         DateUtils.ts,
       )

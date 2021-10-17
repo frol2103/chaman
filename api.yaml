@@ -242,8 +242,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FieldValue'
-        params:
-          type: object
+        params: {}
 
     FieldConfig:
       type: object
@@ -266,9 +265,7 @@ components:
         uuid:
           type: string
           description: identifier of the value
-        value:
-          type: object
-          description: value
+        value: {}
     Item:
       type: object
       properties:

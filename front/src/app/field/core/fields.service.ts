@@ -16,10 +16,10 @@ export class FieldsService {
 
   constructor() {
     this.fields.set("string", StringComponent)
-    this.fields.set("integer", IntegerComponent)
+    this.fields.set("number", IntegerComponent)
     this.fields.set("select", SelectComponent)
     this.fields.set("multipleString", MultipleStringComponent)
-    this.fields.set("multipleInteger", MultipleIntegerComponent)
+    this.fields.set("multipleNumber", MultipleIntegerComponent)
   }
 
   getFieldComponent(fieldType: string){

@@ -6,8 +6,7 @@ export abstract class FieldParent {
 
   public get fieldValue() : FieldValue{
     if(!this.field.value) this.field.value = []
-    if(this.field.value.length === 0) this.field.value.push(new FieldValueImpl(undefined, {"data":undefined}))
-    if(!this.field.value[0].value) this.field.value[0].value = {"data":undefined}
+    if(this.field.value.length === 0) this.field.value.push(new FieldValueImpl(undefined, undefined))
     return this.field.value[0];
   }
 

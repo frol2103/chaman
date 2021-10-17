@@ -16,9 +16,6 @@ export interface FieldValue {
      * identifier of the value
      */
     uuid?: string;
-    /**
-     * value
-     */
-    value?: object;
+    value?: any | null;
 }
 

@@ -8,7 +8,7 @@ import play.api.{Logger, Logging}
 
 case class BasicFieldType[T](inputType: String, format: Format[T], directValueF : List[T] => JsValue) {
   def directValue(v : List[JsValue]) = {
-    val values = v.map(_ \ ("data")).map(_.get).map(v => format.reads(v).getOrThrow(v.toOpt))
+    val values = v.map(v => format.reads(v).getOrThrow(v.toOpt))
     directValueF(values)
   }
 }

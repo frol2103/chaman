@@ -25,6 +25,7 @@ docker run --rm -u $(id -u) -w /local -v "$DIR/../:/local" openapitools/openapi-
     -o back/modules/generated \
     -c openapi/back/config.yaml
 
+sed -i 's/OasAnyTypeNotMapped/JsValue/g' $(find $DIR/../back/modules/generated/app/ -name "*.scala")
 
 info generage front
 rm -rf $DIR/../front/modules/generated/api

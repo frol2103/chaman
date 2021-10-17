@@ -332,14 +332,14 @@
           "reference" : "reference",
           "inputType" : "inputType",
           "label" : "label",
-          "params" : "{}",
+          "params" : "",
           "uuid" : "uuid",
           "value" : [ {
             "uuid" : "uuid",
-            "value" : "{}"
+            "value" : ""
           }, {
             "uuid" : "uuid",
-            "value" : "{}"
+            "value" : ""
           } ]
         },
         "properties" : {
@@ -362,9 +362,7 @@
             },
             "type" : "array"
           },
-          "params" : {
-            "type" : "object"
-          }
+          "params" : { }
         },
         "type" : "object"
       },
@@ -377,27 +375,27 @@
             "reference" : "reference",
             "inputType" : "inputType",
             "label" : "label",
-            "params" : "{}",
+            "params" : "",
             "uuid" : "uuid",
             "value" : [ {
               "uuid" : "uuid",
-              "value" : "{}"
+              "value" : ""
             }, {
               "uuid" : "uuid",
-              "value" : "{}"
+              "value" : ""
             } ]
           }, {
             "reference" : "reference",
             "inputType" : "inputType",
             "label" : "label",
-            "params" : "{}",
+            "params" : "",
             "uuid" : "uuid",
             "value" : [ {
               "uuid" : "uuid",
-              "value" : "{}"
+              "value" : ""
             }, {
               "uuid" : "uuid",
-              "value" : "{}"
+              "value" : ""
             } ]
           } ]
         },
@@ -423,17 +421,14 @@
       "FieldValue" : {
         "example" : {
           "uuid" : "uuid",
-          "value" : "{}"
+          "value" : ""
         },
         "properties" : {
           "uuid" : {
             "description" : "identifier of the value",
             "type" : "string"
           },
-          "value" : {
-            "description" : "value",
-            "type" : "object"
-          }
+          "value" : { }
         },
         "type" : "object"
       },
@@ -446,27 +441,27 @@
             "reference" : "reference",
             "inputType" : "inputType",
             "label" : "label",
-            "params" : "{}",
+            "params" : "",
             "uuid" : "uuid",
             "value" : [ {
               "uuid" : "uuid",
-              "value" : "{}"
+              "value" : ""
             }, {
               "uuid" : "uuid",
-              "value" : "{}"
+              "value" : ""
             } ]
           }, {
             "reference" : "reference",
             "inputType" : "inputType",
             "label" : "label",
-            "params" : "{}",
+            "params" : "",
             "uuid" : "uuid",
             "value" : [ {
               "uuid" : "uuid",
-              "value" : "{}"
+              "value" : ""
             }, {
               "uuid" : "uuid",
-              "value" : "{}"
+              "value" : ""
             } ]
           } ]
         },
