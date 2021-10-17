@@ -13,7 +13,8 @@ case class Field(
   reference: Option[String],
   inputType: Option[String],
   value: Option[List[FieldValue]],
-  params: Option[JsValue]
+  params: Option[JsValue],
+  errorMessages: Option[List[String]]
 )
 
 object Field {

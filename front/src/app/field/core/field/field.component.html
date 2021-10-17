@@ -3,4 +3,5 @@
   <div >
     <app-field-value [field]="field"></app-field-value>
   </div>
+  <div class="error" *ngFor="let m of field.errorMessages">{{m}}</div>
 </div>

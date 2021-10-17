@@ -22,5 +22,6 @@ export interface Field {
     inputType?: string;
     value?: Array<FieldValue>;
     params?: any | null;
+    errorMessages?: Array<string>;
 }
 

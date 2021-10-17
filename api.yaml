@@ -243,6 +243,10 @@ components:
           items:
             $ref: '#/components/schemas/FieldValue'
         params: {}
+        errorMessages:
+          type: array
+          items:
+            type: string
 
     FieldConfig:
       type: object

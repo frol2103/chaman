@@ -1,10 +1,12 @@
 package be.frol.chaman.service
 
 import be.frol.chaman.api.DbContext
+import be.frol.chaman.core.field.{ConfigFieldTypes, FieldWithConf}
 import be.frol.chaman.model.UserInfo
 import be.frol.chaman.tables.Tables
 import be.frol.chaman.tables.Tables.{FieldDataDeletedRow, FieldRow}
 import be.frol.chaman.utils.DateUtils
+import be.frol.chaman.utils.TraversableUtils.traversableEnriched
 import play.api.db.slick.DatabaseConfigProvider
 import slick.dbio.{DBIOAction, NoStream}
 
@@ -36,6 +38,13 @@ class FieldService @Inject()(
   def getField(uuid:String) : DBIO[FieldRow]= lastVersionOfFields.filter(_.uuid === uuid).result.head
 
   def getFields(uuid:String*) : DBIO[Seq[FieldRow]]= lastVersionOfFields.filter(_.uuid.inSet(uuid)).result
+
+  def getFieldsDefinition(uuids:List[String]) : DBIO[Map[String, FieldWithConf[_]]] = {
+    val staticFields = ConfigFieldTypes.mapUuid.keySet.union(uuids.toSet)
+    DBIO.successful(
+      staticFields.map(ConfigFieldTypes.mapUuid(_)).toMapBy(_.uuid)
+    )
+  }
 
   val lastVersionOfFields = {
     Tables.Field.filterNot(f => Tables.Field.filter(_.uuid === f.uuid).filter(_.id > f.id).exists)

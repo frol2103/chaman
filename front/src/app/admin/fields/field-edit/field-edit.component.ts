@@ -44,7 +44,10 @@ export class FieldEditComponent implements OnInit {
     ((this.uuid) ? this.fieldService.updateField(this.uuid, this.field) : this.fieldService.createField(this.field))
       .toPromise()
       .then(v => this.fieldSaved.emit(v))
-      .catch(e => this.toastService.showError('Error while saving field', e))
+      .catch(e => {
+        this.field = e.error.content
+        this.toastService.showError('Error while saving field', e)
+      })
   }
 
   updateField() {

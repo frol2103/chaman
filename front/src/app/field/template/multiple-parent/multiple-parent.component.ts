@@ -22,7 +22,7 @@ export class MultipleParentComponent implements OnInit {
     if (!this.field.value) {
       this.field.value = []
     }
-    this.field.value.push(new FieldValueImpl(null, s.value))
+    this.field.value.push(new FieldValueImpl(null, {'strValue':s.value}))
     s.input.value = "";
   }
 

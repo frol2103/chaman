@@ -330,6 +330,7 @@
       "Field" : {
         "example" : {
           "reference" : "reference",
+          "errorMessages" : [ "errorMessages", "errorMessages" ],
           "inputType" : "inputType",
           "label" : "label",
           "params" : "",
@@ -362,7 +363,13 @@
             },
             "type" : "array"
           },
-          "params" : { }
+          "params" : { },
+          "errorMessages" : {
+            "items" : {
+              "type" : "string"
+            },
+            "type" : "array"
+          }
         },
         "type" : "object"
       },
@@ -373,6 +380,7 @@
           "label" : "label",
           "config" : [ {
             "reference" : "reference",
+            "errorMessages" : [ "errorMessages", "errorMessages" ],
             "inputType" : "inputType",
             "label" : "label",
             "params" : "",
@@ -386,6 +394,7 @@
             } ]
           }, {
             "reference" : "reference",
+            "errorMessages" : [ "errorMessages", "errorMessages" ],
             "inputType" : "inputType",
             "label" : "label",
             "params" : "",
@@ -439,6 +448,7 @@
           "uuid" : "uuid",
           "content" : [ {
             "reference" : "reference",
+            "errorMessages" : [ "errorMessages", "errorMessages" ],
             "inputType" : "inputType",
             "label" : "label",
             "params" : "",
@@ -452,6 +462,7 @@
             } ]
           }, {
             "reference" : "reference",
+            "errorMessages" : [ "errorMessages", "errorMessages" ],
             "inputType" : "inputType",
             "label" : "label",
             "params" : "",
