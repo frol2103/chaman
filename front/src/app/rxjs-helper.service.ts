@@ -30,7 +30,6 @@ class RxjsHelperWrap<T> {
           callback(v)
         }
       ).catch(e => {
-
         errorCallback(e)
         this.toastService.showError((this.errorMessage) ? this.errorMessage : "Error", e)
       }

@@ -250,3 +250,20 @@ label {
 .error {
   color:red;
 }
+
+
+.field-value-chip {
+  width: 100%;
+}
+
+.field {
+  display: flex;
+}
+
+.field .label {
+  vertical-align: center;
+}
+
+.field-content{
+  width: 100%;
+}

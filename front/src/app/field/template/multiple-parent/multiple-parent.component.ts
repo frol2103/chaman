@@ -19,11 +19,14 @@ export class MultipleParentComponent implements OnInit {
   }
 
   addValue(s: MatChipInputEvent) {
-    if (!this.field.value) {
-      this.field.value = []
+    if (s.value != "") {
+
+      if (!this.field.value) {
+        this.field.value = []
+      }
+      this.field.value.push(new FieldValueImpl(null, {'strValue': s.value}))
+      s.input.value = "";
     }
-    this.field.value.push(new FieldValueImpl(null, {'strValue':s.value}))
-    s.input.value = "";
   }
 
   remove(v: FieldValue) {

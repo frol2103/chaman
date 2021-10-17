@@ -27,7 +27,7 @@ class FieldValidationService @Inject()(
         Try(
           f.value.getOrElse(Nil).map(v => v.copy(value = v.value.map(fieldDef.parseAndFormat(_))))
         ) match {
-          case Success(value) => f.copy(value = value.toOpt())
+          case Success(value) => f.copy(value = value.toOpt(), errorMessages = None)
           case Failure(e) => f.copy(errorMessages = List(e.getMessage).toOpt())
         }
       }
