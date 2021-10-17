@@ -11,10 +11,10 @@ import play.api.{Logger, Logging}
 
 import scala.util.Try
 
-trait FieldWithConf[T] {
+trait FieldWithConf {
   def parseAndFormat(input: JsValue): JsValue= basicFieldType.parseAndFormat(input, config)
   def uuid: String
-  def basicFieldType: BasicFieldType[T]
+  def basicFieldType: BasicFieldType[_]
   def config: JsObject
 }
 
@@ -74,7 +74,7 @@ case class ConfigFieldType[T](
                                reference: String,
                               label: String,
                               basicFieldType: BasicFieldType[T],
-                              config: JsObject = JsObject(Nil)) extends FieldWithConf[T]
+                              config: JsObject = JsObject(Nil)) extends FieldWithConf
 
 object ConfigFieldTypes {
   val suffix = ConfigFieldType("d889136c-75c1-4020-b89a-37d25b07eda4","suffix", "Suffix", BasicFieldTypes.string)

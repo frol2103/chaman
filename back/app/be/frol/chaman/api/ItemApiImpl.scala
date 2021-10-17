@@ -4,7 +4,7 @@ import be.frol.chaman.mapper.ItemMapper
 import be.frol.chaman.model.RichModelConversions._
 import be.frol.chaman.openapi.api.ItemApi
 import be.frol.chaman.openapi.model.Item
-import be.frol.chaman.service.{FieldDataService, ItemService}
+import be.frol.chaman.service.{FieldDataService, FieldValidationService, ItemService}
 import be.frol.chaman.tables.Tables
 import be.frol.chaman.utils.OptionUtils._
 import play.api.db.slick.DatabaseConfigProvider
@@ -20,15 +20,17 @@ class ItemApiImpl @Inject()(
                              val dbConfigProvider: DatabaseConfigProvider,
                              val itemService: ItemService,
                              val fieldDataService: FieldDataService,
+                             val fieldValidationService: FieldValidationService,
                            ) extends ItemApi with DbContext with ParentController {
 
   import api._
 
-  override def createItem(item: Item)(implicit request: Request[AnyContent]): Future[Item] = run { implicit u =>
+  override def createItem(inputItem: Item)(implicit request: Request[AnyContent]): Future[Item] = run { implicit u =>
     db.run(
       for {
-        i <- itemService.add(ItemMapper.toRow(item))
-        data <- fieldDataService.updateFieldValues(Nil, ItemMapper.toDataRow(item.copy(uuid = i.uuid.toOpt())))
+        validatedItem <- fieldValidationService.assertValidFieldsItem(inputItem)
+        i <- itemService.add(ItemMapper.toRow(validatedItem))
+        data <- fieldDataService.updateFieldValues(Nil, ItemMapper.toDataRow(validatedItem.copy(uuid = i.uuid.toOpt())))
         item <- getSavedItem(i.uuid)
       } yield (item)
     )
@@ -55,19 +57,20 @@ class ItemApiImpl @Inject()(
     db.run(itemService.all()).map(_.map(ItemMapper.toDto(_)).toList)
   }
 
-  override def updateItem(uuid: String, item: Item)(implicit request: Request[AnyContent]): Future[Item] =  run { implicit u =>
+  override def updateItem(uuid: String, inputItem: Item)(implicit request: Request[AnyContent]): Future[Item] =  run { implicit u =>
     def updateBaseIfNeeded(current: Tables.ItemRow) = {
-      val target = ItemMapper.toRow(item)
+      val target = ItemMapper.toRow(inputItem)
       if (target.baseEquivalent(current)) DBIO.successful(current)
       else itemService.add(target)
     }
 
     db.run(
       for {
+        validatedItem <- fieldValidationService.assertValidFieldsItem(inputItem)
         currentItem <- itemService.get(uuid)
         currentFields <- fieldDataService.fieldDataRow(uuid)
         newBase <- updateBaseIfNeeded(currentItem)
-        newFields <- fieldDataService.updateFieldValues(currentFields, ItemMapper.toDataRow(item))
+        newFields <- fieldDataService.updateFieldValues(currentFields, ItemMapper.toDataRow(validatedItem))
         newItem <- getSavedItem(uuid)
       } yield (newItem)
     )

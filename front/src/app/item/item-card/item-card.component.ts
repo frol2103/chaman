@@ -42,7 +42,7 @@ export class ItemCardComponent implements OnInit {
       this.itemService.createItem(this.item))
       .withErrorMessage("Error while saving item")
       .withSuccessMessage("Item saved")
-      .then(v => this.item = v)
+      .then(v => this.item = v, e=> this.item = e.error.content)
   }
 
 

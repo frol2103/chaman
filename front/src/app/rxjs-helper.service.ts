@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {Observable, PartialObserver} from "rxjs";
+import {Observable} from "rxjs";
 import {ToastService} from "./toast/toast.service";
 
 class RxjsHelperWrap<T> {
@@ -11,15 +11,17 @@ class RxjsHelperWrap<T> {
   ) {
   }
 
+
   withErrorMessage(errorMessage: string) {
-    return new RxjsHelperWrap<T>(this.o,this.toastService, this.successMessage, errorMessage)
+    return new RxjsHelperWrap<T>(this.o, this.toastService, this.successMessage, errorMessage)
   }
 
   withSuccessMessage(successMessage: string) {
-    return new RxjsHelperWrap<T>(this.o,this.toastService, successMessage, this.errorMessage)
+    return new RxjsHelperWrap<T>(this.o, this.toastService, successMessage, this.errorMessage)
   }
 
-  then(callback: (t:T) => void) {
+  then(callback: (t: T) => void, errorCallback: (e: any) => void = () => {
+  }) {
     this.o.toPromise()
       .then(v => {
           if (this.successMessage) {
@@ -27,8 +29,11 @@ class RxjsHelperWrap<T> {
           }
           callback(v)
         }
-      ).catch(e =>
-      this.toastService.showError((this.errorMessage) ? this.errorMessage : "Error", e)
+      ).catch(e => {
+
+        errorCallback(e)
+        this.toastService.showError((this.errorMessage) ? this.errorMessage : "Error", e)
+      }
     )
   }
 }
@@ -42,7 +47,8 @@ export class RxjsHelperService {
     private toast: ToastService,
   ) {
   }
-  wrap<T>(o: Observable<T>) : RxjsHelperWrap<T>{
+
+  wrap<T>(o: Observable<T>): RxjsHelperWrap<T> {
     return new RxjsHelperWrap<T>(o, this.toast)
 
   }

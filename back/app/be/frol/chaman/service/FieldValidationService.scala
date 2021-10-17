@@ -2,7 +2,7 @@ package be.frol.chaman.service
 
 import be.frol.chaman.api.DbContext
 import be.frol.chaman.error.ValidationError
-import be.frol.chaman.openapi.model.Field
+import be.frol.chaman.openapi.model.{Field, Item}
 import be.frol.chaman.utils.OptionUtils.{enrichedObject, enrichedOption}
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.libs.json.{JsNull, Json, Writes}
@@ -38,6 +38,9 @@ class FieldValidationService @Inject()(
     assertValidFieldsMap[List[Field]](input, v => v, (i, v) => v)
   }
 
+  def assertValidFieldsItem(input:Item) : DBIO[Item] = {
+    assertValidFieldsMap[Item](input, v => v.content.getOrElse(Nil), (i, v) => i.copy(content = v.toOpt()))
+  }
   def assertValidFieldsMap[T](input:T,getFIelds :  T => List[Field], outputCreator : (T, List[Field])=>T)(implicit w:Writes[T]) : DBIO[T] = {
     validateFields(getFIelds(input)).map{ validatedFields =>
       if(!validatedFields.flatMap(_.errorMessages.getOrElse(Nil)).isEmpty){
