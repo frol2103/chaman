@@ -9,6 +9,7 @@ CREATE TABLE user (
                       openidconnectiss varchar(255) NOT NULL,
                       openidconnectsub varchar(255) NOT NULL,
                       `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                      PRIMARY KEY (id)
+                      PRIMARY KEY (id),
+                      INDEX(uuid,openidconnectiss,openidconnectsub)
 );
 

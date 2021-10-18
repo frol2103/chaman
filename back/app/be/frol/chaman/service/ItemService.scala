@@ -22,7 +22,7 @@ class ItemService @Inject()(
   }
 
   def delete(uuid: String)(implicit executionContext: ExecutionContext, userInfo: UserInfo) = {
-    lastVersion.filter(_.uuid === uuid).result.head.flatMap(v => Tables.ItemDeleted += Tables.ItemDeletedRow(0L, v.id, userInfo.uuid, DateUtils.ts))
+    lastVersion.filter(_.uuid === uuid).result.head.flatMap(v => Tables.ItemDeleted += Tables.ItemDeletedRow(v.id, userInfo.uuid, DateUtils.ts))
   }
 
   val lastVersion = {

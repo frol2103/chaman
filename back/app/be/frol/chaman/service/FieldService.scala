@@ -27,12 +27,12 @@ class FieldService @Inject()(
       into ((v, id) => v.copy(id = id))) += p)
   }
 
-  def add(p: Tables.FieldDataRow) = {
-    ((Tables.FieldData returning Tables.FieldData.map(_.id)
+  def add(p: Tables.DataRow) = {
+    ((Tables.Data returning Tables.Data.map(_.id)
       into ((v, id) => v.copy(id = id))) += p)
   }
 
-  def addValues(v: Iterable[Tables.FieldDataRow])(implicit executionContext: ExecutionContext) = {
+  def addValues(v: Iterable[Tables.DataRow])(implicit executionContext: ExecutionContext) = {
     DBIO.sequence(v.map(add(_)))
   }
 
@@ -58,7 +58,7 @@ class FieldService @Inject()(
 
   def delete(uuid: String)(implicit executionContext: ExecutionContext, userInfo: UserInfo) = {
     getField(uuid).flatMap(lv =>
-      Tables.FieldDeleted += Tables.FieldDeletedRow(0L, lv.id, userInfo.uuid, DateUtils.ts)
+      Tables.FieldDeleted += Tables.FieldDeletedRow(lv.id, userInfo.uuid, DateUtils.ts)
     )
   }
 }

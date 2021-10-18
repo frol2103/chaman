@@ -5,7 +5,7 @@ import be.frol.chaman.model.RichField
 import be.frol.chaman.model.RichModelConversions._
 import be.frol.chaman.openapi.api.FieldApi
 import be.frol.chaman.openapi.model.{Field, FieldConfig}
-import be.frol.chaman.service.{FieldDataService, FieldService, FieldValidationService}
+import be.frol.chaman.service.{DataService, FieldService, FieldValidationService}
 import be.frol.chaman.tables
 import be.frol.chaman.utils.OptionUtils.enrichedObject
 import play.api.db.slick.DatabaseConfigProvider
@@ -20,7 +20,7 @@ class FieldApiImpl @Inject()(
                               val cc: ControllerComponents,
                               val dbConfigProvider: DatabaseConfigProvider,
                               val fieldService: FieldService,
-                              val fieldDataService: FieldDataService,
+                              val fieldDataService: DataService,
                               val fieldValidationService: FieldValidationService,
                             ) extends FieldApi with DbContext with ParentController {
 

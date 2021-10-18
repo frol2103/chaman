@@ -5,7 +5,7 @@ import be.frol.chaman.model.{RichField, UserInfo}
 import be.frol.chaman.openapi.model.{Field, FieldConfig, FieldValue}
 import be.frol.chaman.tables
 import be.frol.chaman.tables.Tables
-import be.frol.chaman.tables.Tables.{FieldDataRow, FieldRow}
+import be.frol.chaman.tables.Tables.{DataRow, FieldRow}
 import be.frol.chaman.utils.DateUtils
 import be.frol.chaman.utils.OptionUtils._
 import be.frol.chaman.utils.TraversableUtils._
@@ -22,7 +22,7 @@ object FieldMapper {
   }
 
 
-  def toConfigDto(value: FieldRow, config: Seq[FieldDataRow]): FieldConfig = {
+  def toConfigDto(value: FieldRow, config: Seq[DataRow]): FieldConfig = {
     val configDataMap = config.groupBy(_.fieldUuid)
     FieldConfig(
       value.label.toOpt(),
@@ -64,7 +64,7 @@ object FieldMapper {
   }
 
 
-  private def toDto(v: tables.Tables.FieldDataRow) = {
+  private def toDto(v: tables.Tables.DataRow) = {
     FieldValue(v.valueUuid.toOpt(), v.value.map(v => Json.parse(v)))
   }
 
@@ -91,11 +91,12 @@ object FieldMapper {
 
   def toDataRows(f: Field, ownerUuid: String)(implicit userInfo: UserInfo) = {
     f.value.getOrElse(Nil).map(v =>
-      Tables.FieldDataRow(
+      Tables.DataRow(
         0L,
         f.uuid.get,
         ownerUuid,
         v.uuid.getOrElse(UUID.randomUUID().toString),
+        None,
         v.value.map(_.toString),
         userInfo.uuid,
         DateUtils.ts,

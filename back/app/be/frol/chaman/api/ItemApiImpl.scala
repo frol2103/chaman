@@ -4,7 +4,7 @@ import be.frol.chaman.mapper.ItemMapper
 import be.frol.chaman.model.RichModelConversions._
 import be.frol.chaman.openapi.api.ItemApi
 import be.frol.chaman.openapi.model.Item
-import be.frol.chaman.service.{FieldDataService, FieldValidationService, ItemService}
+import be.frol.chaman.service.{DataService, FieldValidationService, ItemService}
 import be.frol.chaman.tables.Tables
 import be.frol.chaman.utils.OptionUtils._
 import play.api.db.slick.DatabaseConfigProvider
@@ -19,7 +19,7 @@ class ItemApiImpl @Inject()(
                              val cc: ControllerComponents,
                              val dbConfigProvider: DatabaseConfigProvider,
                              val itemService: ItemService,
-                             val fieldDataService: FieldDataService,
+                             val fieldDataService: DataService,
                              val fieldValidationService: FieldValidationService,
                            ) extends ItemApi with DbContext with ParentController {
 

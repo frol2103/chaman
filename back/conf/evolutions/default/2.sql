@@ -10,7 +10,9 @@ CREATE TABLE field (
                       label varchar(255) NOT NULL,
                       author varchar(36) NOT NULL,
                       `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-                      PRIMARY KEY (id)
+                      config TEXT NULL,
+                      PRIMARY KEY (id),
+                      INDEX(uuid)
 );
 
 
