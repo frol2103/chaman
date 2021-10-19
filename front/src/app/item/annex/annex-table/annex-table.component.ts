@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {Annex, AnnexService} from "../../../../generated/api";
 import {RxjsHelperService} from "../../../rxjs-helper.service";
+import {MatTableDataSource} from "@angular/material/table";
 
 @Component({
   selector: 'app-annex-table',
@@ -17,16 +18,24 @@ export class AnnexTableComponent implements OnInit {
   @Input() annexes:Array<Annex>
   @Output() deleteAnnex = new EventEmitter<Annex>()
 
+  datasource = new MatTableDataSource<Annex>()
+
   displayedColumns = ['name', 'actions']
 
   ngOnInit(): void {
+    this.refresh()
+  }
+
+  refresh() {
+    this.datasource.data = this.annexes;
+
   }
 
   delete(f: Annex) {
     if(confirm("Are you sure you want to delete annex " + f.filename)){
       this.r.wrap(this.annexService.deleteAnnex(f.uuid))
         .withErrorMessage("Failed to remove annex")
-        .then(v => this.deleteAnnex.emit(v))
+        .then(v => this.deleteAnnex.emit(f))
     }
 
   }

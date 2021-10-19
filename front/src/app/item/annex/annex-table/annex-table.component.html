@@ -1,4 +1,5 @@
-<table mat-table [dataSource]="annexes" class="table table-striped">
+<span (click)="refresh()">ref</span>
+<table mat-table [dataSource]="datasource" class="table table-striped">
 
   <ng-container matColumnDef="name">
     <th mat-header-cell *matHeaderCellDef>Nom</th>

@@ -1,11 +1,12 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {AnnexService, Field, Item, ItemService} from "../../../generated/api";
+import {Annex, AnnexService, Field, Item, ItemService} from "../../../generated/api";
 import {ItemImpl} from "../../model/ItemImpl";
 import {map} from "rxjs/operators";
 import {RxjsHelperService} from "../../rxjs-helper.service";
 import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
 import {FieldSelectorComponent} from "../../admin/fields/field-selector/field-selector.component";
+import {AnnexTableComponent} from "../annex/annex-table/annex-table.component";
 
 @Component({
   selector: 'app-item-card',
@@ -32,6 +33,8 @@ export class ItemCardComponent implements OnInit {
     )
   }
 
+
+  @ViewChild("annexTable") annexTable:AnnexTableComponent;
 
   ngOnInit(): void {
 
@@ -67,6 +70,14 @@ export class ItemCardComponent implements OnInit {
     this.r.wrap(this.annexService.uploadFile(this.item.uuid,event.target.files[0]))
       .withErrorMessage("Error while adding annex")
       .withSuccessMessage("Annex added")
-      .then(v => this.item.annexes.push(v))
+      .then(v => {
+        this.item.annexes.push(v)
+        this.annexTable.refresh();
+      })
+  }
+
+  annexDeleted(a:Annex) {
+    this.item.annexes.splice(this.item.annexes.indexOf(a))
+    this.annexTable.refresh()
   }
 }

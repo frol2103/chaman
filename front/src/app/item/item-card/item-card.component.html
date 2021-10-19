@@ -26,20 +26,24 @@
   </div>
 
 
-  <h2>Data</h2>
+  <h2>Data <i class="fa fa-plus-circle" (click)="startAddField()"></i></h2>
   <div *ngFor="let field of item.content">
     <app-field (onDelete)="deleteField(field)" [field]="field"></app-field>
   </div>
 
 
+
   <h2>Annexes</h2>
-  <app-annex-table [annexes]="item.annexes" ></app-annex-table>
+  <app-annex-table #annexTable (deleteAnnex)="annexDeleted($event)" [annexes]="item.annexes" ></app-annex-table>
   <div>
     <input (change)="onFileChange($event)" id="singleFile" type="file"/>
   </div>
 
-  <button class="btn btn-primary" (click)="save()">save</button>
-  <button class="btn btn-primary" (click)="startAddField()">addField</button>
+  <div class="action-buttons">
+    <button class="btn btn-primary" (click)="save()">save</button>
+  </div>
+
+
 </div>
 
 

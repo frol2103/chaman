@@ -267,3 +267,11 @@ label {
 .field-content{
   width: 100%;
 }
+.action-buttons {
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  padding: 5px;
+  margin-top: 15px;
+}
