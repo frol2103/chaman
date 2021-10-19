@@ -63,7 +63,7 @@ export class ItemCardComponent implements OnInit {
     window.location.href = "/api/item/" + this.item.uuid + "/sticker"
   }
 
-  onFileChange(event: Event) {
+  onFileChange(event: any) {
     this.r.wrap(this.annexService.uploadFile(this.item.uuid,event.target.files[0]))
       .withErrorMessage("Error while adding annex")
       .withSuccessMessage("Annex added")

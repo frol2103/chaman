@@ -247,6 +247,21 @@ paths:
               schema:
                 $ref: "#/definitions/Annex"
 
+  /annex/{uuid}/delete:
+    post:
+      tags:
+        - "annex"
+      summary: "deleta an annex"
+      operationId: "deleteAnnex"
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "OK"
 
 components:
   schemas:

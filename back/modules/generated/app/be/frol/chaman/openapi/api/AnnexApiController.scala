@@ -12,12 +12,25 @@ import play.api.libs.Files.TemporaryFile
 @Singleton
 class AnnexApiController @Inject()(cc: ControllerComponents, api: AnnexApi)(implicit executionContext: ExecutionContext) extends AbstractController(cc) {
   /**
+    * POST /api/annex/:uuid/delete
+    */
+  def deleteAnnex(uuid: String): Action[AnyContent] = Action.async { request =>
+    def executeApi(): Future[Unit] = {
+      api.deleteAnnex(uuid)(request)
+    }
+
+    executeApi().map { _ =>
+      Ok
+    }
+  }
+
+  /**
     * POST /api/item/:uuid/annex
     */
   def uploadFile(uuid: String): Action[AnyContent] = Action.async { request =>
     def executeApi(): Future[Annex] = {
       val file = request.body.asMultipartFormData.flatMap(_.file("file").map(_.ref: TemporaryFile))
-
+        
       api.uploadFile(uuid, file)(request)
     }
 

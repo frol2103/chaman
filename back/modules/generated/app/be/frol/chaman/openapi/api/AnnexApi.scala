@@ -10,6 +10,12 @@ import play.api.mvc._
 @javax.annotation.Generated(value = Array("org.openapitools.codegen.languages.ScalaPlayFrameworkServerCodegen"))
 trait AnnexApi {
   /**
+    * deleta an annex
+    */
+  def deleteAnnex(uuid: String)(implicit request:Request[AnyContent]): Future[Unit]
+
+
+  /**
     * upload a file
     */
   def uploadFile(uuid: String, file: Option[TemporaryFile])(implicit request:Request[AnyContent]): Future[Annex]

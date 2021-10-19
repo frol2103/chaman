@@ -17,6 +17,7 @@ class AnnexService @Inject()(
                                   val fieldService: FieldService,
                                 ) extends DbContext with Logging {
 
+
   import api._
 
   def add(p: Tables.AnnexRow) = {
@@ -24,8 +25,14 @@ class AnnexService @Inject()(
       into ((v, id) => v.copy(id = id))) += p)
   }
 
+  def delete(p: Tables.AnnexRemovedRow) = {
+    Tables.AnnexRemoved += p
+  }
+
 
   def forItem(uuid:String) = lastVersion.filter(_.itemUuid === uuid).result
+
+  def find(uuid: String) = lastVersion.filter(_.uuid === uuid).result.head
 
   val lastVersion = {
     Tables.Annex.filterNot(f => Tables.Annex.filter(_.uuid === f.uuid)

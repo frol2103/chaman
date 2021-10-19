@@ -1,10 +1,11 @@
 package be.frol.chaman.api
 
-import be.frol.chaman.Conf
+import be.frol.chaman.{Conf, tables}
 import be.frol.chaman.mapper.AnnexMapper
 import be.frol.chaman.openapi.api.AnnexApi
 import be.frol.chaman.openapi.model.Annex
 import be.frol.chaman.service.AnnexService
+import be.frol.chaman.tables.Tables
 import be.frol.chaman.tables.Tables.AnnexRow
 import be.frol.chaman.utils.DateUtils
 import be.frol.chaman.utils.OptionUtils.{enrichedObject, enrichedOption}
@@ -38,5 +39,14 @@ class AnnexApiImpl @Inject()(
       ).map(AnnexMapper.toDto(_))
     }.getOrElse(throw new RuntimeException("missing file"))
 
+  }
+
+  override def deleteAnnex(uuid: String)(implicit request: Request[AnyContent]): Future[Unit] = run { implicit user =>
+    db.run(
+      annexService.find(uuid).flatMap(a =>
+        annexService.delete(new tables.Tables.AnnexRemovedRow(a.id, user.uuid, DateUtils.ts))
+          .map(_ => None)
+      )
+    )
   }
 }
