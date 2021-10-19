@@ -1,12 +1,12 @@
 package {{package}}
 
 import play.api.libs.json._
+import play.api.mvc._
 {{#supportAsync}}
 import scala.concurrent.Future
 {{/supportAsync}}
 {{#imports}}
 import {{import}}
-import play.api.mvc._
 {{/imports}}
 {{#operations}}
 

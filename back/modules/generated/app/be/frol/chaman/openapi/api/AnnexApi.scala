@@ -10,7 +10,7 @@ import play.api.mvc._
 @javax.annotation.Generated(value = Array("org.openapitools.codegen.languages.ScalaPlayFrameworkServerCodegen"))
 trait AnnexApi {
   /**
-    * deleta an annex
+    * delete an annex
     */
   def deleteAnnex(uuid: String)(implicit request:Request[AnyContent]): Future[Unit]
 

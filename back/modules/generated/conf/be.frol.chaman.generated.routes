@@ -20,6 +20,10 @@ DELETE /api/field/:uuid         be.frol.chaman.openapi.api.FieldApiController.de
 GET /api/field/:uuid            be.frol.chaman.openapi.api.FieldApiController.getFieldConfig(uuid: String)
 PUT /api/field/:uuid            be.frol.chaman.openapi.api.FieldApiController.updateField(uuid: String)
 
+# Routes for File API
+
+GET /api/annex/:uuid/file       be.frol.chaman.openapi.api.FileApiController.getAnnexFile(uuid: String)
+
 # Routes for Item API
 
 POST /api/item                  be.frol.chaman.openapi.api.ItemApiController.createItem()

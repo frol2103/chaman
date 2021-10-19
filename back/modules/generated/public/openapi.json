@@ -378,8 +378,30 @@
             "description" : "OK"
           }
         },
-        "summary" : "deleta an annex",
+        "summary" : "delete an annex",
         "tags" : [ "annex" ]
+      }
+    },
+    "/annex/{uuid}/file" : {
+      "get" : {
+        "operationId" : "getAnnexFile",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "uuid",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "get a file",
+        "tags" : [ "File" ]
       }
     }
   },

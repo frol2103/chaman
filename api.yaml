@@ -251,7 +251,7 @@ paths:
     post:
       tags:
         - "annex"
-      summary: "deleta an annex"
+      summary: "delete an annex"
       operationId: "deleteAnnex"
       parameters:
         - name: uuid
@@ -262,6 +262,23 @@ paths:
       responses:
         200:
           description: "OK"
+
+  /annex/{uuid}/file:
+    get:
+      tags:
+        - "File"
+      summary: "get a file"
+      operationId: "getAnnexFile"
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "OK"
+
 
 components:
   schemas:
