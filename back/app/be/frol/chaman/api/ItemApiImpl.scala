@@ -4,7 +4,7 @@ import be.frol.chaman.mapper.ItemMapper
 import be.frol.chaman.model.RichModelConversions._
 import be.frol.chaman.openapi.api.ItemApi
 import be.frol.chaman.openapi.model.Item
-import be.frol.chaman.service.{DataService, FieldValidationService, ItemService}
+import be.frol.chaman.service.{AnnexService, DataService, FieldValidationService, ItemService}
 import be.frol.chaman.tables.Tables
 import be.frol.chaman.utils.OptionUtils._
 import play.api.db.slick.DatabaseConfigProvider
@@ -21,6 +21,7 @@ class ItemApiImpl @Inject()(
                              val itemService: ItemService,
                              val fieldDataService: DataService,
                              val fieldValidationService: FieldValidationService,
+                             val annexService:AnnexService,
                            ) extends ItemApi with DbContext with ParentController {
 
   import api._
@@ -50,7 +51,8 @@ class ItemApiImpl @Inject()(
     for {
       i <- itemService.get(uuid)
       fields <- fieldDataService.fieldsFor(uuid)
-    } yield ItemMapper.toDto(i, fields)
+      annexes <- annexService.forItem(uuid)
+    } yield ItemMapper.toDto(i, fields, annexes)
   }
 
   override def getItems()(implicit request: Request[AnyContent]): Future[List[Item]] =  run { implicit u =>

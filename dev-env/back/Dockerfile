@@ -9,8 +9,12 @@ curl -sL "https://keyserver.ubuntu.com/pks/lookup?op=get&search=0x2EE0EA64E40A89
 
 RUN apt-get update && apt-get install -y wkhtmltopdf sbt
 
+RUN mkdir /annexes && chmod a+rwx /annexes
+
 
 ENV _JAVA_OPTIONS='-Duser.home=/var/home'
+
+VOLUME /annexes/
 
 WORKDIR /app
 

@@ -10,7 +10,8 @@ case class Item(
   uuid: Option[String],
   title: Option[String],
   description: Option[String],
-  content: Option[List[Field]]
+  content: Option[List[Field]],
+  annexes: Option[List[Annex]]
 )
 
 object Item {

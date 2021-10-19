@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {Field, Item, ItemService} from "../../../generated/api";
+import {AnnexService, Field, Item, ItemService} from "../../../generated/api";
 import {ItemImpl} from "../../model/ItemImpl";
 import {map} from "rxjs/operators";
 import {RxjsHelperService} from "../../rxjs-helper.service";
@@ -21,6 +21,7 @@ export class ItemCardComponent implements OnInit {
     private itemService: ItemService,
     private r: RxjsHelperService,
     private modalService: NgbModal,
+    private annexService: AnnexService,
   ) {
     route.params.subscribe(p => {
         if (p.id === 'new') {
@@ -60,5 +61,12 @@ export class ItemCardComponent implements OnInit {
 
   dlSticker() {
     window.location.href = "/api/item/" + this.item.uuid + "/sticker"
+  }
+
+  onFileChange(event: Event) {
+    this.r.wrap(this.annexService.uploadFile(this.item.uuid,event.target.files[0]))
+      .withErrorMessage("Error while adding annex")
+      .withSuccessMessage("Annex added")
+      .then(v => this.item.annexes.push(v))
   }
 }

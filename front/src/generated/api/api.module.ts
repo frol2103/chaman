@@ -2,6 +2,7 @@ import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core
 import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
 
+import { AnnexService } from './api/annex.service';
 import { DatatypesService } from './api/datatypes.service';
 import { FieldService } from './api/field.service';
 import { ItemService } from './api/item.service';

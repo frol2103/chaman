@@ -107,7 +107,7 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          content: { }
   /data-types/:
     get:
       tags:
@@ -215,7 +215,39 @@ paths:
       responses:
         200:
           description: OK
-          content: {}
+          content: { }
+
+
+  /item/{uuid}/annex:
+    post:
+      tags:
+        - "annex"
+      summary: "upload a file"
+      operationId: "uploadFile"
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                file:
+                  type: string
+                  format: binary
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Annex"
+
+
 components:
   schemas:
     FieldType:
@@ -242,7 +274,7 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FieldValue'
-        params: {}
+        params: { }
         errorMessages:
           type: array
           items:
@@ -269,7 +301,7 @@ components:
         uuid:
           type: string
           description: identifier of the value
-        value: {}
+        value: { }
     Item:
       type: object
       properties:
@@ -283,3 +315,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Field'
+        annexes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Annex'
+
+    Annex:
+      type: object
+      properties:
+        uuid:
+          type: string
+        filename:
+          type: string
+        mime:
+          type: string

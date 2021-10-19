@@ -314,9 +314,65 @@
         "summary" : "update a item",
         "tags" : [ "item" ]
       }
+    },
+    "/item/{uuid}/annex" : {
+      "post" : {
+        "operationId" : "uploadFile",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "uuid",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "requestBody" : {
+          "$ref" : "#/components/requestBodies/inline_object",
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "properties" : {
+                  "file" : {
+                    "format" : "binary",
+                    "type" : "string"
+                  }
+                },
+                "type" : "object"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/definitions/Annex"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "upload a file",
+        "tags" : [ "annex" ]
+      }
     }
   },
   "components" : {
+    "requestBodies" : {
+      "inline_object" : {
+        "content" : {
+          "multipart/form-data" : {
+            "schema" : {
+              "$ref" : "#/components/schemas/inline_object"
+            }
+          }
+        }
+      }
+    },
     "schemas" : {
       "FieldType" : {
         "properties" : {
@@ -446,6 +502,15 @@
           "description" : "description",
           "title" : "title",
           "uuid" : "uuid",
+          "annexes" : [ {
+            "filename" : "filename",
+            "mime" : "mime",
+            "uuid" : "uuid"
+          }, {
+            "filename" : "filename",
+            "mime" : "mime",
+            "uuid" : "uuid"
+          } ],
           "content" : [ {
             "reference" : "reference",
             "errorMessages" : [ "errorMessages", "errorMessages" ],
@@ -491,6 +556,40 @@
               "$ref" : "#/components/schemas/Field"
             },
             "type" : "array"
+          },
+          "annexes" : {
+            "items" : {
+              "$ref" : "#/components/schemas/Annex"
+            },
+            "type" : "array"
+          }
+        },
+        "type" : "object"
+      },
+      "Annex" : {
+        "example" : {
+          "filename" : "filename",
+          "mime" : "mime",
+          "uuid" : "uuid"
+        },
+        "properties" : {
+          "uuid" : {
+            "type" : "string"
+          },
+          "filename" : {
+            "type" : "string"
+          },
+          "mime" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "inline_object" : {
+        "properties" : {
+          "file" : {
+            "format" : "binary",
+            "type" : "string"
           }
         },
         "type" : "object"

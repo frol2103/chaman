@@ -33,6 +33,9 @@ import { MultipleIntegerComponent } from './field/template/multiple-integer/mult
 import { MultipleStringComponent } from './field/template/multiple-string/multiple-string.component';
 import { SelectComponent } from './field/template/select/select.component';
 import { MultipleParentComponent } from './field/template/multiple-parent/multiple-parent.component';
+import { AnnexTableComponent } from './item/annex/annex-table/annex-table.component';
+import {MatTableModule} from "@angular/material/table";
+import { MimeToFaPipe } from './mime-to-fa.pipe';
 
 @NgModule({
   declarations: [
@@ -58,19 +61,22 @@ import { MultipleParentComponent } from './field/template/multiple-parent/multip
     MultipleStringComponent,
     SelectComponent,
     MultipleParentComponent,
+    AnnexTableComponent,
+    MimeToFaPipe,
   ],
-  imports: [
-    BrowserModule,
-    FormsModule,
-    AppRoutingModule,
-    NgbModule,
-    HttpClientModule,
-    BrowserAnimationsModule,
-    MatChipsModule,
-    MatFormFieldModule,
-    MatIconModule,
-    ReactiveFormsModule,
-  ],
+    imports: [
+        BrowserModule,
+        FormsModule,
+        AppRoutingModule,
+        NgbModule,
+        HttpClientModule,
+        BrowserAnimationsModule,
+        MatChipsModule,
+        MatFormFieldModule,
+        MatIconModule,
+        ReactiveFormsModule,
+        MatTableModule,
+    ],
   providers: [
     {provide: BASE_PATH, useValue: '/api'},
     {provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true},

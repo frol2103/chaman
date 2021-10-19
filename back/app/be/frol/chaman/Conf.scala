@@ -1,5 +1,7 @@
 package be.frol.chaman
 
+import scala.reflect.io.Path
+
 object Conf {
   val frontRootUrl = "/"
 
@@ -7,4 +9,6 @@ object Conf {
 
   val openIdUrl = "http://keycloak:8080/auth/realms/master/"
   val client_id = "chaman"
+
+  val annexStoragePath = Path("/annexes/")
 }
