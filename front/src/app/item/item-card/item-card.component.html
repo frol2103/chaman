@@ -34,7 +34,7 @@
 
 
   <h2>Annexes</h2>
-  <app-annex-table #annexTable (deleteAnnex)="annexDeleted($event)" [annexes]="item.annexes" ></app-annex-table>
+  <app-annex-table #annexTable (deleteAnnex)="annexDeleted($event)" [itemUuid]="item.uuid" [annexes]="item.annexes" ></app-annex-table>
   <div>
     <input (change)="onFileChange($event)" id="singleFile" type="file"/>
   </div>

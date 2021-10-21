@@ -279,6 +279,68 @@ paths:
         200:
           description: "OK"
 
+  /item/{uuid}/thumbnail/file:
+    get:
+      tags:
+        - "File"
+      summary: "get a thumbnail file"
+      operationId: "getThumbnailFile"
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "OK"
+
+  /item/{uuid}/thumbnail:
+    get:
+      tags:
+        - "Thumbnail"
+      summary: "get thumbnail description"
+      operationId: "getDescription"
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Thumbnail"
+
+    put:
+      tags:
+        - "Thumbnail"
+      summary: "set thumbnail description"
+      operationId: "setDescription"
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/Thumbnail"
+              required: true
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Thumbnail"
+
+
 
 components:
   schemas:
@@ -361,3 +423,15 @@ components:
           type: string
         mime:
           type: string
+
+    Thumbnail:
+      type: object
+      properties:
+        annexUuid:
+          type: string
+        x:
+          type: number
+        y:
+          type: number
+        width:
+          type: number

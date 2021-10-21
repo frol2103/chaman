@@ -22,6 +22,19 @@ class FileApiController @Inject()(cc: ControllerComponents, api: FileApi)(implic
     }
   }
 
+  /**
+    * GET /api/item/:uuid/thumbnail/file
+    */
+  def getThumbnailFile(uuid: String): Action[AnyContent] = Action.async { request =>
+    def executeApi(): Future[Unit] = {
+      api.getThumbnailFile(uuid)(request)
+    }
+
+    executeApi().map { _ =>
+      Ok
+    }
+  }
+
   private def splitCollectionParam(paramValues: String, collectionFormat: String): List[String] = {
     val splitBy =
       collectionFormat match {

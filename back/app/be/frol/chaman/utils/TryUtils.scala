@@ -1,6 +1,6 @@
 package be.frol.chaman.utils
 
-import scala.util.{Failure, Try}
+import scala.util.{Failure, Success, Try}
 
 object TryUtils {
 
@@ -10,6 +10,11 @@ object TryUtils {
     }
     def mapError(f: =>Throwable):Try[T] = {
       t.transform(s=>Try{s}, v=>Failure(f))
+    }
+
+    def getOrThrowM(m: => String) = t match {
+      case Success(v) => v
+      case Failure(f) => throw new RuntimeException(m, f)
     }
   }
 

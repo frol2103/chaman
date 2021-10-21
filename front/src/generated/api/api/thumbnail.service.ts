@@ -17,6 +17,7 @@ import { HttpClient, HttpHeaders, HttpParams,
 import { CustomHttpParameterCodec }                          from '../encoder';
 import { Observable }                                        from 'rxjs';
 
+import { Thumbnail } from '../model/models';
 
 import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables';
 import { Configuration }                                     from '../configuration';
@@ -26,7 +27,7 @@ import { Configuration }                                     from '../configurat
 @Injectable({
   providedIn: 'root'
 })
-export class FileService {
+export class ThumbnailService {
 
     protected basePath = 'https://chaman.frol.be/api';
     public defaultHeaders = new HttpHeaders();
@@ -84,17 +85,17 @@ export class FileService {
     }
 
     /**
-     * get a file
+     * get thumbnail description
      * @param uuid 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getAnnexFile(uuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined}): Observable<any>;
-    public getAnnexFile(uuid: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined}): Observable<HttpResponse<any>>;
-    public getAnnexFile(uuid: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined}): Observable<HttpEvent<any>>;
-    public getAnnexFile(uuid: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined}): Observable<any> {
+    public getDescription(uuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Thumbnail>;
+    public getDescription(uuid: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Thumbnail>>;
+    public getDescription(uuid: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Thumbnail>>;
+    public getDescription(uuid: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (uuid === null || uuid === undefined) {
-            throw new Error('Required parameter uuid was null or undefined when calling getAnnexFile.');
+            throw new Error('Required parameter uuid was null or undefined when calling getDescription.');
         }
 
         let headers = this.defaultHeaders;
@@ -103,6 +104,7 @@ export class FileService {
         if (httpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
+                'application/json'
             ];
             httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
@@ -116,7 +118,7 @@ export class FileService {
             responseType_ = 'text';
         }
 
-        return this.httpClient.get<any>(`${this.configuration.basePath}/annex/${encodeURIComponent(String(uuid))}/file`,
+        return this.httpClient.get<Thumbnail>(`${this.configuration.basePath}/item/${encodeURIComponent(String(uuid))}/thumbnail`,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
@@ -128,17 +130,18 @@ export class FileService {
     }
 
     /**
-     * get a thumbnail file
+     * set thumbnail description
      * @param uuid 
+     * @param thumbnail 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public getThumbnailFile(uuid: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined}): Observable<any>;
-    public getThumbnailFile(uuid: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined}): Observable<HttpResponse<any>>;
-    public getThumbnailFile(uuid: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: undefined}): Observable<HttpEvent<any>>;
-    public getThumbnailFile(uuid: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: undefined}): Observable<any> {
+    public setDescription(uuid: string, thumbnail?: Thumbnail, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Thumbnail>;
+    public setDescription(uuid: string, thumbnail?: Thumbnail, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Thumbnail>>;
+    public setDescription(uuid: string, thumbnail?: Thumbnail, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Thumbnail>>;
+    public setDescription(uuid: string, thumbnail?: Thumbnail, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (uuid === null || uuid === undefined) {
-            throw new Error('Required parameter uuid was null or undefined when calling getThumbnailFile.');
+            throw new Error('Required parameter uuid was null or undefined when calling setDescription.');
         }
 
         let headers = this.defaultHeaders;
@@ -147,6 +150,7 @@ export class FileService {
         if (httpHeaderAcceptSelected === undefined) {
             // to determine the Accept header
             const httpHeaderAccepts: string[] = [
+                'application/json'
             ];
             httpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
         }
@@ -155,12 +159,22 @@ export class FileService {
         }
 
 
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            headers = headers.set('Content-Type', httpContentTypeSelected);
+        }
+
         let responseType_: 'text' | 'json' = 'json';
         if(httpHeaderAcceptSelected && httpHeaderAcceptSelected.startsWith('text')) {
             responseType_ = 'text';
         }
 
-        return this.httpClient.get<any>(`${this.configuration.basePath}/item/${encodeURIComponent(String(uuid))}/thumbnail/file`,
+        return this.httpClient.put<Thumbnail>(`${this.configuration.basePath}/item/${encodeURIComponent(String(uuid))}/thumbnail`,
+            thumbnail,
             {
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,

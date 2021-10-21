@@ -7,6 +7,7 @@ import { DatatypesService } from './api/datatypes.service';
 import { FieldService } from './api/field.service';
 import { FileService } from './api/file.service';
 import { ItemService } from './api/item.service';
+import { ThumbnailService } from './api/thumbnail.service';
 
 @NgModule({
   imports:      [],

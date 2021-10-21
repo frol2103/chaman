@@ -32,7 +32,7 @@ class AnnexApiImpl @Inject()(
         java.security.MessageDigest.getInstance("SHA-1").digest(
           java.nio.file.Files.readAllBytes(file.get.path)))
 
-      java.nio.file.Files.move(file.get.path, Conf.annexPath(sha1Sum))
+      java.nio.file.Files.move(file.get.path, Conf.annex(sha1Sum).toPath)
       db.run(
         annexService.add(AnnexRow(0L, UUID.randomUUID().toString, uuid, sha1Sum, f.filename,
         f.contentType.getOrThrowM("mime type missing"),u.uuid,DateUtils.ts))

@@ -8,4 +8,6 @@ export * from './file.service';
 import { FileService } from './file.service';
 export * from './item.service';
 import { ItemService } from './item.service';
-export const APIS = [AnnexService, DatatypesService, FieldService, FileService, ItemService];
+export * from './thumbnail.service';
+import { ThumbnailService } from './thumbnail.service';
+export const APIS = [AnnexService, DatatypesService, FieldService, FileService, ItemService, ThumbnailService];

@@ -5,32 +5,38 @@
 
 # Routes for Annex API
 
-POST /api/annex/:uuid/delete    be.frol.chaman.openapi.api.AnnexApiController.deleteAnnex(uuid: String)
-POST /api/item/:uuid/annex      be.frol.chaman.openapi.api.AnnexApiController.uploadFile(uuid: String)
+POST /api/annex/:uuid/delete          be.frol.chaman.openapi.api.AnnexApiController.deleteAnnex(uuid: String)
+POST /api/item/:uuid/annex            be.frol.chaman.openapi.api.AnnexApiController.uploadFile(uuid: String)
 
 # Routes for Datatypes API
 
-GET /api/data-types/            be.frol.chaman.openapi.api.DatatypesApiController.getDataTypes()
+GET /api/data-types/                  be.frol.chaman.openapi.api.DatatypesApiController.getDataTypes()
 
 # Routes for Field API
 
-POST /api/field                 be.frol.chaman.openapi.api.FieldApiController.createField()
-GET /api/field                  be.frol.chaman.openapi.api.FieldApiController.getField()
-DELETE /api/field/:uuid         be.frol.chaman.openapi.api.FieldApiController.deleteField(uuid: String)
-GET /api/field/:uuid            be.frol.chaman.openapi.api.FieldApiController.getFieldConfig(uuid: String)
-PUT /api/field/:uuid            be.frol.chaman.openapi.api.FieldApiController.updateField(uuid: String)
+POST /api/field                       be.frol.chaman.openapi.api.FieldApiController.createField()
+GET /api/field                        be.frol.chaman.openapi.api.FieldApiController.getField()
+DELETE /api/field/:uuid               be.frol.chaman.openapi.api.FieldApiController.deleteField(uuid: String)
+GET /api/field/:uuid                  be.frol.chaman.openapi.api.FieldApiController.getFieldConfig(uuid: String)
+PUT /api/field/:uuid                  be.frol.chaman.openapi.api.FieldApiController.updateField(uuid: String)
 
 # Routes for File API
 
-GET /api/annex/:uuid/file       be.frol.chaman.openapi.api.FileApiController.getAnnexFile(uuid: String)
+GET /api/annex/:uuid/file             be.frol.chaman.openapi.api.FileApiController.getAnnexFile(uuid: String)
+GET /api/item/:uuid/thumbnail/file    be.frol.chaman.openapi.api.FileApiController.getThumbnailFile(uuid: String)
 
 # Routes for Item API
 
-POST /api/item                  be.frol.chaman.openapi.api.ItemApiController.createItem()
-GET /api/item                   be.frol.chaman.openapi.api.ItemApiController.getItems()
-DELETE /api/item/:uuid          be.frol.chaman.openapi.api.ItemApiController.deleteItem(uuid: String)
-GET /api/item/:uuid             be.frol.chaman.openapi.api.ItemApiController.getItem(uuid: String)
-PUT /api/item/:uuid             be.frol.chaman.openapi.api.ItemApiController.updateItem(uuid: String)
+POST /api/item                        be.frol.chaman.openapi.api.ItemApiController.createItem()
+GET /api/item                         be.frol.chaman.openapi.api.ItemApiController.getItems()
+DELETE /api/item/:uuid                be.frol.chaman.openapi.api.ItemApiController.deleteItem(uuid: String)
+GET /api/item/:uuid                   be.frol.chaman.openapi.api.ItemApiController.getItem(uuid: String)
+PUT /api/item/:uuid                   be.frol.chaman.openapi.api.ItemApiController.updateItem(uuid: String)
+
+# Routes for Thumbnail API
+
+GET /api/item/:uuid/thumbnail         be.frol.chaman.openapi.api.ThumbnailApiController.getDescription(uuid: String)
+PUT /api/item/:uuid/thumbnail         be.frol.chaman.openapi.api.ThumbnailApiController.setDescription(uuid: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET /assets/*file           controllers.Assets.at(file)

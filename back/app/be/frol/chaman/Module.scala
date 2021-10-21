@@ -11,6 +11,7 @@ class Module extends PlayModule {
     bind[FieldApi].to[FieldApiImpl],
     bind[DatatypesApi].to[DatatypesApiImpl],
     bind[ItemApi].to[ItemApiImpl],
-    bind[AnnexApi].to[AnnexApiImpl]
+    bind[AnnexApi].to[AnnexApiImpl],
+    bind[ThumbnailApi].to[ThumbnailApiImpl],
   )
 }

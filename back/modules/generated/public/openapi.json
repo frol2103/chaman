@@ -403,6 +403,93 @@
         "summary" : "get a file",
         "tags" : [ "File" ]
       }
+    },
+    "/item/{uuid}/thumbnail/file" : {
+      "get" : {
+        "operationId" : "getThumbnailFile",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "uuid",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "get a thumbnail file",
+        "tags" : [ "File" ]
+      }
+    },
+    "/item/{uuid}/thumbnail" : {
+      "get" : {
+        "operationId" : "getDescription",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "uuid",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/definitions/Thumbnail"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "get thumbnail description",
+        "tags" : [ "Thumbnail" ]
+      },
+      "put" : {
+        "operationId" : "setDescription",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "uuid",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/definitions/Thumbnail"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/definitions/Thumbnail"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "set thumbnail description",
+        "tags" : [ "Thumbnail" ]
+      }
     }
   },
   "components" : {
@@ -625,6 +712,29 @@
           },
           "mime" : {
             "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "Thumbnail" : {
+        "example" : {
+          "annexUuid" : "annexUuid",
+          "x" : 0.8008281904610115,
+          "width" : 1.4658129805029452,
+          "y" : 6.027456183070403
+        },
+        "properties" : {
+          "annexUuid" : {
+            "type" : "string"
+          },
+          "x" : {
+            "type" : "number"
+          },
+          "y" : {
+            "type" : "number"
+          },
+          "width" : {
+            "type" : "number"
           }
         },
         "type" : "object"

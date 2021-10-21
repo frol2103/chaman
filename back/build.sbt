@@ -21,6 +21,8 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
       "com.google.zxing" % "javase" % "3.3.0",
       "com.google.zxing" % "core" % "3.3.0",
       "org.xhtmlrenderer" % "flying-saucer-pdf-openpdf" % "9.1.20",
+      "org.imgscalr" % "imgscalr-lib" % "4.2",
+
     )
 
   )

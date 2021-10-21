@@ -30,7 +30,7 @@ class DataService @Inject()(
       .filter(_.ownerUuid === f.ownerUuid)
       .filter(_.valueUuid === f.valueUuid)
       .filter(_.id > f.id).exists)
-      .filterNot(f => Tables.DataDeleted.filter(f.id === _.fkDataId).exists)
+      .filterNot(f => Tables.DataDeleted.filter(f.id === _.fkFieldDataId).exists)
   }
 
 

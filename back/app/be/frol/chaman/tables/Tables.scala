@@ -14,7 +14,7 @@ trait Tables {
   import slick.jdbc.{GetResult => GR}
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema: profile.SchemaDescription = Array(Annex.schema, AnnexRemoved.schema, Data.schema, DataDeleted.schema, Field.schema, FieldDeleted.schema, Item.schema, ItemDeleted.schema, PlayEvolutions.schema, User.schema).reduceLeft(_ ++ _)
+  lazy val schema: profile.SchemaDescription = Array(Annex.schema, AnnexRemoved.schema, Data.schema, DataDeleted.schema, Field.schema, FieldDeleted.schema, Item.schema, ItemDeleted.schema, ItemThumbnail.schema, PlayEvolutions.schema, User.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
 
@@ -130,10 +130,10 @@ trait Tables {
   lazy val Data = new TableQuery(tag => new Data(tag))
 
   /** Entity class storing rows of table DataDeleted
-   *  @param fkDataId Database column fk_field_data_id SqlType(BIGINT), PrimaryKey
+   *  @param fkFieldDataId Database column fk_field_data_id SqlType(BIGINT), PrimaryKey
    *  @param author Database column author SqlType(VARCHAR), Length(36,true)
    *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
-  case class DataDeletedRow(fkDataId: Long, author: String, timestamp: java.sql.Timestamp)
+  case class DataDeletedRow(fkFieldDataId: Long, author: String, timestamp: java.sql.Timestamp)
   /** GetResult implicit for fetching DataDeletedRow objects using plain SQL queries */
   implicit def GetResultDataDeletedRow(implicit e0: GR[Long], e1: GR[String], e2: GR[java.sql.Timestamp]): GR[DataDeletedRow] = GR{
     prs => import prs._
@@ -141,12 +141,12 @@ trait Tables {
   }
   /** Table description of table data_deleted. Objects of this class serve as prototypes for rows in queries. */
   class DataDeleted(_tableTag: Tag) extends profile.api.Table[DataDeletedRow](_tableTag, Some("chaman"), "data_deleted") {
-    def * = (fkDataId, author, timestamp) <> (DataDeletedRow.tupled, DataDeletedRow.unapply)
+    def * = (fkFieldDataId, author, timestamp) <> (DataDeletedRow.tupled, DataDeletedRow.unapply)
     /** Maps whole row to an option. Useful for outer joins. */
-    def ? = ((Rep.Some(fkDataId), Rep.Some(author), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> DataDeletedRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+    def ? = ((Rep.Some(fkFieldDataId), Rep.Some(author), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> DataDeletedRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
 
     /** Database column fk_field_data_id SqlType(BIGINT), PrimaryKey */
-    val fkDataId: Rep[Long] = column[Long]("fk_field_data_id", O.PrimaryKey)
+    val fkFieldDataId: Rep[Long] = column[Long]("fk_field_data_id", O.PrimaryKey)
     /** Database column author SqlType(VARCHAR), Length(36,true) */
     val author: Rep[String] = column[String]("author", O.Length(36,varying=true))
     /** Database column timestamp SqlType(TIMESTAMP) */
@@ -288,6 +288,50 @@ trait Tables {
   }
   /** Collection-like TableQuery object for table ItemDeleted */
   lazy val ItemDeleted = new TableQuery(tag => new ItemDeleted(tag))
+
+  /** Entity class storing rows of table ItemThumbnail
+   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param itemUuid Database column item_uuid SqlType(VARCHAR), Length(36,true)
+   *  @param annexUuid Database column annex_uuid SqlType(VARCHAR), Length(36,true)
+   *  @param x Database column x SqlType(INT)
+   *  @param y Database column y SqlType(INT)
+   *  @param width Database column width SqlType(INT)
+   *  @param author Database column author SqlType(VARCHAR), Length(36,true)
+   *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
+  case class ItemThumbnailRow(id: Long, itemUuid: String, annexUuid: String, x: Int, y: Int, width: Int, author: String, timestamp: java.sql.Timestamp)
+  /** GetResult implicit for fetching ItemThumbnailRow objects using plain SQL queries */
+  implicit def GetResultItemThumbnailRow(implicit e0: GR[Long], e1: GR[String], e2: GR[Int], e3: GR[java.sql.Timestamp]): GR[ItemThumbnailRow] = GR{
+    prs => import prs._
+    ItemThumbnailRow.tupled((<<[Long], <<[String], <<[String], <<[Int], <<[Int], <<[Int], <<[String], <<[java.sql.Timestamp]))
+  }
+  /** Table description of table item_thumbnail. Objects of this class serve as prototypes for rows in queries. */
+  class ItemThumbnail(_tableTag: Tag) extends profile.api.Table[ItemThumbnailRow](_tableTag, Some("chaman"), "item_thumbnail") {
+    def * = (id, itemUuid, annexUuid, x, y, width, author, timestamp) <> (ItemThumbnailRow.tupled, ItemThumbnailRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = ((Rep.Some(id), Rep.Some(itemUuid), Rep.Some(annexUuid), Rep.Some(x), Rep.Some(y), Rep.Some(width), Rep.Some(author), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> ItemThumbnailRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get, _7.get, _8.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column item_uuid SqlType(VARCHAR), Length(36,true) */
+    val itemUuid: Rep[String] = column[String]("item_uuid", O.Length(36,varying=true))
+    /** Database column annex_uuid SqlType(VARCHAR), Length(36,true) */
+    val annexUuid: Rep[String] = column[String]("annex_uuid", O.Length(36,varying=true))
+    /** Database column x SqlType(INT) */
+    val x: Rep[Int] = column[Int]("x")
+    /** Database column y SqlType(INT) */
+    val y: Rep[Int] = column[Int]("y")
+    /** Database column width SqlType(INT) */
+    val width: Rep[Int] = column[Int]("width")
+    /** Database column author SqlType(VARCHAR), Length(36,true) */
+    val author: Rep[String] = column[String]("author", O.Length(36,varying=true))
+    /** Database column timestamp SqlType(TIMESTAMP) */
+    val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
+
+    /** Index over (itemUuid) (database name item_uuid) */
+    val index1 = index("item_uuid", itemUuid)
+  }
+  /** Collection-like TableQuery object for table ItemThumbnail */
+  lazy val ItemThumbnail = new TableQuery(tag => new ItemThumbnail(tag))
 
   /** Entity class storing rows of table PlayEvolutions
    *  @param id Database column id SqlType(INT), PrimaryKey
