@@ -8,8 +8,8 @@
   <div class="bd-callout bd-callout-meta">
     <strong>Meta data</strong>
     <div class="metadata">
-      <div class="thumbnail">
-        <img src="/api/item/{{item.uuid}}/thumbnail/file">
+      <div (click)="editThumbnail()" class="thumbnail">
+        <img [src]="imgSrc | async">
       </div>
       <div class="metadata-data">
         <div class="row input-group mb-3">
@@ -31,6 +31,7 @@
       </div>
     </div>
   </div>
+
 
 
   <h2>Data <i class="fa fa-plus-circle" (click)="startAddField()"></i></h2>

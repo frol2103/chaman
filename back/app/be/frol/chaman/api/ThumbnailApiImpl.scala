@@ -37,8 +37,8 @@ class ThumbnailApiImpl @Inject()(
             ImageIO.read(Conf.annex(annex.filesha))
           }.getOrThrowM("Couldn't read file associated with annex")
           val width = Math.min(Math.min(icon.width.map(_.toInt).getOrElse(image.getWidth), image.getHeight), image.getWidth)
-          val x = Math.min(icon.x.map(_.toInt).getOrElse(Int.MaxValue), (image.getWidth - width) / 2)
-          val y = Math.min(icon.y.map(_.toInt).getOrElse(Int.MaxValue), (image.getHeight - width) / 2)
+          val x = Math.min(icon.x.map(_.toInt).getOrElse(Int.MaxValue), (image.getWidth - width))
+          val y = Math.min(icon.y.map(_.toInt).getOrElse(Int.MaxValue), (image.getHeight - width))
           val croppedImage = image.getSubimage(x, y, width, width)
           val scaledImage = Scalr.resize(croppedImage, Scalr.Method.BALANCED, Conf.thumbnailWidth, Conf.thumbnailWidth)
           ImageIO.write(scaledImage, "jpg", Conf.thumbnail(uuid));

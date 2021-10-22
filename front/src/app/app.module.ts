@@ -36,6 +36,8 @@ import { MultipleParentComponent } from './field/template/multiple-parent/multip
 import { AnnexTableComponent } from './item/annex/annex-table/annex-table.component';
 import {MatTableModule} from "@angular/material/table";
 import { MimeToFaPipe } from './mime-to-fa.pipe';
+import { ImageCropperComponent } from './image-cropper/image-cropper.component';
+import { ThumbnailEditorComponent } from './item/thumbnail-editor/thumbnail-editor.component';
 
 @NgModule({
   declarations: [
@@ -63,6 +65,8 @@ import { MimeToFaPipe } from './mime-to-fa.pipe';
     MultipleParentComponent,
     AnnexTableComponent,
     MimeToFaPipe,
+    ImageCropperComponent,
+    ThumbnailEditorComponent,
   ],
     imports: [
         BrowserModule,

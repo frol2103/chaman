@@ -1,0 +1,7 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="modal-basic-title">Edit thumbnail</h4>
+</div>
+<div class="modal-body">
+  <image-cropper #imgCropper *ngIf="thumbnailDescription" [thumbnail]="thumbnailDescription"></image-cropper>
+  <button class="btn-primary btn" (click)="save()">Save</button>
+</div>

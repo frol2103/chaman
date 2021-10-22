@@ -1,12 +1,14 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
 import {Annex, AnnexService, Field, Item, ItemService} from "../../../generated/api";
 import {ItemImpl} from "../../model/ItemImpl";
-import {map} from "rxjs/operators";
+import {map, timestamp} from "rxjs/operators";
 import {RxjsHelperService} from "../../rxjs-helper.service";
-import {NgbModal} from "@ng-bootstrap/ng-bootstrap";
+import {NgbModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
 import {FieldSelectorComponent} from "../../admin/fields/field-selector/field-selector.component";
 import {AnnexTableComponent} from "../annex/annex-table/annex-table.component";
+import {ThumbnailEditorComponent} from "../thumbnail-editor/thumbnail-editor.component";
+import {BehaviorSubject} from "rxjs";
 
 @Component({
   selector: 'app-item-card',
@@ -23,16 +25,25 @@ export class ItemCardComponent implements OnInit {
     private r: RxjsHelperService,
     private modalService: NgbModal,
     private annexService: AnnexService,
+    private modalConfig: NgbModalConfig,
   ) {
     route.params.subscribe(p => {
         if (p.id === 'new') {
           this.item = new ItemImpl()
         }
-        else itemService.getItem(p.id).toPromise().then(i => this.item = i)
+        else {
+          itemService.getItem(p.id).toPromise().then(i => {
+            this.item = i
+            this.refreshThumbnail()
+          })
+        }
+
       }
     )
+    this.modalConfig.size = 'xl'
   }
 
+  imgSrc: BehaviorSubject<string> = new BehaviorSubject(undefined);
 
   @ViewChild("annexTable") annexTable:AnnexTableComponent;
 
@@ -79,5 +90,15 @@ export class ItemCardComponent implements OnInit {
   annexDeleted(a:Annex) {
     this.item.annexes.splice(this.item.annexes.indexOf(a))
     this.annexTable.refresh()
+  }
+
+  refreshThumbnail(){
+    this.imgSrc.next("/api/item/" + this.item.uuid + "/thumbnail/file?ts=" + Date.now())
+  }
+
+  editThumbnail() {
+    let ngbModalRef = this.modalService.open(ThumbnailEditorComponent);
+    ngbModalRef.componentInstance.item = this.item;
+    ngbModalRef.result.then(v => this.refreshThumbnail())
   }
 }
