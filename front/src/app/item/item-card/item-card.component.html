@@ -7,20 +7,27 @@
 
   <div class="bd-callout bd-callout-meta">
     <strong>Meta data</strong>
-    <div class="row input-group mb-3">
-      <div class="col-2">
-        <label>title</label>
+    <div class="metadata">
+      <div class="thumbnail">
+        <img src="/api/item/{{item.uuid}}/thumbnail/file">
       </div>
-      <div class="col-10">
-        <input type="text" class="form-control" [(ngModel)]="item.title">
-      </div>
-    </div>
-    <div class="row input-group mb-3">
-      <div class="col-2">
-        <label>description</label>
-      </div>
-      <div class="col-10">
-        <input type="text" class="form-control" [(ngModel)]="item.description">
+      <div class="metadata-data">
+        <div class="row input-group mb-3">
+          <div class="col-2">
+            <label>title</label>
+          </div>
+          <div class="col-10">
+            <input type="text" class="form-control" [(ngModel)]="item.title">
+          </div>
+        </div>
+        <div class="row input-group mb-3">
+          <div class="col-2">
+            <label>description</label>
+          </div>
+          <div class="col-10">
+            <input type="text" class="form-control" [(ngModel)]="item.description">
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -32,9 +39,9 @@
   </div>
 
 
-
   <h2>Annexes</h2>
-  <app-annex-table #annexTable (deleteAnnex)="annexDeleted($event)" [itemUuid]="item.uuid" [annexes]="item.annexes" ></app-annex-table>
+  <app-annex-table #annexTable (deleteAnnex)="annexDeleted($event)" [itemUuid]="item.uuid"
+                   [annexes]="item.annexes"></app-annex-table>
   <div>
     <input (change)="onFileChange($event)" id="singleFile" type="file"/>
   </div>
