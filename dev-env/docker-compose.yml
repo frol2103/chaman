@@ -32,8 +32,6 @@ services:
       - MYSQL_DATABASE=chaman
       - MYSQL_USER=user
       - MYSQL_PASSWORD=pass
-    volumes:
-      - /srv/test/db:/var/lib/mysql
 
   keycloak:
     image: quay.io/keycloak/keycloak:15.0.2
