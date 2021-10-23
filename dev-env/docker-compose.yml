@@ -40,7 +40,7 @@ services:
     environment:
       - KEYCLOAK_USER=chaman
       - KEYCLOAK_PASSWORD=pwd
-      - KEYCLOAK_FRONTEND_URL=http://keycloak:8080/auth
+      - KEYCLOAK_FRONTEND_URL=http://192.168.1.55:8080/auth
       - DB_VENDOR=mysql
       - DB_ADDR=db
       - DB_USER=user
