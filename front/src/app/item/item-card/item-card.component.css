@@ -14,3 +14,7 @@
 .metadata {
   display: flex;
 }
+
+.metadata-field{
+  margin-bottom: 15px;
+}

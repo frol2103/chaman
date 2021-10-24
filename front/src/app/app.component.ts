@@ -8,6 +8,7 @@ import {WebsocketService} from "./websocket.service";
 })
 export class AppComponent{
   title = 'chaman';
+  navCollapsed = true;
 
   constructor(
     private websocketService: WebsocketService,

@@ -3,9 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MenuComponent } from './menu/menu/menu.component';
-import { MenuItemComponent } from './menu/menu-item/menu-item.component';
-import { MenuGroupComponent } from './menu/menu-group/menu-group.component';
 import {NgbModule} from "@ng-bootstrap/ng-bootstrap";
 import { FieldTableComponent } from './admin/fields/field-table/field-table.component';
 import { FieldsComponent } from './admin/fields/fields/fields.component';
@@ -42,9 +39,6 @@ import { ThumbnailEditorComponent } from './item/thumbnail-editor/thumbnail-edit
 @NgModule({
   declarations: [
     AppComponent,
-    MenuComponent,
-    MenuItemComponent,
-    MenuGroupComponent,
     FieldTableComponent,
     FieldsComponent,
     FieldEditComponent,
