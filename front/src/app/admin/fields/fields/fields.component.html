@@ -1,7 +1,7 @@
 <h1>Fields</h1>
 <field-table [allowEdit]="true" [fields]="fields"
              (editField)="startEdit($event, editField)"
-             (removeField)="delete($event)" ></field-table>
+             (removeField)="delete($event)"></field-table>
 
 <button *ngIf="!inEdit" (click)="newField(editField)" type="button" class="btn btn-primary">+</button>
 

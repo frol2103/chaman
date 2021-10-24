@@ -1,5 +1,6 @@
 package be.frol.chaman
 
+
 import java.io.File
 import java.nio.file
 import java.nio.file.FileSystems
@@ -22,4 +23,7 @@ object Conf {
   val thumbnailWidth = 200
 
   val fileStoragePath = Path("/data/")
+
+
+  val redisHost = "redis"
 }

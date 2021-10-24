@@ -340,6 +340,21 @@ paths:
               schema:
                 $ref: "#/definitions/Thumbnail"
 
+  /event:
+    put:
+      tags:
+        - "Event"
+      summary:  "add an event"
+      operationId: "addEvent"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/definitions/Event"
+              required: true
+      responses:
+        200:
+          description: "Ok"
 
 
 components:
@@ -435,3 +450,18 @@ components:
           type: number
         width:
           type: number
+
+    Event:
+      type: object
+      properties:
+        eventType:
+          type: string
+          enum:
+            - TakePicture
+            - TakeThumbnail
+        itemId:
+          type: string
+        content:
+          type: string
+
+

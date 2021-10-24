@@ -1,6 +1,14 @@
 import {Component, OnInit, TemplateRef, ViewChild} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {Annex, AnnexService, Field, Item, ItemService} from "../../../generated/api";
+import {
+  Annex,
+  AnnexService,
+  Field,
+  Item,
+  ItemService,
+  Event,
+  EventService
+} from "../../../generated/api";
 import {ItemImpl} from "../../model/ItemImpl";
 import {map, timestamp} from "rxjs/operators";
 import {RxjsHelperService} from "../../rxjs-helper.service";
@@ -9,6 +17,7 @@ import {FieldSelectorComponent} from "../../admin/fields/field-selector/field-se
 import {AnnexTableComponent} from "../annex/annex-table/annex-table.component";
 import {ThumbnailEditorComponent} from "../thumbnail-editor/thumbnail-editor.component";
 import {BehaviorSubject} from "rxjs";
+import {EventImpl} from "../../model/EventImpl";
 
 @Component({
   selector: 'app-item-card',
@@ -26,6 +35,7 @@ export class ItemCardComponent implements OnInit {
     private modalService: NgbModal,
     private annexService: AnnexService,
     private modalConfig: NgbModalConfig,
+    private eventService: EventService,
   ) {
     route.params.subscribe(p => {
         if (p.id === 'new') {
@@ -100,5 +110,15 @@ export class ItemCardComponent implements OnInit {
     let ngbModalRef = this.modalService.open(ThumbnailEditorComponent);
     ngbModalRef.componentInstance.item = this.item;
     ngbModalRef.result.then(v => this.refreshThumbnail())
+  }
+
+  requestPicture() {
+    let eventImpl = new EventImpl(Event.EventTypeEnum.TakePicture, this.item.uuid);
+    console.log("push event", eventImpl)
+    this.r.wrap(this.eventService.addEvent(eventImpl))
+      .withErrorMessage("Couldn't request a picture")
+      .withSuccessMessage("Picture requested")
+      .then(v => console.log("v"))
+
   }
 }

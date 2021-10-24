@@ -490,6 +490,27 @@
         "summary" : "set thumbnail description",
         "tags" : [ "Thumbnail" ]
       }
+    },
+    "/event" : {
+      "put" : {
+        "operationId" : "addEvent",
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/definitions/Event"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "200" : {
+            "description" : "Ok"
+          }
+        },
+        "summary" : "add an event",
+        "tags" : [ "Event" ]
+      }
     }
   },
   "components" : {
@@ -735,6 +756,26 @@
           },
           "width" : {
             "type" : "number"
+          }
+        },
+        "type" : "object"
+      },
+      "Event" : {
+        "example" : {
+          "itemId" : "itemId",
+          "eventType" : "TakePicture",
+          "content" : "content"
+        },
+        "properties" : {
+          "eventType" : {
+            "enum" : [ "TakePicture", "TakeThumbnail" ],
+            "type" : "string"
+          },
+          "itemId" : {
+            "type" : "string"
+          },
+          "content" : {
+            "type" : "string"
           }
         },
         "type" : "object"

@@ -12,6 +12,10 @@ POST /api/item/:uuid/annex            be.frol.chaman.openapi.api.AnnexApiControl
 
 GET /api/data-types/                  be.frol.chaman.openapi.api.DatatypesApiController.getDataTypes()
 
+# Routes for Event API
+
+PUT /api/event                        be.frol.chaman.openapi.api.EventApiController.addEvent()
+
 # Routes for Field API
 
 POST /api/field                       be.frol.chaman.openapi.api.FieldApiController.createField()

@@ -5,5 +5,19 @@
     "pathRewrite": {
       "^": ""
     }
+  },
+  "/keycloak": {
+    "target": "http://keycloak:8080/",
+    "protected": false,
+    "pathRewrite": {
+      "^/keycloak": ""
+    }
+  },
+  "/auth": {
+    "target": "http://keycloak:8080/",
+    "protected": false,
+    "pathRewrite": {
+      "^/auth": ""
+    }
   }
 }

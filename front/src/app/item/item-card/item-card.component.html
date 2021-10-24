@@ -40,7 +40,7 @@
   </div>
 
 
-  <h2>Annexes</h2>
+  <h2>Annexes <i class="fa fa-mobile-alt" (click)="requestPicture()"></i></h2>
   <app-annex-table #annexTable (deleteAnnex)="annexDeleted($event)" [itemUuid]="item.uuid"
                    [annexes]="item.annexes"></app-annex-table>
   <div>

@@ -46,3 +46,7 @@ services:
       - DB_USER=user
       - DB_PASSWORD=pass
       - DB_DATABASE=chaman
+      
+  redis:
+    image: redis:6
+     

@@ -10,7 +10,7 @@ import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
   styleUrls: ['./thumbnail-editor.component.css']
 })
 export class ThumbnailEditorComponent implements OnInit {
-  private thumbnailDescription: Thumbnail;
+  public thumbnailDescription: Thumbnail;
 
   constructor(
     public r: RxjsHelperService,

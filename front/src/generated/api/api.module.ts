@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { AnnexService } from './api/annex.service';
 import { DatatypesService } from './api/datatypes.service';
+import { EventService } from './api/event.service';
 import { FieldService } from './api/field.service';
 import { FileService } from './api/file.service';
 import { ItemService } from './api/item.service';

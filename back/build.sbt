@@ -22,7 +22,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
       "com.google.zxing" % "core" % "3.3.0",
       "org.xhtmlrenderer" % "flying-saucer-pdf-openpdf" % "9.1.20",
       "org.imgscalr" % "imgscalr-lib" % "4.2",
-
+      "com.github.etaty" %% "rediscala" % "1.8.0",
     )
 
   )
@@ -39,7 +39,7 @@ libraryDependencies ++= Seq(
   "mysql" % "mysql-connector-java" % "5.1.44",
 )
 
-	
+
 lazy val slick = TaskKey[Seq[File]]("gen-tables")
 
 slick := {
@@ -59,8 +59,6 @@ slick := {
   r.run("slick.codegen.SourceCodeGenerator", cp.files, Array(slickDriver, jdbcDriver, url, outputDir, pkg, user, password), s.log)
   Seq(file(fname))
 }
-
-
 
 
 scalaVersion := "2.12.6"
