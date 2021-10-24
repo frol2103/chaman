@@ -25,7 +25,6 @@ class EventApiImpl @Inject()(
 
   override def addEvent(event: Option[Event])(implicit request: Request[AnyContent]): Future[Unit] = run { implicit user =>
     val eventStr = Json.toJson(event.getOrThrowM("event is mandatory")).toString()
-    logger.error("publish " + user.uuid + " - " + eventStr)
     redisClient.publish(user.uuid, eventStr)
       .map(v => Ok(v + ""))
   }

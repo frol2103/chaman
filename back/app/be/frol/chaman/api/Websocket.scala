@@ -21,7 +21,6 @@ class Websocket @Inject()(cc: ControllerComponents)
 
   def userEvents() = WebSocket.accept[String, String] { implicit request =>
     run { implicit user =>
-      logger.error("get user websocket " + user.uuid)
       def props(channel: String)(out: ActorRef) = Props(classOf[SubscribeActor], redisClient,
         out, Seq(channel), Nil)
       ActorFlow.actorRef { out =>
