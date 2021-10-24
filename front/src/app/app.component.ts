@@ -12,7 +12,7 @@ export class AppComponent{
   constructor(
     private websocketService: WebsocketService,
   ) {
-    let url = "ws://"+window.location.host+":"+9000+"/api/event/user";
+    let url = "ws://"+window.location.host+"/api/event/user";
     console.log("get events from", url)
     websocketService.connect(url).subscribe(v =>
       console.log("received event", JSON.parse(v.data))

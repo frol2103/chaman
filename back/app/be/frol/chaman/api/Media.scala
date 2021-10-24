@@ -46,4 +46,10 @@ class Media @Inject()(
       height.getOrElse(50),
     ).toString)
   }
+
+  def debug() = Action { request =>
+    Ok(request.headers.toMap.mkString("\n"))
+
+
+  }
 }

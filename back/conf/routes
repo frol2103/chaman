@@ -12,3 +12,4 @@ GET        /api/item/:id/qr             be.frol.chaman.api.Media.itemQr(id)
 GET        /api/item/:id/sticker        be.frol.chaman.api.Media.sticker(id)
 
 GET        /api/event/user              be.frol.chaman.api.Websocket.userEvents()
+GET        /api/debug                   be.frol.chaman.api.Media.debug()
