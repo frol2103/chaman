@@ -35,6 +35,8 @@ import {MatTableModule} from "@angular/material/table";
 import { MimeToFaPipe } from './mime-to-fa.pipe';
 import { ImageCropperComponent } from './image-cropper/image-cropper.component';
 import { ThumbnailEditorComponent } from './item/thumbnail-editor/thumbnail-editor.component';
+import {CameraSnapshotComponent} from "./camera-input/camera-snapshot/camera-snapshot.component";
+import { ThumbnailCameraComponent } from './item/thumbnail-camera/thumbnail-camera.component';
 
 @NgModule({
   declarations: [
@@ -61,6 +63,8 @@ import { ThumbnailEditorComponent } from './item/thumbnail-editor/thumbnail-edit
     MimeToFaPipe,
     ImageCropperComponent,
     ThumbnailEditorComponent,
+    CameraSnapshotComponent,
+    ThumbnailCameraComponent,
   ],
     imports: [
         BrowserModule,

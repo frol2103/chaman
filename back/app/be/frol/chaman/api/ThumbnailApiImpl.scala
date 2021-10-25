@@ -41,7 +41,7 @@ class ThumbnailApiImpl @Inject()(
           val y = Math.min(icon.y.map(_.toInt).getOrElse(Int.MaxValue), (image.getHeight - width))
           val croppedImage = image.getSubimage(x, y, width, width)
           val scaledImage = Scalr.resize(croppedImage, Scalr.Method.BALANCED, Conf.thumbnailWidth, Conf.thumbnailWidth)
-          ImageIO.write(scaledImage, "jpg", Conf.thumbnail(uuid));
+          ImageIO.write(scaledImage, "png", Conf.thumbnail(uuid));
           thumbnailService.add(ItemThumbnailRow(0L, uuid, annex.uuid, x, y, width, user.uuid, DateUtils.ts))
         }
       )

@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Annex, AnnexService, ThumbnailService} from "../../../../generated/api";
+import {Annex, AnnexService, Thumbnail, ThumbnailService} from "../../../../generated/api";
 import {RxjsHelperService} from "../../../rxjs-helper.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {ThumbnailImpl} from "../../../model/ThumbnailImpl";
@@ -21,6 +21,7 @@ export class AnnexTableComponent implements OnInit {
   @Input() annexes: Array<Annex>
   @Input() itemUuid: string
   @Output() deleteAnnex = new EventEmitter<Annex>()
+  @Output() setThumbnail = new EventEmitter<Thumbnail>()
 
   datasource = new MatTableDataSource<Annex>()
 
@@ -47,7 +48,7 @@ export class AnnexTableComponent implements OnInit {
     this.r.wrap(this.thumbnailService.setDescription(this.itemUuid, new ThumbnailImpl(f.uuid)))
       .withSuccessMessage("Thumbnail set")
       .withErrorMessage("Failed to set thumbnail")
-      .then(v => console.log("thumbnail set"))
+      .then(v => this.setThumbnail.emit(v))
 
   }
 }

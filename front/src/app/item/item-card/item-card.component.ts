@@ -18,6 +18,9 @@ import {AnnexTableComponent} from "../annex/annex-table/annex-table.component";
 import {ThumbnailEditorComponent} from "../thumbnail-editor/thumbnail-editor.component";
 import {BehaviorSubject} from "rxjs";
 import {EventImpl} from "../../model/EventImpl";
+import {MobileDetectorService} from "../../mobile-detector.service";
+import {CameraSnapshotComponent} from "../../camera-input/camera-snapshot/camera-snapshot.component";
+import {ThumbnailCameraComponent} from "../thumbnail-camera/thumbnail-camera.component";
 
 @Component({
   selector: 'app-item-card',
@@ -36,6 +39,7 @@ export class ItemCardComponent implements OnInit {
     private annexService: AnnexService,
     private modalConfig: NgbModalConfig,
     private eventService: EventService,
+    public mobileService: MobileDetectorService,
   ) {
     route.params.subscribe(p => {
         if (p.id === 'new') {
@@ -102,6 +106,7 @@ export class ItemCardComponent implements OnInit {
     this.annexTable.refresh()
   }
 
+
   refreshThumbnail(){
     this.imgSrc.next("/api/item/" + this.item.uuid + "/thumbnail/file?ts=" + Date.now())
   }
@@ -120,5 +125,11 @@ export class ItemCardComponent implements OnInit {
       .withSuccessMessage("Picture requested")
       .then(v => console.log("v"))
 
+  }
+
+  takePhoto() {
+    let ngbModalRef = this.modalService.open(ThumbnailCameraComponent);
+    ngbModalRef.componentInstance.item = this.item;
+    ngbModalRef.result.then(v => this.refreshThumbnail())
   }
 }
