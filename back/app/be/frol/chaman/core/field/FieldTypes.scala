@@ -60,6 +60,7 @@ object BasicFieldTypes {
   val nHolderFormat = Json.format[NumberHolder]
   val bHolderFormat = Json.format[BooleanHolder]
 
+  val multipleTag = BasicFieldType[StringHolder]("multipleTag", sHolderFormat, list(v =>JsString(v.strValue)))
   val string = BasicFieldType[StringHolder]("string", sHolderFormat, single(v =>JsString(v.strValue)))
   val multipleString = BasicFieldType[StringHolder]("multipleString", sHolderFormat, list(v => JsString(v.strValue)))
   val number = BasicFieldType[NumberHolder]("number", nHolderFormat, single(v => JsNumber(v.numericValue)), numberFormatter)
@@ -90,12 +91,13 @@ object ConfigFieldTypes {
 }
 
 object FieldTypes {
+  val multipleTag = FieldType(BasicFieldTypes.multipleTag, Nil)
   val string = FieldType(BasicFieldTypes.string, Nil)
   val multipleString = FieldType(BasicFieldTypes.multipleString, Nil)
   val number = FieldType(BasicFieldTypes.number, List(ConfigFieldTypes.suffix, ConfigFieldTypes.numberFormatter))
   val multipleNumber = FieldType(BasicFieldTypes.multipleNumber, List(ConfigFieldTypes.suffix, ConfigFieldTypes.numberFormatter))
   val select = FieldType(BasicFieldTypes.select, List(ConfigFieldTypes.staticValues))
 
-  val all = List(string, multipleString, number, multipleNumber, select)
+  val all = List(string, multipleString, number, multipleNumber, select, multipleTag)
   val mapByInputType = all.toMapBy(_.basicFieldType.inputType)
 }

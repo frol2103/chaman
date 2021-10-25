@@ -108,6 +108,49 @@ paths:
         200:
           description: OK
           content: { }
+
+
+  /field/{uuid}/tag:
+    get:
+      tags:
+        - tag
+      summary: get tag list for a field
+      operationId: getAllTags
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+    put:
+      tags:
+        - tag
+      summary: add tag for a field
+      operationId: addTag
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: value
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+
   /data-types/:
     get:
       tags:

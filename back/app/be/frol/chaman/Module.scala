@@ -13,6 +13,7 @@ class Module extends PlayModule {
     bind[ItemApi].to[ItemApiImpl],
     bind[AnnexApi].to[AnnexApiImpl],
     bind[ThumbnailApi].to[ThumbnailApiImpl],
-    bind[EventApi].to[EventApiImpl]
+    bind[EventApi].to[EventApiImpl],
+    bind[TagApi].to[TagApiImpl],
   )
 }

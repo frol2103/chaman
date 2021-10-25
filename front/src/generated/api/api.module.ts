@@ -8,6 +8,7 @@ import { EventService } from './api/event.service';
 import { FieldService } from './api/field.service';
 import { FileService } from './api/file.service';
 import { ItemService } from './api/item.service';
+import { TagService } from './api/tag.service';
 import { ThumbnailService } from './api/thumbnail.service';
 
 @NgModule({

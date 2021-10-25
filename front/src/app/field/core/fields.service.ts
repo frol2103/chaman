@@ -5,6 +5,7 @@ import {IntegerComponent} from "../template/integer/integer.component";
 import {SelectComponent} from "../template/select/select.component";
 import {MultipleStringComponent} from "../template/multiple-string/multiple-string.component";
 import {MultipleIntegerComponent} from "../template/multiple-integer/multiple-integer.component";
+import {MultipleTagComponent} from "../template/multiple-tag/multiple-tag.component";
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,7 @@ export class FieldsService {
     this.fields.set("select", SelectComponent)
     this.fields.set("multipleString", MultipleStringComponent)
     this.fields.set("multipleNumber", MultipleIntegerComponent)
+    this.fields.set("multipleTag", MultipleTagComponent)
   }
 
   getFieldComponent(fieldType: string){

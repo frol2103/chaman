@@ -37,6 +37,8 @@ import { ImageCropperComponent } from './image-cropper/image-cropper.component';
 import { ThumbnailEditorComponent } from './item/thumbnail-editor/thumbnail-editor.component';
 import {CameraSnapshotComponent} from "./camera-input/camera-snapshot/camera-snapshot.component";
 import { ThumbnailCameraComponent } from './item/thumbnail-camera/thumbnail-camera.component';
+import { MultipleTagComponent } from './field/template/multiple-tag/multiple-tag.component';
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 @NgModule({
   declarations: [
@@ -65,6 +67,7 @@ import { ThumbnailCameraComponent } from './item/thumbnail-camera/thumbnail-came
     ThumbnailEditorComponent,
     CameraSnapshotComponent,
     ThumbnailCameraComponent,
+    MultipleTagComponent,
   ],
     imports: [
         BrowserModule,
@@ -78,6 +81,7 @@ import { ThumbnailCameraComponent } from './item/thumbnail-camera/thumbnail-came
         MatIconModule,
         ReactiveFormsModule,
         MatTableModule,
+        MatAutocompleteModule,
     ],
   providers: [
     {provide: BASE_PATH, useValue: '/api'},

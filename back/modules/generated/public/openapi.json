@@ -157,6 +157,67 @@
         "tags" : [ "field" ]
       }
     },
+    "/field/{uuid}/tag" : {
+      "get" : {
+        "operationId" : "getAllTags",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "uuid",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "items" : {
+                    "type" : "string"
+                  },
+                  "type" : "array"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "get tag list for a field",
+        "tags" : [ "tag" ]
+      },
+      "put" : {
+        "operationId" : "addTag",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "uuid",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : true,
+          "in" : "query",
+          "name" : "value",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "add tag for a field",
+        "tags" : [ "tag" ]
+      }
+    },
     "/data-types/" : {
       "get" : {
         "operationId" : "getDataTypes",

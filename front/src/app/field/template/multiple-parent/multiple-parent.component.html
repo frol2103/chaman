@@ -10,7 +10,15 @@
     </mat-chip>
     <input
       #valueInput
+      [formControl]="inputCtrl"
+      [matAutocomplete]="auto"
       [matChipInputFor]="valueList"
       (matChipInputTokenEnd)="addValue($event)">
   </mat-chip-list>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+    <mat-option *ngFor="let v of filteredInputs | async" [value]="v">
+      {{v}}
+    </mat-option>
+  </mat-autocomplete>
+
 </mat-form-field>

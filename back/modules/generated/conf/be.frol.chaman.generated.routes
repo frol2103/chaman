@@ -37,6 +37,11 @@ DELETE /api/item/:uuid                be.frol.chaman.openapi.api.ItemApiControll
 GET /api/item/:uuid                   be.frol.chaman.openapi.api.ItemApiController.getItem(uuid: String)
 PUT /api/item/:uuid                   be.frol.chaman.openapi.api.ItemApiController.updateItem(uuid: String)
 
+# Routes for Tag API
+
+PUT /api/field/:uuid/tag              be.frol.chaman.openapi.api.TagApiController.addTag(uuid: String)
+GET /api/field/:uuid/tag              be.frol.chaman.openapi.api.TagApiController.getAllTags(uuid: String)
+
 # Routes for Thumbnail API
 
 GET /api/item/:uuid/thumbnail         be.frol.chaman.openapi.api.ThumbnailApiController.getDescription(uuid: String)
