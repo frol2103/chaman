@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
-import {Field, FieldService} from "../../../../generated/api";
-import {FieldImpl} from "../../../model/FieldImpl";
+import {Field, FieldService} from "../../../generated/api";
+import {FieldImpl} from "../../model/FieldImpl";
 import * as _ from 'lodash';
 import {NgbModal, NgbModalConfig, NgbModalRef} from "@ng-bootstrap/ng-bootstrap";
 

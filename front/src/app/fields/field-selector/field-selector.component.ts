@@ -1,5 +1,5 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {Field, FieldService} from "../../../../generated/api";
+import {Field, FieldService} from "../../../generated/api";
 import {NgbActiveModal} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({

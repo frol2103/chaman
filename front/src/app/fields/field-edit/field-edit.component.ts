@@ -1,9 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output, ViewChild} from '@angular/core';
-import {DatatypesService, Field, FieldConfig, FieldService} from "../../../../generated/api";
-import {ToastService} from "../../../toast/toast.service";
-import {FieldComponent} from "../../../field/core/field/field.component";
-import {Copy} from "../../../utils/Copy";
-import {FieldConfigImpl} from "../../../model/FielConfigImpl";
+import {DatatypesService, Field, FieldConfig, FieldService} from "../../../generated/api";
+import {ToastService} from "../../toast/toast.service";
+import {FieldComponent} from "../../field/core/field/field.component";
+import {Copy} from "../../utils/Copy";
+import {FieldConfigImpl} from "../../model/FielConfigImpl";
 
 @Component({
   selector: 'app-field-edit',

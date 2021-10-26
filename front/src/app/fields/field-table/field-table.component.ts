@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Field} from "../../../../generated/api";
+import {Field} from "../../../generated/api";
 
 @Component({
   selector: 'field-table',
