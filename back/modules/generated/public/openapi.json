@@ -249,7 +249,7 @@
               "application/json" : {
                 "schema" : {
                   "items" : {
-                    "$ref" : "#/components/schemas/Item"
+                    "$ref" : "#/components/schemas/ItemDescr"
                   },
                   "type" : "array"
                 }
@@ -421,8 +421,8 @@
         "tags" : [ "annex" ]
       }
     },
-    "/annex/{uuid}/delete" : {
-      "post" : {
+    "/annex/{uuid}" : {
+      "delete" : {
         "operationId" : "deleteAnnex",
         "parameters" : [ {
           "explode" : false,
@@ -572,6 +572,66 @@
         "summary" : "add an event",
         "tags" : [ "Event" ]
       }
+    },
+    "/item/{uuid}/link" : {
+      "post" : {
+        "operationId" : "addLink",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "uuid",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        }, {
+          "explode" : true,
+          "in" : "query",
+          "name" : "linkedUuid",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "$ref" : "#/definitions/Link"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "summary" : "add a link",
+        "tags" : [ "link" ]
+      }
+    },
+    "/link/{uuid}" : {
+      "delete" : {
+        "operationId" : "deleteLink",
+        "parameters" : [ {
+          "explode" : false,
+          "in" : "path",
+          "name" : "uuid",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "simple"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK"
+          }
+        },
+        "summary" : "delete a link",
+        "tags" : [ "link" ]
+      }
     }
   },
   "components" : {
@@ -710,9 +770,43 @@
         },
         "type" : "object"
       },
+      "ItemDescr" : {
+        "example" : {
+          "description" : "description",
+          "title" : "title",
+          "uuid" : "uuid"
+        },
+        "properties" : {
+          "uuid" : {
+            "type" : "string"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "description" : {
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
       "Item" : {
         "example" : {
           "description" : "description",
+          "links" : [ {
+            "item" : {
+              "description" : "description",
+              "title" : "title",
+              "uuid" : "uuid"
+            },
+            "uuid" : "uuid"
+          }, {
+            "item" : {
+              "description" : "description",
+              "title" : "title",
+              "uuid" : "uuid"
+            },
+            "uuid" : "uuid"
+          } ],
           "title" : "title",
           "uuid" : "uuid",
           "annexes" : [ {
@@ -773,6 +867,12 @@
           "annexes" : {
             "items" : {
               "$ref" : "#/components/schemas/Annex"
+            },
+            "type" : "array"
+          },
+          "links" : {
+            "items" : {
+              "$ref" : "#/components/schemas/Link"
             },
             "type" : "array"
           }
@@ -837,6 +937,25 @@
           },
           "content" : {
             "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
+      "Link" : {
+        "example" : {
+          "item" : {
+            "description" : "description",
+            "title" : "title",
+            "uuid" : "uuid"
+          },
+          "uuid" : "uuid"
+        },
+        "properties" : {
+          "uuid" : {
+            "type" : "string"
+          },
+          "item" : {
+            "$ref" : "#/components/schemas/ItemDescr"
           }
         },
         "type" : "object"

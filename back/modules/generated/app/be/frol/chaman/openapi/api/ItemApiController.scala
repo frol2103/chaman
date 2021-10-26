@@ -6,6 +6,7 @@ import play.api.libs.json._
 import play.api.mvc._
 import scala.concurrent.{ExecutionContext, Future}
 import be.frol.chaman.openapi.model.Item
+import be.frol.chaman.openapi.model.ItemDescr
 
 @javax.annotation.Generated(value = Array("org.openapitools.codegen.languages.ScalaPlayFrameworkServerCodegen"))
 @Singleton
@@ -58,7 +59,7 @@ class ItemApiController @Inject()(cc: ControllerComponents, api: ItemApi)(implic
     * GET /api/item
     */
   def getItems(): Action[AnyContent] = Action.async { request =>
-    def executeApi(): Future[List[Item]] = {
+    def executeApi(): Future[List[ItemDescr]] = {
       api.getItems()(request)
     }
 

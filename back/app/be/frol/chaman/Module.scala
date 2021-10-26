@@ -15,5 +15,6 @@ class Module extends PlayModule {
     bind[ThumbnailApi].to[ThumbnailApiImpl],
     bind[EventApi].to[EventApiImpl],
     bind[TagApi].to[TagApiImpl],
+    bind[LinkApi].to[LinkApiImpl]
   )
 }

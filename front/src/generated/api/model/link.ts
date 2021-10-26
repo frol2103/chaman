@@ -9,17 +9,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { Field } from './field';
-import { Annex } from './annex';
-import { Link } from './link';
+import { ItemDescr } from './itemDescr';
 
 
-export interface Item { 
+export interface Link { 
     uuid?: string;
-    title?: string;
-    description?: string;
-    content?: Array<Field>;
-    annexes?: Array<Annex>;
-    links?: Array<Link>;
+    item?: ItemDescr;
 }
 

@@ -1,19 +1,23 @@
 <table mat-table [dataSource]="datasource" class="table table-striped">
 
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef>Name</th>
+  <ng-container matColumnDef="title">
+    <th mat-header-cell *matHeaderCellDef>Title</th>
     <td mat-cell *matCellDef="let f">
-      <i class="fa {{f.mime | mimeToFa}}"></i>
-      <a href="/api/annex/{{f.uuid}}/file">{{f.filename}}</a>
+      {{f.item.title}}
     </td>
   </ng-container>
 
+  <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef>Description</th>
+    <td mat-cell *matCellDef="let f">
+      {{f.item.title}}
+    </td>
+  </ng-container>
 
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef>Actions</th>
     <td mat-cell *matCellDef="let f">
       <a (click)="delete(f)"><i class="fa fa-trash"></i></a>
-      <a (click)="thumbnail(f)"><i class="fa fa-address-card"></i></a>
     </td>
   </ng-container>
 

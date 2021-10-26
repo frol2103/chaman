@@ -7,13 +7,13 @@ import {
   Item,
   ItemService,
   Event,
-  EventService
+  EventService, Link, LinkService
 } from "../../../generated/api";
 import {ItemImpl} from "../../model/ItemImpl";
 import {map, timestamp} from "rxjs/operators";
 import {RxjsHelperService} from "../../rxjs-helper.service";
 import {NgbModal, NgbModalConfig} from "@ng-bootstrap/ng-bootstrap";
-import {FieldSelectorComponent} from "../../admin/fields/field-selector/field-selector.component";
+import {FieldSelectorComponent} from "../../fields/field-selector/field-selector.component";
 import {AnnexTableComponent} from "../annex/annex-table/annex-table.component";
 import {ThumbnailEditorComponent} from "../thumbnail-editor/thumbnail-editor.component";
 import {BehaviorSubject} from "rxjs";
@@ -21,6 +21,8 @@ import {EventImpl} from "../../model/EventImpl";
 import {MobileDetectorService} from "../../mobile-detector.service";
 import {CameraSnapshotComponent} from "../../camera-input/camera-snapshot/camera-snapshot.component";
 import {ThumbnailCameraComponent} from "../thumbnail-camera/thumbnail-camera.component";
+import {ItemSelectorComponent} from "../item-selector/item-selector.component";
+import {LinkTableComponent} from "../link/link-table/link-table.component";
 
 @Component({
   selector: 'app-item-card',
@@ -40,6 +42,7 @@ export class ItemCardComponent implements OnInit {
     private modalConfig: NgbModalConfig,
     private eventService: EventService,
     public mobileService: MobileDetectorService,
+    public linkService: LinkService,
   ) {
     route.params.subscribe(p => {
         if (p.id === 'new') {
@@ -60,6 +63,7 @@ export class ItemCardComponent implements OnInit {
   imgSrc: BehaviorSubject<string> = new BehaviorSubject(undefined);
 
   @ViewChild("annexTable") annexTable:AnnexTableComponent;
+  @ViewChild("linkTable") linkTable:LinkTableComponent;
 
   ngOnInit(): void {
 
@@ -131,5 +135,20 @@ export class ItemCardComponent implements OnInit {
     let ngbModalRef = this.modalService.open(ThumbnailCameraComponent);
     ngbModalRef.componentInstance.item = this.item;
     ngbModalRef.result.then(v => this.refreshThumbnail())
+  }
+
+  addLink() {
+    if(!this.item.links) this.item.links = []
+    this.modalService.open(ItemSelectorComponent).result.then((result) => {
+      this.linkService.addLink(this.item.uuid, result.uuid).toPromise().then( r => {
+          this.item.links.push(r)
+          this.linkTable.refresh()
+      })
+    });
+  }
+
+  linkDeleted(l:Link) {
+    this.item.links.splice(this.item.links.indexOf(l))
+    this.linkTable.refresh()
   }
 }

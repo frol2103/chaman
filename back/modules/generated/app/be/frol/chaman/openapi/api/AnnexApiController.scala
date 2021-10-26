@@ -12,7 +12,7 @@ import play.api.libs.Files.TemporaryFile
 @Singleton
 class AnnexApiController @Inject()(cc: ControllerComponents, api: AnnexApi)(implicit executionContext: ExecutionContext) extends AbstractController(cc) {
   /**
-    * POST /api/annex/:uuid/delete
+    * DELETE /api/annex/:uuid
     */
   def deleteAnnex(uuid: String): Action[AnyContent] = Action.async { request =>
     def executeApi(): Future[Unit] = {

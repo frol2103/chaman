@@ -5,7 +5,7 @@
 
 # Routes for Annex API
 
-POST /api/annex/:uuid/delete          be.frol.chaman.openapi.api.AnnexApiController.deleteAnnex(uuid: String)
+DELETE /api/annex/:uuid               be.frol.chaman.openapi.api.AnnexApiController.deleteAnnex(uuid: String)
 POST /api/item/:uuid/annex            be.frol.chaman.openapi.api.AnnexApiController.uploadFile(uuid: String)
 
 # Routes for Datatypes API
@@ -36,6 +36,11 @@ GET /api/item                         be.frol.chaman.openapi.api.ItemApiControll
 DELETE /api/item/:uuid                be.frol.chaman.openapi.api.ItemApiController.deleteItem(uuid: String)
 GET /api/item/:uuid                   be.frol.chaman.openapi.api.ItemApiController.getItem(uuid: String)
 PUT /api/item/:uuid                   be.frol.chaman.openapi.api.ItemApiController.updateItem(uuid: String)
+
+# Routes for Link API
+
+POST /api/item/:uuid/link             be.frol.chaman.openapi.api.LinkApiController.addLink(uuid: String)
+DELETE /api/link/:uuid                be.frol.chaman.openapi.api.LinkApiController.deleteLink(uuid: String)
 
 # Routes for Tag API
 

@@ -11,7 +11,8 @@ case class Item(
   title: Option[String],
   description: Option[String],
   content: Option[List[Field]],
-  annexes: Option[List[Annex]]
+  annexes: Option[List[Annex]],
+  links: Option[List[Link]]
 )
 
 object Item {

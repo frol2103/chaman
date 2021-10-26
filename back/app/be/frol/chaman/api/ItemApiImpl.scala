@@ -3,8 +3,8 @@ package be.frol.chaman.api
 import be.frol.chaman.mapper.ItemMapper
 import be.frol.chaman.model.RichModelConversions._
 import be.frol.chaman.openapi.api.ItemApi
-import be.frol.chaman.openapi.model.Item
-import be.frol.chaman.service.{AnnexService, DataService, FieldValidationService, ItemService}
+import be.frol.chaman.openapi.model.{Item, ItemDescr}
+import be.frol.chaman.service.{AnnexService, DataService, FieldValidationService, ItemService, LinkService}
 import be.frol.chaman.tables.Tables
 import be.frol.chaman.utils.OptionUtils._
 import play.api.db.slick.DatabaseConfigProvider
@@ -22,6 +22,7 @@ class ItemApiImpl @Inject()(
                              val fieldDataService: DataService,
                              val fieldValidationService: FieldValidationService,
                              val annexService:AnnexService,
+                             val linkService: LinkService,
                            ) extends ItemApi with DbContext with ParentController {
 
   import api._
@@ -52,11 +53,12 @@ class ItemApiImpl @Inject()(
       i <- itemService.get(uuid)
       fields <- fieldDataService.fieldsFor(uuid)
       annexes <- annexService.forItem(uuid)
-    } yield ItemMapper.toDto(i, fields, annexes)
+      links <- linkService.getLinks(uuid)
+    } yield ItemMapper.toDto(i, fields, annexes, links)
   }
 
-  override def getItems()(implicit request: Request[AnyContent]): Future[List[Item]] =  run { implicit u =>
-    db.run(itemService.all()).map(_.map(ItemMapper.toDto(_)).toList)
+  override def getItems()(implicit request: Request[AnyContent]): Future[List[ItemDescr]] =  run { implicit u =>
+    db.run(itemService.all()).map(_.map(ItemMapper.toDescrDto(_)).toList)
   }
 
   override def updateItem(uuid: String, inputItem: Item)(implicit request: Request[AnyContent]): Future[Item] =  run { implicit u =>

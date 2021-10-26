@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import {Item, ItemService} from "../../../generated/api";
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
+import {Item, ItemDescr, ItemService} from "../../../generated/api";
 import {Observable} from "rxjs";
 import {Router} from "@angular/router";
 
@@ -10,22 +10,19 @@ import {Router} from "@angular/router";
 })
 export class ItemSearchComponent implements OnInit {
 
-  items: Array<Item>;
+  @Output() selection = new EventEmitter<ItemDescr>()
+
+  items: Array<ItemDescr>;
 
   constructor(
     private itemService : ItemService,
-    private routerService: Router,
   ) {
     this.itemService.getItems().toPromise().then(i => {
       this.items =i
-      console.log("items", this.items)
     })
   }
 
   ngOnInit(): void {
   }
 
-  newItem() {
-    this.routerService.navigate(["/item/new"])
-  }
 }

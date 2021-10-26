@@ -4,6 +4,7 @@ import play.api.libs.json._
 import play.api.mvc._
 import scala.concurrent.Future
 import be.frol.chaman.openapi.model.Item
+import be.frol.chaman.openapi.model.ItemDescr
 
 @javax.annotation.Generated(value = Array("org.openapitools.codegen.languages.ScalaPlayFrameworkServerCodegen"))
 trait ItemApi {
@@ -28,7 +29,7 @@ trait ItemApi {
   /**
     * Get all items
     */
-  def getItems()(implicit request:Request[AnyContent]): Future[List[Item]]
+  def getItems()(implicit request:Request[AnyContent]): Future[List[ItemDescr]]
 
 
   /**

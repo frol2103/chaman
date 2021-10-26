@@ -10,11 +10,10 @@
     </tr>
     </thead>
     <tbody>
-    <tr *ngFor="let item of items" [routerLink]="['/item/', item.uuid]">
+    <tr *ngFor="let item of items" (click)="selection.emit(item)">
       <td>{{ item.title }}</td>
       <td>{{ item.description }}</td>
     </tr>
     </tbody>
   </table>
-  <button (click)="newItem()" type="button" class="btn btn-primary">+</button>
 </div>

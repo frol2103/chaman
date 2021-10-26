@@ -44,6 +44,11 @@
     <input (change)="onFileChange($event)" id="singleFile" type="file"/>
   </div>
 
+  <h2>Links
+    <i *ngIf="!mobileService.isMobile" class="fa fa-plus-circle" (click)="addLink()"></i>
+  </h2>
+  <app-link-table #linkTable (deleteLink)="linkDeleted($event)" [item]="item"></app-link-table>
+
   <div class="action-buttons">
     <button class="btn btn-primary" (click)="save()">save</button>
   </div>

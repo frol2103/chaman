@@ -16,7 +16,7 @@ trait Tables {
   import slick.jdbc.{GetResult => GR}
 
   /** DDL for all tables. Call .create to execute. */
-  lazy val schema: profile.SchemaDescription = Array(AdminEventEntity.schema, Annex.schema, AnnexRemoved.schema, AssociatedPolicy.schema, AuthenticationExecution.schema, AuthenticationFlow.schema, AuthenticatorConfig.schema, AuthenticatorConfigEntry.schema, BrokerLink.schema, Client.schema, ClientAttributes.schema, ClientAuthFlowBindings.schema, ClientInitialAccess.schema, ClientNodeRegistrations.schema, ClientScope.schema, ClientScopeAttributes.schema, ClientScopeClient.schema, ClientScopeRoleMapping.schema, ClientSession.schema, ClientSessionAuthStatus.schema, ClientSessionNote.schema, ClientSessionProtMapper.schema, ClientSessionRole.schema, ClientUserSessionNote.schema, Component.schema, ComponentConfig.schema, CompositeRole.schema, Credential.schema, Data.schema, Databasechangelog.schema, Databasechangeloglock.schema, DataDeleted.schema, DefaultClientScope.schema, EventEntity.schema, FederatedIdentity.schema, FederatedUser.schema, FedUserAttribute.schema, FedUserConsent.schema, FedUserConsentClScope.schema, FedUserCredential.schema, FedUserGroupMembership.schema, FedUserRequiredAction.schema, FedUserRoleMapping.schema, Field.schema, FieldDeleted.schema, FieldTag.schema, GroupAttribute.schema, GroupRoleMapping.schema, IdentityProvider.schema, IdentityProviderConfig.schema, IdentityProviderMapper.schema, IdpMapperConfig.schema, Item.schema, ItemDeleted.schema, ItemThumbnail.schema, KeycloakGroup.schema, KeycloakRole.schema, MigrationModel.schema, OfflineClientSession.schema, OfflineUserSession.schema, PlayEvolutions.schema, PolicyConfig.schema, ProtocolMapper.schema, ProtocolMapperConfig.schema, Realm.schema, RealmAttribute.schema, RealmDefaultGroups.schema, RealmEnabledEventTypes.schema, RealmEventsListeners.schema, RealmLocalizations.schema, RealmRequiredCredential.schema, RealmSmtpConfig.schema, RealmSupportedLocales.schema, RedirectUris.schema, RequiredActionConfig.schema, RequiredActionProvider.schema, ResourceAttribute.schema, ResourcePolicy.schema, ResourceScope.schema, ResourceServer.schema, ResourceServerPermTicket.schema, ResourceServerPolicy.schema, ResourceServerResource.schema, ResourceServerScope.schema, ResourceUris.schema, RoleAttribute.schema, ScopeMapping.schema, ScopePolicy.schema, User.schema, UserAttribute.schema, UserConsent.schema, UserConsentClientScope.schema, UserEntity.schema, UserFederationConfig.schema, UserFederationMapper.schema, UserFederationMapperConfig.schema, UserFederationProvider.schema, UserGroupMembership.schema, UsernameLoginFailure.schema, UserRequiredAction.schema, UserRoleMapping.schema, UserSession.schema, UserSessionNote.schema, WebOrigins.schema).reduceLeft(_ ++ _)
+  lazy val schema: profile.SchemaDescription = Array(AdminEventEntity.schema, Annex.schema, AnnexRemoved.schema, AssociatedPolicy.schema, AuthenticationExecution.schema, AuthenticationFlow.schema, AuthenticatorConfig.schema, AuthenticatorConfigEntry.schema, BrokerLink.schema, Client.schema, ClientAttributes.schema, ClientAuthFlowBindings.schema, ClientInitialAccess.schema, ClientNodeRegistrations.schema, ClientScope.schema, ClientScopeAttributes.schema, ClientScopeClient.schema, ClientScopeRoleMapping.schema, ClientSession.schema, ClientSessionAuthStatus.schema, ClientSessionNote.schema, ClientSessionProtMapper.schema, ClientSessionRole.schema, ClientUserSessionNote.schema, Component.schema, ComponentConfig.schema, CompositeRole.schema, Credential.schema, Data.schema, Databasechangelog.schema, Databasechangeloglock.schema, DataDeleted.schema, DefaultClientScope.schema, EventEntity.schema, FederatedIdentity.schema, FederatedUser.schema, FedUserAttribute.schema, FedUserConsent.schema, FedUserConsentClScope.schema, FedUserCredential.schema, FedUserGroupMembership.schema, FedUserRequiredAction.schema, FedUserRoleMapping.schema, Field.schema, FieldDeleted.schema, FieldTag.schema, GroupAttribute.schema, GroupRoleMapping.schema, IdentityProvider.schema, IdentityProviderConfig.schema, IdentityProviderMapper.schema, IdpMapperConfig.schema, Item.schema, ItemDeleted.schema, ItemThumbnail.schema, KeycloakGroup.schema, KeycloakRole.schema, Link.schema, LinkRemoved.schema, MigrationModel.schema, OfflineClientSession.schema, OfflineUserSession.schema, PlayEvolutions.schema, PolicyConfig.schema, ProtocolMapper.schema, ProtocolMapperConfig.schema, Realm.schema, RealmAttribute.schema, RealmDefaultGroups.schema, RealmEnabledEventTypes.schema, RealmEventsListeners.schema, RealmLocalizations.schema, RealmRequiredCredential.schema, RealmSmtpConfig.schema, RealmSupportedLocales.schema, RedirectUris.schema, RequiredActionConfig.schema, RequiredActionProvider.schema, ResourceAttribute.schema, ResourcePolicy.schema, ResourceScope.schema, ResourceServer.schema, ResourceServerPermTicket.schema, ResourceServerPolicy.schema, ResourceServerResource.schema, ResourceServerScope.schema, ResourceUris.schema, RoleAttribute.schema, ScopeMapping.schema, ScopePolicy.schema, User.schema, UserAttribute.schema, UserConsent.schema, UserConsentClientScope.schema, UserEntity.schema, UserFederationConfig.schema, UserFederationMapper.schema, UserFederationMapperConfig.schema, UserFederationProvider.schema, UserGroupMembership.schema, UsernameLoginFailure.schema, UserRequiredAction.schema, UserRoleMapping.schema, UserSession.schema, UserSessionNote.schema, WebOrigins.schema).reduceLeft(_ ++ _)
   @deprecated("Use .schema instead of .ddl", "3.0")
   def ddl = schema
 
@@ -2202,6 +2202,70 @@ trait Tables {
   }
   /** Collection-like TableQuery object for table KeycloakRole */
   lazy val KeycloakRole = new TableQuery(tag => new KeycloakRole(tag))
+
+  /** Entity class storing rows of table Link
+   *  @param id Database column id SqlType(BIGINT), AutoInc, PrimaryKey
+   *  @param uuid Database column uuid SqlType(VARCHAR), Length(36,true)
+   *  @param itemUuid1 Database column item_uuid_1 SqlType(VARCHAR), Length(36,true)
+   *  @param itemUuid2 Database column item_uuid_2 SqlType(VARCHAR), Length(36,true)
+   *  @param author Database column author SqlType(VARCHAR), Length(36,true)
+   *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
+  case class LinkRow(id: Long, uuid: String, itemUuid1: String, itemUuid2: String, author: String, timestamp: java.sql.Timestamp)
+  /** GetResult implicit for fetching LinkRow objects using plain SQL queries */
+  implicit def GetResultLinkRow(implicit e0: GR[Long], e1: GR[String], e2: GR[java.sql.Timestamp]): GR[LinkRow] = GR{
+    prs => import prs._
+    LinkRow.tupled((<<[Long], <<[String], <<[String], <<[String], <<[String], <<[java.sql.Timestamp]))
+  }
+  /** Table description of table link. Objects of this class serve as prototypes for rows in queries. */
+  class Link(_tableTag: Tag) extends profile.api.Table[LinkRow](_tableTag, Some("chaman"), "link") {
+    def * = (id, uuid, itemUuid1, itemUuid2, author, timestamp) <> (LinkRow.tupled, LinkRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = ((Rep.Some(id), Rep.Some(uuid), Rep.Some(itemUuid1), Rep.Some(itemUuid2), Rep.Some(author), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> LinkRow.tupled((_1.get, _2.get, _3.get, _4.get, _5.get, _6.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column id SqlType(BIGINT), AutoInc, PrimaryKey */
+    val id: Rep[Long] = column[Long]("id", O.AutoInc, O.PrimaryKey)
+    /** Database column uuid SqlType(VARCHAR), Length(36,true) */
+    val uuid: Rep[String] = column[String]("uuid", O.Length(36,varying=true))
+    /** Database column item_uuid_1 SqlType(VARCHAR), Length(36,true) */
+    val itemUuid1: Rep[String] = column[String]("item_uuid_1", O.Length(36,varying=true))
+    /** Database column item_uuid_2 SqlType(VARCHAR), Length(36,true) */
+    val itemUuid2: Rep[String] = column[String]("item_uuid_2", O.Length(36,varying=true))
+    /** Database column author SqlType(VARCHAR), Length(36,true) */
+    val author: Rep[String] = column[String]("author", O.Length(36,varying=true))
+    /** Database column timestamp SqlType(TIMESTAMP) */
+    val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
+
+    /** Index over (itemUuid1,itemUuid2) (database name item_uuid_1) */
+    val index1 = index("item_uuid_1", (itemUuid1, itemUuid2))
+  }
+  /** Collection-like TableQuery object for table Link */
+  lazy val Link = new TableQuery(tag => new Link(tag))
+
+  /** Entity class storing rows of table LinkRemoved
+   *  @param fkLinkId Database column fk_link_id SqlType(BIGINT), PrimaryKey
+   *  @param author Database column author SqlType(VARCHAR), Length(36,true)
+   *  @param timestamp Database column timestamp SqlType(TIMESTAMP) */
+  case class LinkRemovedRow(fkLinkId: Long, author: String, timestamp: java.sql.Timestamp)
+  /** GetResult implicit for fetching LinkRemovedRow objects using plain SQL queries */
+  implicit def GetResultLinkRemovedRow(implicit e0: GR[Long], e1: GR[String], e2: GR[java.sql.Timestamp]): GR[LinkRemovedRow] = GR{
+    prs => import prs._
+    LinkRemovedRow.tupled((<<[Long], <<[String], <<[java.sql.Timestamp]))
+  }
+  /** Table description of table link_removed. Objects of this class serve as prototypes for rows in queries. */
+  class LinkRemoved(_tableTag: Tag) extends profile.api.Table[LinkRemovedRow](_tableTag, Some("chaman"), "link_removed") {
+    def * = (fkLinkId, author, timestamp) <> (LinkRemovedRow.tupled, LinkRemovedRow.unapply)
+    /** Maps whole row to an option. Useful for outer joins. */
+    def ? = ((Rep.Some(fkLinkId), Rep.Some(author), Rep.Some(timestamp))).shaped.<>({r=>import r._; _1.map(_=> LinkRemovedRow.tupled((_1.get, _2.get, _3.get)))}, (_:Any) =>  throw new Exception("Inserting into ? projection not supported."))
+
+    /** Database column fk_link_id SqlType(BIGINT), PrimaryKey */
+    val fkLinkId: Rep[Long] = column[Long]("fk_link_id", O.PrimaryKey)
+    /** Database column author SqlType(VARCHAR), Length(36,true) */
+    val author: Rep[String] = column[String]("author", O.Length(36,varying=true))
+    /** Database column timestamp SqlType(TIMESTAMP) */
+    val timestamp: Rep[java.sql.Timestamp] = column[java.sql.Timestamp]("timestamp")
+  }
+  /** Collection-like TableQuery object for table LinkRemoved */
+  lazy val LinkRemoved = new TableQuery(tag => new LinkRemoved(tag))
 
   /** Entity class storing rows of table MigrationModel
    *  @param id Database column ID SqlType(VARCHAR), PrimaryKey, Length(36,true)

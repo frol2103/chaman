@@ -5,4 +5,6 @@ export * from './fieldConfig';
 export * from './fieldType';
 export * from './fieldValue';
 export * from './item';
+export * from './itemDescr';
+export * from './link';
 export * from './thumbnail';

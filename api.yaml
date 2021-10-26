@@ -180,7 +180,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Item'
+                  $ref: '#/components/schemas/ItemDescr'
     post:
       tags:
         - item
@@ -290,8 +290,8 @@ paths:
               schema:
                 $ref: "#/definitions/Annex"
 
-  /annex/{uuid}/delete:
-    post:
+  /annex/{uuid}:
+    delete:
       tags:
         - "annex"
       summary: "delete an annex"
@@ -399,6 +399,46 @@ paths:
         200:
           description: "Ok"
 
+  /item/{uuid}/link:
+    post:
+      tags:
+        - "link"
+      summary: "add a link"
+      operationId: "addLink"
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: linkedUuid
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/definitions/Link"
+
+  /link/{uuid}:
+    delete:
+      tags:
+        - "link"
+      summary: "delete a link"
+      operationId: "deleteLink"
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: "OK"
 
 components:
   schemas:
@@ -454,6 +494,15 @@ components:
           type: string
           description: identifier of the value
         value: { }
+    ItemDescr:
+      type: object
+      properties:
+        uuid:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
     Item:
       type: object
       properties:
@@ -471,6 +520,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Annex'
+        links:
+          type: array
+          items:
+            $ref: '#/components/schemas/Link'
 
     Annex:
       type: object
@@ -507,4 +560,10 @@ components:
         content:
           type: string
 
-
+    Link:
+      type: object
+      properties:
+        uuid:
+          type: string
+        item:
+          $ref: '#/components/schemas/ItemDescr'
