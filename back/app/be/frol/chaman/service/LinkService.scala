@@ -38,7 +38,7 @@ class LinkService @Inject()(
     } yield links.map(l=> l -> items.get(otherItem(l)).getOrThrowM("Couldn't find item for link"))
   }
 
-  val currentLinks = Tables.Link.filter(v => Tables.LinkRemoved.filter(_.fkLinkId === v.id).exists)
+  val currentLinks = Tables.Link.filterNot(v => Tables.LinkRemoved.filter(_.fkLinkId === v.id).exists)
 
   def get(uuid: String)= currentLinks.filter(_.uuid === uuid).result.headOption.map(_.getOrThrowM("Cannot find item " + uuid))
 

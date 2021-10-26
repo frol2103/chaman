@@ -271,3 +271,6 @@ label {
 app-toasts.ngb-toasts {
   top:50px;
 }
+app-item-card tr.mat-header-row {
+  height: unset;
+}
