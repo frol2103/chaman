@@ -3,6 +3,7 @@ import {FieldValueImpl} from "../../model/FieldValueImpl";
 
 export abstract class FieldParent {
   public field: Field;
+  public inEdit : boolean = false
 
   public get fieldValue() : FieldValue{
     if(!this.field.value) this.field.value = []

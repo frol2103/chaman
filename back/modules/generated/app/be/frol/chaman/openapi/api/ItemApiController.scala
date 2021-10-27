@@ -5,6 +5,7 @@ import javax.inject.{Inject, Singleton}
 import play.api.libs.json._
 import play.api.mvc._
 import scala.concurrent.{ExecutionContext, Future}
+import be.frol.chaman.openapi.model.Field
 import be.frol.chaman.openapi.model.Item
 import be.frol.chaman.openapi.model.ItemDescr
 
@@ -34,6 +35,19 @@ class ItemApiController @Inject()(cc: ControllerComponents, api: ItemApi)(implic
   def deleteItem(uuid: String): Action[AnyContent] = Action.async { request =>
     def executeApi(): Future[Unit] = {
       api.deleteItem(uuid)(request)
+    }
+
+    executeApi().map { _ =>
+      Ok
+    }
+  }
+
+  /**
+    * DELETE /api/item/:uuid/field/:uuidField
+    */
+  def deleteItemField(uuid: String, uuidField: String): Action[AnyContent] = Action.async { request =>
+    def executeApi(): Future[Unit] = {
+      api.deleteItemField(uuid, uuidField)(request)
     }
 
     executeApi().map { _ =>
@@ -78,6 +92,23 @@ class ItemApiController @Inject()(cc: ControllerComponents, api: ItemApi)(implic
         throw new OpenApiExceptions.MissingRequiredParameterException("body", "item")
       }
       api.updateItem(uuid, item)(request)
+    }
+
+    executeApi().map { result =>
+      val json = Json.toJson(result)
+      Ok(json)
+    }
+  }
+
+  /**
+    * PUT /api/item/:uuid/field/:uuidField
+    */
+  def updateItemField(uuid: String, uuidField: String): Action[AnyContent] = Action.async { request =>
+    def executeApi(): Future[Field] = {
+      val field = request.body.asJson.map(_.as[Field]).getOrElse {
+        throw new OpenApiExceptions.MissingRequiredParameterException("body", "field")
+      }
+      api.updateItemField(uuid, uuidField, field)(request)
     }
 
     executeApi().map { result =>

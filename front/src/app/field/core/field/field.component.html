@@ -1,7 +1,7 @@
 <div class="form-group">
   <label [for]="field.reference" *ngIf="showLabel">{{field.label}}</label>
   <div >
-    <app-field-value [field]="field"></app-field-value>
+    <app-field-value [inEdit]="inEdit" [field]="field"></app-field-value>
   </div>
   <div class="error" *ngFor="let m of field.errorMessages">{{m}}</div>
 </div>

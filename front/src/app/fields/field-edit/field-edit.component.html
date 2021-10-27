@@ -19,7 +19,7 @@
 
   <div class="config">
     <ng-container *ngFor="let c of field.config">
-      <app-field [field]="c"></app-field>
+      <app-field [inEdit]="true" [field]="c"></app-field>
     </ng-container>
   </div>
 

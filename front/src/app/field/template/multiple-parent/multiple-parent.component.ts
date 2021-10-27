@@ -22,11 +22,13 @@ export class MultipleParentComponent implements OnInit {
   filteredInputs: Observable<string[]>;
 
   @Input() field: Field;
+  @Input() inEdit: boolean;
   @Input() autoComplete: Autocomplete
 
   @ViewChild('valueInput') valueInput: ElementRef<HTMLInputElement>;
 
   inputCtrl = new FormControl();
+
 
   ngOnInit(): void {
     if (this.autoComplete) {
@@ -42,10 +44,15 @@ export class MultipleParentComponent implements OnInit {
       if (!this.field.value) {
         this.field.value = []
       }
-      this.autoComplete.add(s.value).toPromise().then(v => {
-        if (v) this.add(s.value);
+      if(this.autoComplete){
+        this.autoComplete.add(s.value).toPromise().then(v => {
+          if (v) this.add(s.value);
+          s.input.value = "";
+        })
+      } else {
+        this.add(s.value)
         s.input.value = "";
-      })
+      }
     }
   }
 

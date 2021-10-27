@@ -1,3 +1,4 @@
-<div class="form-group">
+<div *ngIf="inEdit" class="form-group">
   <input type="text" class="form-control" [(ngModel)]="fieldValue.value.strValue"  />
 </div>
+<span *ngIf="!inEdit">{{fieldValue.value}}</span>

@@ -17,6 +17,7 @@ class DataService @Inject()(
                                   val fieldService: FieldService,
                                 ) extends DbContext with Logging {
 
+
   import api._
 
   def add(p: Tables.DataRow) = {
@@ -34,21 +35,18 @@ class DataService @Inject()(
   }
 
 
-  def fieldsFor(uuid: String)(implicit executionContext: ExecutionContext): DBIO[Seq[RichField]] = {
-    fieldsFor(Seq(uuid))
-  }
-
-
-  def fieldsFor(uuid: Iterable[String])(implicit executionContext: ExecutionContext): DBIO[Seq[RichField]] = {
-    dataFor(uuid)
+  def fieldsFor(uuid: String, fieldUuid:Option[String] = None)(implicit executionContext: ExecutionContext): DBIO[Seq[RichField]] = {
+    dataFor(Seq(uuid), fieldUuid)
       .join(fieldService.lastVersionOfFields).on(_.fieldUuid === _.uuid)
       .result
       .map(_.groupBy(_._2)
         .map { case (f, values) => RichField(f, values.map(_._1)) }.toSeq)
   }
 
-  def dataFor(uuid: Iterable[String]) = {
-    lastVersion.filter(_.ownerUuid.inSet(uuid))
+  def dataFor(uuid: Iterable[String], fieldUuid:Option[String] = None) = {
+    lastVersion
+      .filter(_.ownerUuid.inSet(uuid))
+      .filterOpt(fieldUuid)(_.fieldUuid === _)
   }
 
   def fieldData(ownerUuid: String, fieldUuid: String) = {
@@ -63,6 +61,7 @@ class DataService @Inject()(
     DBIO.sequence((current.keySet union target.keySet).map(v => updateFieldValues(current.get(v).getOrElse(Nil), target.get(v).getOrElse(Nil))).toList)
       .map(_.flatten)
   }
+
 
   def updateFieldValues(current: Iterable[DataRow], target: Iterable[DataRow])(implicit executionContext: ExecutionContext, userInfo: UserInfo) = {
     val currentMap = current.toMapBy(_.valueUuid)

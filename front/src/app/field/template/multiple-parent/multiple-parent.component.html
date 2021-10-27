@@ -1,4 +1,4 @@
-<mat-form-field class="field-value-chip">
+<mat-form-field *ngIf="inEdit" class="field-value-chip">
   <mat-chip-list #valueList>
     <mat-chip
       *ngFor="let v of field.value"
@@ -21,4 +21,17 @@
     </mat-option>
   </mat-autocomplete>
 
+</mat-form-field>
+
+<mat-form-field *ngIf="!inEdit" class="field-value-chip">
+  <mat-chip-list>
+    <mat-chip
+      *ngFor="let v of field.value"
+      [removable]="true"
+      [selectable]="false"
+      (removed)="remove(v)">
+      {{v.value.strValue}}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+  </mat-chip-list>
 </mat-form-field>

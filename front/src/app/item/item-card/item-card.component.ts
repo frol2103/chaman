@@ -23,6 +23,7 @@ import {CameraSnapshotComponent} from "../../camera-input/camera-snapshot/camera
 import {ThumbnailCameraComponent} from "../thumbnail-camera/thumbnail-camera.component";
 import {ItemSelectorComponent} from "../item-selector/item-selector.component";
 import {LinkTableComponent} from "../link/link-table/link-table.component";
+import {Location} from "@angular/common";
 
 @Component({
   selector: 'app-item-card',
@@ -42,6 +43,7 @@ export class ItemCardComponent implements OnInit {
     private modalConfig: NgbModalConfig,
     private eventService: EventService,
     public mobileService: MobileDetectorService,
+    public location: Location,
     public linkService: LinkService,
   ) {
     route.params.subscribe(p => {
@@ -75,7 +77,10 @@ export class ItemCardComponent implements OnInit {
       this.itemService.createItem(this.item))
       .withErrorMessage("Error while saving item")
       .withSuccessMessage("Item saved")
-      .then(v => this.item = v, e=> this.item = e.error.content)
+      .then(v => {
+        this.item = v
+        this.location.replaceState("/item/"+this.item.uuid)
+      }, e=> this.item = e.error.content)
   }
 
 

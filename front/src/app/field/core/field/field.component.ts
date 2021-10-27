@@ -13,14 +13,13 @@ export class FieldComponent implements OnInit {
   constructor() {
   }
 
-  edition = false
-
+  @Input() inEdit : boolean = false
   @Input() field: Field
   @Input() showLabel: Boolean = true
-  @Output() onDelete = new EventEmitter<Field>()
 
 
   ngOnInit(): void {
   }
+
 
 }

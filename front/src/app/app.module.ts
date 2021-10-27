@@ -42,6 +42,7 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import { ItemSelectorComponent } from './item/item-selector/item-selector.component';
 import { LinkTableComponent } from './item/link/link-table/link-table.component';
 import { ItemsComponent } from './item/items/items.component';
+import { FieldSavableComponent } from './field/field-savable/field-savable.component';
 
 @NgModule({
   declarations: [
@@ -74,6 +75,7 @@ import { ItemsComponent } from './item/items/items.component';
     ItemSelectorComponent,
     LinkTableComponent,
     ItemsComponent,
+    FieldSavableComponent,
   ],
     imports: [
         BrowserModule,

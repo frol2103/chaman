@@ -37,6 +37,9 @@ class FieldValidationService @Inject()(
   def assertValidFields(input:List[Field]) : DBIO[List[Field]] = {
     assertValidFieldsMap[List[Field]](input, v => v, (i, v) => v)
   }
+  def assertValidField(input:Field) : DBIO[Field] = {
+    assertValidFieldsMap[Field](input, v => List(v), (i, v) => v.head)
+  }
 
   def assertValidFieldsItem(input:Item) : DBIO[Item] = {
     assertValidFieldsMap[Item](input, v => v.content.getOrElse(Nil), (i, v) => i.copy(content = v.toOpt()))

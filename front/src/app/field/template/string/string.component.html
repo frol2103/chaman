@@ -1,1 +1,2 @@
-<input type="text" class="form-control" [id]="field.reference" [(ngModel)]="fieldValue.value.strValue"  />
+<input *ngIf="inEdit" type="text" class="form-control" [id]="field.reference" [(ngModel)]="fieldValue.value.strValue"  />
+<span *ngIf="!inEdit">{{fieldValue.value}}</span>
