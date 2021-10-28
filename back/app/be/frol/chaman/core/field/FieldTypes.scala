@@ -12,14 +12,23 @@ import play.api.{Logger, Logging}
 import scala.util.Try
 
 
-
-case class StringHolder(strValue:String)
-case class NumberHolder(strValue:String, processedValue: Option[Double]){
-  val numericValue = Try{strValue.toDouble}.mapError(new RuntimeException("Number not readable : " + strValue)).get
+trait Holder {
+  def stringRepr : String
 }
-case class BooleanHolder(value:Boolean)
 
-case class BasicFieldType[T](
+case class StringHolder(strValue:String) extends Holder{
+  override def stringRepr: String = strValue
+}
+case class NumberHolder(strValue:String, processedValue: Option[Double]) extends Holder {
+  val numericValue = Try{strValue.toDouble}.mapError(new RuntimeException("Number not readable : " + strValue)).get
+
+  override def stringRepr: String = strValue
+}
+case class BooleanHolder(value:Boolean) extends Holder {
+  override def stringRepr: String = value.toString
+}
+
+case class BasicFieldType[T <: Holder](
                               inputType: String,
                               format: Format[T],
                               directValueF : List[T] => JsValue,
@@ -30,6 +39,7 @@ case class BasicFieldType[T](
     directValueF(values)
   }
 
+  def value(v:JsValue) : Holder = v.validate(format).getOrThrow(v.toOpt())
 
   def parseAndFormat(input: JsValue, config:JsObject): JsValue= {
     if(input == JsNull) JsNull
@@ -65,7 +75,7 @@ object BasicFieldTypes {
 
 }
 
-case class ConfigFieldType[T](
+case class ConfigFieldType[T <: Holder](
                              uuid: String,
                                reference: String,
                               label: String,
@@ -73,7 +83,7 @@ case class ConfigFieldType[T](
                               config: JsObject = JsObject(Nil)) extends FieldWithConf
 
 object ConfigFieldTypes {
-  val suffix = ConfigFieldType("d889136c-75c1-4020-b89a-37d25b07eda4","suffix", "Suffix", BasicFieldTypes.string)
+  val suffix = ConfigFieldType[StringHolder]("d889136c-75c1-4020-b89a-37d25b07eda4","suffix", "Suffix", BasicFieldTypes.string)
   val numberFormatter = ConfigFieldType("057c0520-59de-4a0f-a458-a40c3a6c96f1","number.formatter", "Number Formatter", BasicFieldTypes.select,
     Json.toJsObject(Map("staticValues"-> List("none","metric prefix", "scientific"))))
 

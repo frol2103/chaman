@@ -5,7 +5,7 @@ import be.frol.chaman.mapper.{FieldMapper, ItemMapper}
 import be.frol.chaman.model.RichModelConversions._
 import be.frol.chaman.openapi.api.ItemApi
 import be.frol.chaman.openapi.model.{Field, Item, ItemDescr}
-import be.frol.chaman.service.{AnnexService, DataService, FieldService, FieldValidationService, ItemService, LinkService}
+import be.frol.chaman.service.{AnnexService, DataService, FieldService, FieldValidationService, ItemRefresherService, ItemService, LinkService}
 import be.frol.chaman.tables.Tables
 import be.frol.chaman.tables.Tables.DataDeletedRow
 import be.frol.chaman.utils.OptionUtils._
@@ -26,6 +26,7 @@ class ItemApiImpl @Inject()(
                              val annexService:AnnexService,
                              val linkService: LinkService,
                              val fieldService: FieldService,
+                             val itemRefresher: ItemRefresherService,
                            ) extends ItemApi with DbContext with ParentController {
 
   import api._
@@ -79,12 +80,13 @@ class ItemApiImpl @Inject()(
   override def updateItemField(uuid: String, uuidField: String, field: Field)(implicit request: Request[AnyContent]): Future[Field] = run{ implicit user =>
     import api._
     db.run(
-      for {
+      (for {
         validatedField <- fieldValidationService.assertValidField(field)
         currentData <- fieldDataService.fieldData(uuid, uuidField).result
         newFields <- fieldDataService.updateFieldValues(currentData, FieldMapper.toDataRows(validatedField, uuid))
+        upd <- itemRefresher.refresh(uuid)
         field <- getSavedField(uuid, uuidField)
-      } yield(field)
+      } yield(field)).transactionally
     )
   }
 }
