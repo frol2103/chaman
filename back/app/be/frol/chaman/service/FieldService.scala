@@ -1,7 +1,7 @@
 package be.frol.chaman.service
 
 import be.frol.chaman.api.DbContext
-import be.frol.chaman.core.field.{ConfigFieldType, ConfigFieldTypes, FieldWithConf}
+import be.frol.chaman.core.field.{ConfigFieldType, ConfigFieldTypes, DefaultFields, FieldWithConf, StaticFields}
 import be.frol.chaman.model.RichModelConversions._
 import be.frol.chaman.model.UserInfo
 import be.frol.chaman.tables.Tables
@@ -38,15 +38,18 @@ class FieldService @Inject()(
 
   def allFields = lastVersionOfFields.result
 
-  def getField(uuid: String): DBIO[FieldRow] = lastVersionOfFields.filter(_.uuid === uuid).result.head
+  def getField(uuid: String): DBIO[FieldRow] = DefaultFields.fieldsMap.get(uuid).map(DBIO.successful(_))
+    .getOrElse(lastVersionOfFields.filter(_.uuid === uuid).result.head)
 
-  def getFields(uuid: String*): DBIO[Seq[FieldRow]] = lastVersionOfFields.filter(_.uuid.inSet(uuid)).result
+  def getDbFields(uuid: Iterable[String]): DBIO[Seq[FieldRow]] = {
+    lastVersionOfFields.filter(_.uuid.inSet(uuid)).result
+  }
 
   def getFieldsDefinition(uuids: List[String]): DBIO[Map[String, FieldWithConf]] = {
-    val staticFields = ConfigFieldTypes.mapUuid.keySet.intersect(uuids.toSet)
+    val staticFields = StaticFields.allStaticFieldsMap.keySet.intersect(uuids.toSet)
     val remainingFields = uuids.toSet -- staticFields
-    val staticFieldsConfig: Set[ConfigFieldType[_]] = staticFields.map(ConfigFieldTypes.mapUuid(_))
-    (if (remainingFields.isEmpty) DBIO.successful(Nil) else getFields(remainingFields.toSeq: _*).map(_.map(_.toFieldWithConf))).map( fl =>
+    val staticFieldsConfig: Set[FieldWithConf] = staticFields.map(StaticFields.allStaticFieldsMap(_))
+    (if (remainingFields.isEmpty) DBIO.successful(Nil) else getDbFields(remainingFields.toSeq).map(_.map(v=>FieldWithConf.toFieldWithConf(v.field)))).map(fl =>
       (fl ++ staticFieldsConfig).toMapBy(_.uuid)
     )
   }

@@ -337,43 +337,6 @@
         },
         "summary" : "get a item",
         "tags" : [ "item" ]
-      },
-      "put" : {
-        "operationId" : "updateItem",
-        "parameters" : [ {
-          "explode" : false,
-          "in" : "path",
-          "name" : "uuid",
-          "required" : true,
-          "schema" : {
-            "type" : "string"
-          },
-          "style" : "simple"
-        } ],
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/Item"
-              }
-            }
-          },
-          "required" : true
-        },
-        "responses" : {
-          "200" : {
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "$ref" : "#/components/schemas/Item"
-                }
-              }
-            },
-            "description" : "OK"
-          }
-        },
-        "summary" : "update a item",
-        "tags" : [ "item" ]
       }
     },
     "/item/{uuid}/annex" : {

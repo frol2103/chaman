@@ -40,12 +40,6 @@ trait ItemApi {
 
 
   /**
-    * update a item
-    */
-  def updateItem(uuid: String, item: Item)(implicit request:Request[AnyContent]): Future[Item]
-
-
-  /**
     * update an item field
     */
   def updateItemField(uuid: String, uuidField: String, field: Field)(implicit request:Request[AnyContent]): Future[Field]

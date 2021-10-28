@@ -36,7 +36,6 @@ GET /api/item                              be.frol.chaman.openapi.api.ItemApiCon
 DELETE /api/item/:uuid                     be.frol.chaman.openapi.api.ItemApiController.deleteItem(uuid: String)
 DELETE /api/item/:uuid/field/:uuidField    be.frol.chaman.openapi.api.ItemApiController.deleteItemField(uuid: String, uuidField: String)
 GET /api/item/:uuid                        be.frol.chaman.openapi.api.ItemApiController.getItem(uuid: String)
-PUT /api/item/:uuid                        be.frol.chaman.openapi.api.ItemApiController.updateItem(uuid: String)
 PUT /api/item/:uuid/field/:uuidField       be.frol.chaman.openapi.api.ItemApiController.updateItemField(uuid: String, uuidField: String)
 
 # Routes for Link API

@@ -1,10 +1,11 @@
 package be.frol.chaman.api
 
+import be.frol.chaman.core.field.DefaultFields
 import be.frol.chaman.mapper.{FieldMapper, ItemMapper}
 import be.frol.chaman.model.RichModelConversions._
 import be.frol.chaman.openapi.api.ItemApi
 import be.frol.chaman.openapi.model.{Field, Item, ItemDescr}
-import be.frol.chaman.service.{AnnexService, DataService, FieldValidationService, ItemService, LinkService}
+import be.frol.chaman.service.{AnnexService, DataService, FieldService, FieldValidationService, ItemService, LinkService}
 import be.frol.chaman.tables.Tables
 import be.frol.chaman.tables.Tables.DataDeletedRow
 import be.frol.chaman.utils.OptionUtils._
@@ -24,6 +25,7 @@ class ItemApiImpl @Inject()(
                              val fieldValidationService: FieldValidationService,
                              val annexService:AnnexService,
                              val linkService: LinkService,
+                             val fieldService: FieldService,
                            ) extends ItemApi with DbContext with ParentController {
 
   import api._
@@ -52,38 +54,20 @@ class ItemApiImpl @Inject()(
   private def getSavedItem(uuid: String) = {
     for {
       i <- itemService.get(uuid)
-      fields <- fieldDataService.fieldsFor(uuid)
+      data <- fieldDataService.dataFor(Seq(uuid)).result
+      fields <- fieldService.getDbFields(data.map(_.fieldUuid).toSet)
       annexes <- annexService.forItem(uuid)
       links <- linkService.getLinks(uuid)
-    } yield ItemMapper.toDto(i, fields, annexes, links)
+    } yield ItemMapper.toDtoFD(i, DefaultFields.ItemContent.fields ++ fields, data, annexes, links)
   }
 
   private def getSavedField(ownerUuid: String, fieldUuid:String) = {
-    fieldDataService.fieldsFor(ownerUuid, fieldUuid.toOpt)
-      .map(f => FieldMapper.toDto(f.head))
+    fieldDataService.fieldFor(ownerUuid, fieldUuid)
+      .map(f => FieldMapper.toDto(f))
   }
 
   override def getItems()(implicit request: Request[AnyContent]): Future[List[ItemDescr]] =  run { implicit u =>
     db.run(itemService.all()).map(_.map(ItemMapper.toDescrDto(_)).toList)
-  }
-
-  override def updateItem(uuid: String, inputItem: Item)(implicit request: Request[AnyContent]): Future[Item] =  run { implicit u =>
-    def updateBaseIfNeeded(current: Tables.ItemRow) = {
-      val target = ItemMapper.toRow(inputItem)
-      if (target.baseEquivalent(current)) DBIO.successful(current)
-      else itemService.add(target)
-    }
-
-    db.run(
-      for {
-        validatedItem <- fieldValidationService.assertValidFieldsItem(inputItem)
-        currentItem <- itemService.get(uuid)
-        currentFields <- fieldDataService.fieldDataRow(uuid)
-        newBase <- updateBaseIfNeeded(currentItem)
-        newFields <- fieldDataService.updateFieldValues(currentFields, ItemMapper.toDataRow(validatedItem))
-        newItem <- getSavedItem(uuid)
-      } yield (newItem)
-    )
   }
 
   override def deleteItemField(uuid: String, uuidField: String)(implicit request: Request[AnyContent]): Future[Unit] = run { implicit user =>

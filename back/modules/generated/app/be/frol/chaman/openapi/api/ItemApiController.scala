@@ -84,23 +84,6 @@ class ItemApiController @Inject()(cc: ControllerComponents, api: ItemApi)(implic
   }
 
   /**
-    * PUT /api/item/:uuid
-    */
-  def updateItem(uuid: String): Action[AnyContent] = Action.async { request =>
-    def executeApi(): Future[Item] = {
-      val item = request.body.asJson.map(_.as[Item]).getOrElse {
-        throw new OpenApiExceptions.MissingRequiredParameterException("body", "item")
-      }
-      api.updateItem(uuid, item)(request)
-    }
-
-    executeApi().map { result =>
-      val json = Json.toJson(result)
-      Ok(json)
-    }
-  }
-
-  /**
     * PUT /api/item/:uuid/field/:uuidField
     */
   def updateItemField(uuid: String, uuidField: String): Action[AnyContent] = Action.async { request =>

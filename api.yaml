@@ -219,30 +219,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Item'
-    put:
-      tags:
-        - item
-      summary: update a item
-      operationId: updateItem
-      parameters:
-        - name: uuid
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Item'
-        required: true
-      responses:
-        200:
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Item'
 
     delete:
       tags:

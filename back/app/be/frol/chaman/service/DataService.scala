@@ -13,9 +13,11 @@ import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
 class DataService @Inject()(
-                                  val dbConfigProvider: DatabaseConfigProvider,
-                                  val fieldService: FieldService,
-                                ) extends DbContext with Logging {
+                             val dbConfigProvider: DatabaseConfigProvider,
+                             val fieldService: FieldService,
+                           )(
+                             implicit val executionContext: ExecutionContext,
+                           ) extends DbContext with Logging {
 
 
   import api._
@@ -35,15 +37,11 @@ class DataService @Inject()(
   }
 
 
-  def fieldsFor(uuid: String, fieldUuid:Option[String] = None)(implicit executionContext: ExecutionContext): DBIO[Seq[RichField]] = {
-    dataFor(Seq(uuid), fieldUuid)
-      .join(fieldService.lastVersionOfFields).on(_.fieldUuid === _.uuid)
-      .result
-      .map(_.groupBy(_._2)
-        .map { case (f, values) => RichField(f, values.map(_._1)) }.toSeq)
+  def fieldFor(ownerUuid: String, fieldUuid: String) = {
+    fieldData(ownerUuid, fieldUuid).result.flatMap(l => fieldService.getField(fieldUuid).map(f => RichField(f, l)))
   }
 
-  def dataFor(uuid: Iterable[String], fieldUuid:Option[String] = None) = {
+  def dataFor(uuid: Iterable[String], fieldUuid: Option[String] = None) = {
     lastVersion
       .filter(_.ownerUuid.inSet(uuid))
       .filterOpt(fieldUuid)(_.fieldUuid === _)
@@ -57,7 +55,7 @@ class DataService @Inject()(
 
   def fieldDataRow(ownerUuid: String) = lastVersion.filter(_.ownerUuid === ownerUuid).result
 
-  def updateFieldValuesMaps(current: Map[String, Iterable[DataRow]], target: Map[String, Iterable[DataRow]])(implicit executionContext: ExecutionContext, userInfo: UserInfo)=  {
+  def updateFieldValuesMaps(current: Map[String, Iterable[DataRow]], target: Map[String, Iterable[DataRow]])(implicit executionContext: ExecutionContext, userInfo: UserInfo) = {
     DBIO.sequence((current.keySet union target.keySet).map(v => updateFieldValues(current.get(v).getOrElse(Nil), target.get(v).getOrElse(Nil))).toList)
       .map(_.flatten)
   }
@@ -66,7 +64,7 @@ class DataService @Inject()(
   def updateFieldValues(current: Iterable[DataRow], target: Iterable[DataRow])(implicit executionContext: ExecutionContext, userInfo: UserInfo) = {
     val currentMap = current.toMapBy(_.valueUuid)
     val targetMap = target.toMapBy(_.valueUuid)
-    val toDelete = currentMap.filterNot(c => targetMap.contains(c._1)).map(_._2).map(r => new DataDeletedRow( r.id,userInfo.uuid, DateUtils.ts))
+    val toDelete = currentMap.filterNot(c => targetMap.contains(c._1)).map(_._2).map(r => new DataDeletedRow(r.id, userInfo.uuid, DateUtils.ts))
     val toUpdate = target.filter(d => currentMap.get(d.valueUuid).map(d.value != _.value).getOrElse(true))
     val toUpdateMap = toUpdate.toMapBy(_.valueUuid)
     for {

@@ -2,7 +2,7 @@ package be.frol.chaman.mapper
 
 import be.frol.chaman.model.{RichField, UserInfo}
 import be.frol.chaman.openapi.model.{Item, ItemDescr, Link}
-import be.frol.chaman.tables.Tables.{AnnexRow, ItemRow, LinkRow}
+import be.frol.chaman.tables.Tables.{AnnexRow, DataRow, FieldRow, ItemRow, LinkRow}
 import be.frol.chaman.utils.DateUtils
 import be.frol.chaman.utils.OptionUtils.enrichedObject
 
@@ -20,6 +20,11 @@ object ItemMapper {
     )
 
   }
+  def toDtoFD(itemRow: ItemRow, fields: Seq[FieldRow], data:Seq[DataRow], annexes: Seq[AnnexRow], links: Seq[(LinkRow, ItemRow)]): Item = {
+    val dataMap = data.groupBy(_.fieldUuid)
+    toDto(itemRow, fields.map(f => RichField(f, dataMap.get(f.uuid).toList.flatten)), annexes, links)
+  }
+
   def toDescrDto(itemRow: ItemRow): ItemDescr = {
     new ItemDescr(itemRow.uuid.toOpt(),
       itemRow.title.toOpt(),

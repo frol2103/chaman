@@ -11,12 +11,7 @@ import play.api.{Logger, Logging}
 
 import scala.util.Try
 
-trait FieldWithConf {
-  def parseAndFormat(input: JsValue): JsValue= basicFieldType.parseAndFormat(input, config)
-  def uuid: String
-  def basicFieldType: BasicFieldType[_]
-  def config: JsObject
-}
+
 
 case class StringHolder(strValue:String)
 case class NumberHolder(strValue:String, processedValue: Option[Double]){
@@ -86,8 +81,6 @@ object ConfigFieldTypes {
 
   val all : List[ConfigFieldType[_]]= List(suffix, numberFormatter, staticValues)
   val mapUuid = all.toMapBy(_.uuid)
-
-
 }
 
 object FieldTypes {

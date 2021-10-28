@@ -71,18 +71,6 @@ export class ItemCardComponent implements OnInit {
 
   }
 
-  save(){
-    this.r.wrap((this.item.uuid) ?
-      this.itemService.updateItem(this.item.uuid, this.item) :
-      this.itemService.createItem(this.item))
-      .withErrorMessage("Error while saving item")
-      .withSuccessMessage("Item saved")
-      .then(v => {
-        this.item = v
-        this.location.replaceState("/item/"+this.item.uuid)
-      }, e=> this.item = e.error.content)
-  }
-
 
 
   startAddField(){
