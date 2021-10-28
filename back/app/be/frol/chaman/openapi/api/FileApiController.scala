@@ -7,14 +7,14 @@ import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc._
 
 import javax.inject.{Inject, Singleton}
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 @Singleton
 class FileApiController @Inject()(
-                                                    val cc: ControllerComponents,
-                                                    val annexService: AnnexService,
-                                                    val dbConfigProvider: DatabaseConfigProvider,
-                                                  )(implicit executionContext: ExecutionContext)
+                                   val cc: ControllerComponents,
+                                   val annexService: AnnexService,
+                                   val dbConfigProvider: DatabaseConfigProvider,
+                                 )(implicit executionContext: ExecutionContext)
   extends AbstractController(cc) with DbContext {
   /**
    * GET /api/annex/:uuid/file
@@ -31,9 +31,11 @@ class FileApiController @Inject()(
   }
 
 
-  def getThumbnailFile(uuid: String) = Action{request =>
-    Ok(java.nio.file.Files.readAllBytes(Conf.thumbnail(uuid).toPath))
-      .as("image/jpg")
+  def getThumbnailFile(uuid: String) = Action { request =>
+    val path = Conf.thumbnail(uuid).toPath
+    if (path.toFile.exists()) {
+      Ok(java.nio.file.Files.readAllBytes(path)).as("image/jpg")
+    } else Redirect("/assets/missingPicture.jpg")
   }
 
 }

@@ -274,3 +274,7 @@ app-toasts.ngb-toasts {
 app-item-card tr.mat-header-row {
   height: unset;
 }
+
+app-field label {
+  margin-right: 10px;
+}
