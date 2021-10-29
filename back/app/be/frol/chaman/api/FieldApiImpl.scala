@@ -92,7 +92,7 @@ class FieldApiImpl @Inject()(
                 fieldConfig.config.getOrElse(Nil).flatMap(FieldMapper.toDataRows(_, uuid)).groupBy(_.fieldUuid))
             } yield (nf.withData( nd))
         }
-      ).map(FieldMapper.toDto(_))
+      ).map(FieldMapper.toDtoRf(_))
     }
 
   }

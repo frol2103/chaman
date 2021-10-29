@@ -13,6 +13,7 @@ import play.api.libs.json.{JsObject, JsValue, Json}
 
 import java.util.UUID
 
+import be.frol.chaman.model.RichModelConversions._
 object FieldMapper {
   def toConfigDto(value: FieldType[_]): FieldConfig = {
     FieldConfig(None, None,
@@ -35,19 +36,9 @@ object FieldMapper {
     )
   }
 
-  def toDto(f: ConfigFieldType[_]): Field = {
-    Field(
-      f.uuid.toOpt(),
-      f.label.toOpt(),
-      f.reference.toOpt(),
-      f.basicFieldType.inputType.toOpt(),
-      None,
-      f.config.toOpt(),
-      None,
-    )
-  }
+  def toDto(f: FieldWithConf): Field = toDtoRf(f)
 
-  def toDto(f: RichField): Field = {
+  def toDtoRf(f: RichField): Field = {
     Field(
       f.field.uuid.toOpt,
       f.field.label.toOpt,
@@ -55,7 +46,8 @@ object FieldMapper {
       f.field.basicFieldType.inputType.toOpt,
       f.fieldData.map(v => toDto(v)).toList.toOpt(),
       f.field.config.toOpt(),
-      None
+      None,
+      f.field.isUserField.toOpt(),
 
     )
   }

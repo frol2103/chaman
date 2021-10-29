@@ -23,5 +23,9 @@ export interface Field {
     value?: Array<FieldValue>;
     params?: any | null;
     errorMessages?: Array<string>;
+    /**
+     * true if the field is user defined false if its a deault field
+     */
+    isUserField?: boolean;
 }
 

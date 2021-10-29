@@ -18,6 +18,8 @@ object DefaultFields {
       override def basicFieldType: BasicFieldType[_] = fieldTYpe
 
       override def config: JsObject = JsObject(Nil)
+
+      override def isUserField: Boolean = false
     }
   }
 

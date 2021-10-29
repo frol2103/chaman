@@ -16,6 +16,11 @@
               <img [src]="imgSrc | async">
             </div>
           </div>
+          <div class="col-12 col-md">
+            <div *ngFor="let field of item.content">
+              <app-field-savable *ngIf="!field.isUserField" (onDelete)="deleteField(field)" [itemUuid]="item.uuid" [field]="field"></app-field-savable>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -24,7 +29,7 @@
     <div class="section">
       <h2>Data <i class="fa fa-plus-circle" (click)="startAddField()"></i></h2>
       <div *ngFor="let field of item.content">
-        <app-field-savable (onDelete)="deleteField(field)" [itemUuid]="item.uuid" [field]="field"></app-field-savable>
+        <app-field-savable  *ngIf="field.isUserField" (onDelete)="deleteField(field)" [itemUuid]="item.uuid" [field]="field"></app-field-savable>
       </div>
     </div>
 

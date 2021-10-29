@@ -80,7 +80,9 @@ case class ConfigFieldType[T <: Holder](
                              reference: String,
                               label: String,
                               basicFieldType: BasicFieldType[T],
-                              config: JsObject = JsObject(Nil)) extends FieldWithConf
+                              config: JsObject = JsObject(Nil)) extends FieldWithConf{
+  override def isUserField: Boolean = false
+}
 
 object ConfigFieldTypes {
   val suffix = ConfigFieldType[StringHolder]("d889136c-75c1-4020-b89a-37d25b07eda4","suffix", "Suffix", BasicFieldTypes.string)

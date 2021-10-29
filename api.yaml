@@ -494,6 +494,9 @@ components:
           type: array
           items:
             type: string
+        isUserField:
+          description: true if the field is user defined false if its a deault field
+          type: boolean
 
     FieldConfig:
       type: object

@@ -691,6 +691,7 @@
         "example" : {
           "reference" : "reference",
           "errorMessages" : [ "errorMessages", "errorMessages" ],
+          "isUserField" : true,
           "inputType" : "inputType",
           "label" : "label",
           "params" : "",
@@ -729,6 +730,10 @@
               "type" : "string"
             },
             "type" : "array"
+          },
+          "isUserField" : {
+            "description" : "true if the field is user defined false if its a deault field",
+            "type" : "boolean"
           }
         },
         "type" : "object"
@@ -741,6 +746,7 @@
           "config" : [ {
             "reference" : "reference",
             "errorMessages" : [ "errorMessages", "errorMessages" ],
+            "isUserField" : true,
             "inputType" : "inputType",
             "label" : "label",
             "params" : "",
@@ -755,6 +761,7 @@
           }, {
             "reference" : "reference",
             "errorMessages" : [ "errorMessages", "errorMessages" ],
+            "isUserField" : true,
             "inputType" : "inputType",
             "label" : "label",
             "params" : "",
@@ -852,6 +859,7 @@
           "content" : [ {
             "reference" : "reference",
             "errorMessages" : [ "errorMessages", "errorMessages" ],
+            "isUserField" : true,
             "inputType" : "inputType",
             "label" : "label",
             "params" : "",
@@ -866,6 +874,7 @@
           }, {
             "reference" : "reference",
             "errorMessages" : [ "errorMessages", "errorMessages" ],
+            "isUserField" : true,
             "inputType" : "inputType",
             "label" : "label",
             "params" : "",

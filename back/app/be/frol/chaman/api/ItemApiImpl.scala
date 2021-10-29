@@ -64,7 +64,7 @@ class ItemApiImpl @Inject()(
 
   private def getSavedField(ownerUuid: String, fieldUuid:String) = {
     fieldDataService.fieldFor(ownerUuid, fieldUuid)
-      .map(f => FieldMapper.toDto(f))
+      .map(f => FieldMapper.toDtoRf(f))
   }
 
   override def getItems()(implicit request: Request[AnyContent]): Future[List[ItemDescr]] =  run { implicit u =>

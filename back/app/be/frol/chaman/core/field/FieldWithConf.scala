@@ -16,6 +16,8 @@ trait FieldWithConf {
   def basicFieldType: BasicFieldType[_]
 
   def config: JsObject
+
+  def isUserField : Boolean
 }
 object FieldWithConf {
 
@@ -32,5 +34,7 @@ object FieldWithConf {
     override def reference: String = fr.reference
 
     override def label: String = fr.label
+
+    override def isUserField: Boolean = true
   }
 }

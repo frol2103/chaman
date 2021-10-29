@@ -15,7 +15,7 @@ object ItemMapper {
     new Item(itemRow.uuid.toOpt(),
       itemRow.title.toOpt(),
       itemRow.description.toOpt(),
-      fields.map(FieldMapper.toDto(_)).toList.toOpt(),
+      fields.map(FieldMapper.toDtoRf(_)).toList.toOpt(),
       annexes.map(AnnexMapper.toDto(_)).toList.toOpt,
       links.map(v => LinkMapper.toDto(v)).toList.toOpt
     )
