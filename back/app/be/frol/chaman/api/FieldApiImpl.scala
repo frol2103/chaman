@@ -34,7 +34,7 @@ class FieldApiImpl @Inject()(
     db.run(
       for {
         fields <- fieldService.allFields
-      } yield (fields.map(f => RichField(f, Nil)))
+      } yield (fields)
     ).map(_.map(FieldMapper.toDto(_)).toList)
   }
 
@@ -55,7 +55,7 @@ class FieldApiImpl @Inject()(
           fieldService.add(FieldMapper.toRow(fcv, None)).flatMap { f =>
             fieldService.addValues(
               fcv.config.getOrElse(Nil).flatMap(fc => FieldMapper.toDataRows(fc, f.uuid))
-            ).map(v => RichField(f, Nil))
+            ).map(v => f)
           }
         )
     ).map(FieldMapper.toDto(_))
@@ -80,17 +80,17 @@ class FieldApiImpl @Inject()(
             val newField = FieldMapper.toRow(fieldConfig, uuid.toOpt())
 
             def updateIfNeeded(f: tables.Tables.FieldRow) = {
-              if (!f.equivalent(newField)) fieldService.add(newField.field)
+              if (!f.equivalent(newField)) fieldService.add(newField)
               else DBIOAction.successful(f)
             }
 
             for {
-              f <- fieldService.getField(uuid)
+              f <- fieldService.getDbField(uuid)
               fd <- fieldDataService.dataFor(Seq(uuid)).result
               nf <- updateIfNeeded(f)
               nd <- fieldDataService.updateFieldValuesMaps(fd.toList.groupBy(_.fieldUuid),
                 fieldConfig.config.getOrElse(Nil).flatMap(FieldMapper.toDataRows(_, uuid)).groupBy(_.fieldUuid))
-            } yield (RichField(nf, nd))
+            } yield (nf.withData( nd))
         }
       ).map(FieldMapper.toDto(_))
     }

@@ -13,6 +13,8 @@ import play.api.db.slick.DatabaseConfigProvider
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
+import be.frol.chaman.model.RichModelConversions._
+import be.frol.chaman.utils.OptionUtils.enrichedOption
 
 class FieldService @Inject()(
                               val dbConfigProvider: DatabaseConfigProvider,
@@ -38,8 +40,13 @@ class FieldService @Inject()(
 
   def allFields = lastVersionOfFields.result
 
-  def getField(uuid: String): DBIO[FieldRow] = DefaultFields.fieldsMap.get(uuid).map(DBIO.successful(_))
-    .getOrElse(lastVersionOfFields.filter(_.uuid === uuid).result.head)
+  def getField(uuid: String): DBIO[FieldWithConf] = DefaultFields.fieldsMap.get(uuid).map(DBIO.successful(_))
+    .getOrElse(getDbField(uuid).map(v => v))
+
+
+  def getDbField(uuid: String) = {
+    getDbFields(Seq(uuid)).map(_.headOption.getOrThrowM(s"Cannot find field $uuid in db"))
+  }
 
   def getDbFields(uuid: Iterable[String]): DBIO[Seq[FieldRow]] = {
     lastVersionOfFields.filter(_.uuid.inSet(uuid)).result
@@ -49,7 +56,7 @@ class FieldService @Inject()(
     val staticFields = StaticFields.allStaticFieldsMap.keySet.intersect(uuids.toSet)
     val remainingFields = uuids.toSet -- staticFields
     val staticFieldsConfig: Set[FieldWithConf] = staticFields.map(StaticFields.allStaticFieldsMap(_))
-    (if (remainingFields.isEmpty) DBIO.successful(Nil) else getDbFields(remainingFields.toSeq).map(_.map(v=>FieldWithConf.toFieldWithConf(v.field)))).map(fl =>
+    (if (remainingFields.isEmpty) DBIO.successful(Nil) else getDbFields(remainingFields.toSeq).map(_.map(v=>v.field))).map(fl =>
       (fl ++ staticFieldsConfig).toMapBy(_.uuid)
     )
   }
@@ -60,7 +67,7 @@ class FieldService @Inject()(
   }
 
   def delete(uuid: String)(implicit executionContext: ExecutionContext, userInfo: UserInfo) = {
-    getField(uuid).flatMap(lv =>
+    getDbField(uuid).flatMap(lv =>
       Tables.FieldDeleted += Tables.FieldDeletedRow(lv.id, userInfo.uuid, DateUtils.ts)
     )
   }

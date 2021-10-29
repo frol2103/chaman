@@ -77,7 +77,7 @@ object BasicFieldTypes {
 
 case class ConfigFieldType[T <: Holder](
                              uuid: String,
-                               reference: String,
+                             reference: String,
                               label: String,
                               basicFieldType: BasicFieldType[T],
                               config: JsObject = JsObject(Nil)) extends FieldWithConf

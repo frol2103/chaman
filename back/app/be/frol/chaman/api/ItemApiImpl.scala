@@ -59,7 +59,7 @@ class ItemApiImpl @Inject()(
       fields <- fieldService.getDbFields(data.map(_.fieldUuid).toSet)
       annexes <- annexService.forItem(uuid)
       links <- linkService.getLinks(uuid)
-    } yield ItemMapper.toDtoFD(i, DefaultFields.ItemContent.fields ++ fields, data, annexes, links)
+    } yield ItemMapper.toDtoFD(i, DefaultFields.ItemContent.fields ++ fields.map(fieldToFieldWithConf), data, annexes, links)
   }
 
   private def getSavedField(ownerUuid: String, fieldUuid:String) = {

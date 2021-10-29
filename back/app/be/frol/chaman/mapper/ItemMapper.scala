@@ -1,5 +1,6 @@
 package be.frol.chaman.mapper
 
+import be.frol.chaman.core.field.FieldWithConf
 import be.frol.chaman.model.{RichField, UserInfo}
 import be.frol.chaman.openapi.model.{Item, ItemDescr, Link}
 import be.frol.chaman.tables.Tables.{AnnexRow, DataRow, FieldRow, ItemRow, LinkRow}
@@ -20,7 +21,7 @@ object ItemMapper {
     )
 
   }
-  def toDtoFD(itemRow: ItemRow, fields: Seq[FieldRow], data:Seq[DataRow], annexes: Seq[AnnexRow], links: Seq[(LinkRow, ItemRow)]): Item = {
+  def toDtoFD(itemRow: ItemRow, fields: Seq[FieldWithConf], data:Seq[DataRow], annexes: Seq[AnnexRow], links: Seq[(LinkRow, ItemRow)]): Item = {
     val dataMap = data.groupBy(_.fieldUuid)
     toDto(itemRow, fields.map(f => RichField(f, dataMap.get(f.uuid).toList.flatten)), annexes, links)
   }

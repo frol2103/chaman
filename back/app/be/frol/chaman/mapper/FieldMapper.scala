@@ -1,6 +1,6 @@
 package be.frol.chaman.mapper
 
-import be.frol.chaman.core.field.{ConfigFieldType, ConfigFieldTypes, FieldType, FieldTypes}
+import be.frol.chaman.core.field.{ConfigFieldType, ConfigFieldTypes, FieldType, FieldTypes, FieldWithConf}
 import be.frol.chaman.model.{RichField, UserInfo}
 import be.frol.chaman.openapi.model.{Field, FieldConfig, FieldValue}
 import be.frol.chaman.tables
@@ -22,13 +22,13 @@ object FieldMapper {
   }
 
 
-  def toConfigDto(value: FieldRow, config: Seq[DataRow]): FieldConfig = {
+  def toConfigDto(value: FieldWithConf, config: Seq[DataRow]): FieldConfig = {
     val configDataMap = config.groupBy(_.fieldUuid)
     FieldConfig(
       value.label.toOpt(),
       value.reference.toOpt(),
-      value.datatype.toOpt(),
-      FieldTypes.mapByInputType(value.datatype).configFields.map { v =>
+      value.basicFieldType.inputType.toOpt(),
+      FieldTypes.mapByInputType(value.basicFieldType.inputType).configFields.map { v =>
         toDto(v)
           .copy(value = configDataMap.get(v.uuid).getOrElse(Nil).map(toDto(_)).toList.toOpt())
       }.toOpt()
@@ -52,12 +52,9 @@ object FieldMapper {
       f.field.uuid.toOpt,
       f.field.label.toOpt,
       f.field.reference.toOpt,
-      f.field.datatype.toOpt,
+      f.field.basicFieldType.inputType.toOpt,
       f.fieldData.map(v => toDto(v)).toList.toOpt(),
-      f.field.config.map(Json.parse(_) match {
-        case v: JsObject => v
-        case _ => JsObject(Nil)
-      }),
+      f.field.config.toOpt(),
       None
 
     )

@@ -9,6 +9,10 @@ trait FieldWithConf {
 
   def uuid: String
 
+  def reference :String
+
+  def label : String
+
   def basicFieldType: BasicFieldType[_]
 
   def config: JsObject
@@ -24,5 +28,9 @@ object FieldWithConf {
       case s:JsObject => s
       case _ => JsObject(Nil)
     }.getOrElse(JsObject(Nil))
+
+    override def reference: String = fr.reference
+
+    override def label: String = fr.label
   }
 }

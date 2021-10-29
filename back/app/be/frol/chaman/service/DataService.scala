@@ -11,6 +11,7 @@ import slick.util.Logging
 
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
+import be.frol.chaman.model.RichModelConversions._
 
 class DataService @Inject()(
                              val dbConfigProvider: DatabaseConfigProvider,
@@ -38,7 +39,7 @@ class DataService @Inject()(
 
 
   def fieldFor(ownerUuid: String, fieldUuid: String) = {
-    fieldData(ownerUuid, fieldUuid).result.flatMap(l => fieldService.getField(fieldUuid).map(f => RichField(f, l)))
+    fieldData(ownerUuid, fieldUuid).result.flatMap(l => fieldService.getField(fieldUuid).map(f => f.withData( l)))
   }
 
   def dataFor(uuid: Iterable[String], fieldUuid: Option[String] = None) = {

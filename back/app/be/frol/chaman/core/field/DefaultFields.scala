@@ -2,12 +2,24 @@ package be.frol.chaman.core.field
 
 import be.frol.chaman.tables.Tables.FieldRow
 import be.frol.chaman.utils.TraversableUtils.traversableEnriched
+import play.api.libs.json.{JsNull, JsObject}
 
 import java.sql.Timestamp
 
 object DefaultFields {
-  def field(uuid:String, ref:String, name:String, fieldTYpe: BasicFieldType[_]) =
-    FieldRow(0L, uuid, ref, fieldTYpe.inputType, name, "root", new Timestamp(0), None)
+  def field(pUuid:String, ref:String, name:String, fieldTYpe: BasicFieldType[_]) = {
+    new FieldWithConf {
+      override def uuid: String = pUuid
+
+      override def reference: String = ref
+
+      override def label: String = name
+
+      override def basicFieldType: BasicFieldType[_] = fieldTYpe
+
+      override def config: JsObject = JsObject(Nil)
+    }
+  }
 
   object ItemContent {
     lazy val name = field("dcf5f7cc-9498-46e1-a2b8-b9560c1c669e","name", "Name", BasicFieldTypes.string)
