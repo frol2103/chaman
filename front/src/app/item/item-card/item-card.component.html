@@ -1,9 +1,5 @@
 <div *wait="item" class="d-print-none">
 
-  <h1>Item : {{item.title}}</h1>
-  <button type="button" class="btn btn-primary" *ngIf="item.uuid" (click)="dlSticker()">
-    <i class="bi bi-upc-scan"></i> Sticker
-  </button>
 
 
     <div class="section">
@@ -15,6 +11,7 @@
             <div (click)="editThumbnail()">
               <img [src]="imgSrc | async">
             </div>
+
           </div>
           <div class="col-12 col-md">
             <div *ngFor="let field of item.content">
@@ -55,6 +52,10 @@
     </div>
 
   </div>
+
+  <button type="button" class="btn btn-primary" *ngIf="item.uuid" (click)="dlSticker()">
+    <i class="bi bi-upc-scan"></i> Sticker
+  </button>
 </div>
 
 
