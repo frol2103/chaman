@@ -16,11 +16,8 @@ class ItemApiController @Inject()(cc: ControllerComponents, api: ItemApi)(implic
     * POST /api/item
     */
   def createItem(): Action[AnyContent] = Action.async { request =>
-    def executeApi(): Future[Item] = {
-      val item = request.body.asJson.map(_.as[Item]).getOrElse {
-        throw new OpenApiExceptions.MissingRequiredParameterException("body", "item")
-      }
-      api.createItem(item)(request)
+    def executeApi(): Future[ItemDescr] = {
+      api.createItem()(request)
     }
 
     executeApi().map { result =>

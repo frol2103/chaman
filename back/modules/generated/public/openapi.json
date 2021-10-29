@@ -263,22 +263,12 @@
       },
       "post" : {
         "operationId" : "createItem",
-        "requestBody" : {
-          "content" : {
-            "application/json" : {
-              "schema" : {
-                "$ref" : "#/components/schemas/Item"
-              }
-            }
-          },
-          "required" : true
-        },
         "responses" : {
           "200" : {
             "content" : {
               "application/json" : {
                 "schema" : {
-                  "$ref" : "#/components/schemas/Item"
+                  "$ref" : "#/components/schemas/ItemDescr"
                 }
               }
             },

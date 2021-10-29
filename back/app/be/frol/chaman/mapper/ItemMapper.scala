@@ -34,9 +34,6 @@ object ItemMapper {
 
 
 
-  def toRow(item: Item)(implicit userInfo: UserInfo) = {
-    new ItemRow(0L, item.uuid.getOrElse(UUID.randomUUID().toString), item.title.getOrElse(""), item.description.getOrElse(""), userInfo.uuid, DateUtils.ts)
-  }
 
   def toDataRow(item: Item)(implicit userInfo: UserInfo) = {
     item.content.map(_.flatMap(FieldMapper.toDataRows(_, item.uuid.get))).getOrElse(Nil)

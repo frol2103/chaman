@@ -186,19 +186,13 @@ paths:
         - item
       summary: create an item
       operationId: createItem
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Item'
-        required: true
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Item'
+                $ref: '#/components/schemas/ItemDescr'
 
   /item/{uuid}:
     get:

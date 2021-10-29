@@ -6,12 +6,15 @@ import be.frol.chaman.model.RichModelConversions._
 import be.frol.chaman.openapi.api.ItemApi
 import be.frol.chaman.openapi.model.{Field, Item, ItemDescr}
 import be.frol.chaman.service.{AnnexService, DataService, FieldService, FieldValidationService, ItemRefresherService, ItemService, LinkService}
+import be.frol.chaman.tables
 import be.frol.chaman.tables.Tables
 import be.frol.chaman.tables.Tables.DataDeletedRow
+import be.frol.chaman.utils.DateUtils
 import be.frol.chaman.utils.OptionUtils._
 import play.api.db.slick.DatabaseConfigProvider
 import play.api.mvc.{AnyContent, ControllerComponents, Request}
 
+import java.util.UUID
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -31,14 +34,11 @@ class ItemApiImpl @Inject()(
 
   import api._
 
-  override def createItem(inputItem: Item)(implicit request: Request[AnyContent]): Future[Item] = run { implicit u =>
+  override def createItem()(implicit request: Request[AnyContent]): Future[ItemDescr] = run { implicit u =>
     db.run(
       for {
-        validatedItem <- fieldValidationService.assertValidFieldsItem(inputItem)
-        i <- itemService.add(ItemMapper.toRow(validatedItem))
-        data <- fieldDataService.updateFieldValues(Nil, ItemMapper.toDataRow(validatedItem.copy(uuid = i.uuid.toOpt())))
-        item <- getSavedItem(i.uuid)
-      } yield (item)
+        i <- itemService.add(new tables.Tables.ItemRow(0L, UUID.randomUUID().toString, "", "", u.uuid, DateUtils.ts))
+      } yield (ItemMapper.toDescrDto(i))
     )
   }
 

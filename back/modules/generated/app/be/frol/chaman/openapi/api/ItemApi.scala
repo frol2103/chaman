@@ -12,7 +12,7 @@ trait ItemApi {
   /**
     * create an item
     */
-  def createItem(item: Item)(implicit request:Request[AnyContent]): Future[Item]
+  def createItem()(implicit request:Request[AnyContent]): Future[ItemDescr]
 
 
   /**
