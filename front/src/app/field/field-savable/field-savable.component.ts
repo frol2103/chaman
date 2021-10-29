@@ -15,7 +15,9 @@ export class FieldSavableComponent implements OnInit {
   ) {
   }
 
+  @Input() showLabel = true
   @Input() itemUuid: string
+  @Input() subReference: string
   @Input() field: Field
   @Input() inEdit: boolean
   @Output() onDelete = new EventEmitter<Field>()
@@ -24,7 +26,7 @@ export class FieldSavableComponent implements OnInit {
   }
 
   save() {
-    this.r.wrap(this.itemService.updateItemField(this.itemUuid, this.field.uuid, this.field))
+    this.r.wrap(this.itemService.updateItemField(this.itemUuid, this.field.uuid, this.field, this.subReference))
       .withErrorMessage("Failed to update field")
       .withSuccessMessage("Field updated")
       .then(v => this.inEdit=false, v => this.field.errorMessages = v.error.content.errorMessages)

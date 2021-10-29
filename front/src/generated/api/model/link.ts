@@ -9,11 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Field } from './field';
 import { ItemDescr } from './itemDescr';
 
 
 export interface Link { 
     uuid?: string;
     item?: ItemDescr;
+    fields?: Array<Field>;
 }
 

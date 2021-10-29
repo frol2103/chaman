@@ -54,7 +54,7 @@ class FieldApiImpl @Inject()(
         .flatMap(fcv =>
           fieldService.add(FieldMapper.toRow(fcv, None)).flatMap { f =>
             fieldService.addValues(
-              fcv.config.getOrElse(Nil).flatMap(fc => FieldMapper.toDataRows(fc, f.uuid))
+              fcv.config.getOrElse(Nil).flatMap(fc => FieldMapper.toDataRows(fc, f.uuid, None))
             ).map(v => f)
           }
         )
@@ -89,7 +89,7 @@ class FieldApiImpl @Inject()(
               fd <- fieldDataService.dataFor(Seq(uuid)).result
               nf <- updateIfNeeded(f)
               nd <- fieldDataService.updateFieldValuesMaps(fd.toList.groupBy(_.fieldUuid),
-                fieldConfig.config.getOrElse(Nil).flatMap(FieldMapper.toDataRows(_, uuid)).groupBy(_.fieldUuid))
+                fieldConfig.config.getOrElse(Nil).flatMap(FieldMapper.toDataRows(_, uuid, None)).groupBy(_.fieldUuid))
             } yield (nf.withData( nd))
         }
       ).map(FieldMapper.toDtoRf(_))

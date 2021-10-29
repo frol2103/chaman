@@ -9,7 +9,8 @@ import play.api.libs.json._
 case class Annex(
   uuid: Option[String],
   filename: Option[String],
-  mime: Option[String]
+  mime: Option[String],
+  fields: Option[List[Field]]
 )
 
 object Annex {

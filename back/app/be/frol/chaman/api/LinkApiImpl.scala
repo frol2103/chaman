@@ -28,7 +28,7 @@ class LinkApiImpl @Inject()(
       for {
         l <- this.linkService.add(LinkMapper.toRow(uuid, linkedUuid))
         i <- this.itemService.get(linkedUuid)
-      } yield LinkMapper.toDto(l, i)
+      } yield LinkMapper.toDto(l, i, Map())
     )
   }
 

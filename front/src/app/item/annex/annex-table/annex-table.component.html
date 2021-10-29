@@ -9,6 +9,14 @@
   </ng-container>
 
 
+  <ng-container *ngFor="let id of this.fieldsIds" [matColumnDef]="id">
+    <th mat-header-cell *matHeaderCellDef>{{getFieldName(id)}}</th>
+    <td mat-cell *matCellDef="let f">
+      <app-field-savable [itemUuid]="this.itemUuid" [field]="this.getField(f, id)" [subReference]="f.uuid" [showLabel]="false"></app-field-savable>
+    </td>
+  </ng-container>
+
+
   <ng-container matColumnDef="actions">
     <th mat-header-cell *matHeaderCellDef>Actions</th>
     <td mat-cell *matCellDef="let f">

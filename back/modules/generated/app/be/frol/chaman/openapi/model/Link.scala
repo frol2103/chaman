@@ -8,7 +8,8 @@ import play.api.libs.json._
 @javax.annotation.Generated(value = Array("org.openapitools.codegen.languages.ScalaPlayFrameworkServerCodegen"))
 case class Link(
   uuid: Option[String],
-  item: Option[ItemDescr]
+  item: Option[ItemDescr],
+  fields: Option[List[Field]]
 )
 
 object Link {

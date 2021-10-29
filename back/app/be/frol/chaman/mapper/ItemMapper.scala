@@ -1,6 +1,6 @@
 package be.frol.chaman.mapper
 
-import be.frol.chaman.core.field.FieldWithConf
+import be.frol.chaman.core.field.{DefaultFields, FieldWithConf}
 import be.frol.chaman.model.{RichField, UserInfo}
 import be.frol.chaman.openapi.model.{Item, ItemDescr, Link}
 import be.frol.chaman.tables.Tables.{AnnexRow, DataRow, FieldRow, ItemRow, LinkRow}
@@ -11,19 +11,15 @@ import java.util.UUID
 
 object ItemMapper {
 
-  def toDto(itemRow: ItemRow, fields: Seq[RichField] = Nil, annexes: Seq[AnnexRow] = Nil, links: Seq[(LinkRow, ItemRow)] = Nil): Item = {
+  def toDtoFD(itemRow: ItemRow, fields: Seq[FieldWithConf], data:Seq[DataRow], annexes: Seq[AnnexRow], links: Seq[(LinkRow, ItemRow)]): Item = {
+    val dataMap = data.groupBy(_.fieldUuid)
     new Item(itemRow.uuid.toOpt(),
       itemRow.title.toOpt(),
       itemRow.description.toOpt(),
-      fields.map(FieldMapper.toDtoRf(_)).toList.toOpt(),
-      annexes.map(AnnexMapper.toDto(_)).toList.toOpt,
-      links.map(v => LinkMapper.toDto(v)).toList.toOpt
+      (DefaultFields.ItemContent.fields ++ fields).map(f => RichField(f, dataMap.get(f.uuid).toList.flatten)).map(FieldMapper.toDtoRf(_)).toList.toOpt(),
+      annexes.map(AnnexMapper.toDto(_, dataMap)).toList.toOpt,
+      links.map(v => LinkMapper.toDto(v, dataMap)).toList.toOpt
     )
-
-  }
-  def toDtoFD(itemRow: ItemRow, fields: Seq[FieldWithConf], data:Seq[DataRow], annexes: Seq[AnnexRow], links: Seq[(LinkRow, ItemRow)]): Item = {
-    val dataMap = data.groupBy(_.fieldUuid)
-    toDto(itemRow, fields.map(f => RichField(f, dataMap.get(f.uuid).toList.flatten)), annexes, links)
   }
 
   def toDescrDto(itemRow: ItemRow): ItemDescr = {
@@ -36,7 +32,4 @@ object ItemMapper {
 
 
 
-  def toDataRow(item: Item)(implicit userInfo: UserInfo) = {
-    item.content.map(_.flatMap(FieldMapper.toDataRows(_, item.uuid.get))).getOrElse(Nil)
-  }
 }

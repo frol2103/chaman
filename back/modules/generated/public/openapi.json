@@ -469,6 +469,15 @@
             "type" : "string"
           },
           "style" : "simple"
+        }, {
+          "explode" : true,
+          "in" : "query",
+          "name" : "subReferenceUuid",
+          "required" : false,
+          "schema" : {
+            "type" : "string"
+          },
+          "style" : "form"
         } ],
         "requestBody" : {
           "content" : {
@@ -836,6 +845,37 @@
               "title" : "title",
               "uuid" : "uuid"
             },
+            "fields" : [ {
+              "reference" : "reference",
+              "errorMessages" : [ "errorMessages", "errorMessages" ],
+              "isUserField" : true,
+              "inputType" : "inputType",
+              "label" : "label",
+              "params" : "",
+              "uuid" : "uuid",
+              "value" : [ {
+                "uuid" : "uuid",
+                "value" : ""
+              }, {
+                "uuid" : "uuid",
+                "value" : ""
+              } ]
+            }, {
+              "reference" : "reference",
+              "errorMessages" : [ "errorMessages", "errorMessages" ],
+              "isUserField" : true,
+              "inputType" : "inputType",
+              "label" : "label",
+              "params" : "",
+              "uuid" : "uuid",
+              "value" : [ {
+                "uuid" : "uuid",
+                "value" : ""
+              }, {
+                "uuid" : "uuid",
+                "value" : ""
+              } ]
+            } ],
             "uuid" : "uuid"
           }, {
             "item" : {
@@ -843,6 +883,37 @@
               "title" : "title",
               "uuid" : "uuid"
             },
+            "fields" : [ {
+              "reference" : "reference",
+              "errorMessages" : [ "errorMessages", "errorMessages" ],
+              "isUserField" : true,
+              "inputType" : "inputType",
+              "label" : "label",
+              "params" : "",
+              "uuid" : "uuid",
+              "value" : [ {
+                "uuid" : "uuid",
+                "value" : ""
+              }, {
+                "uuid" : "uuid",
+                "value" : ""
+              } ]
+            }, {
+              "reference" : "reference",
+              "errorMessages" : [ "errorMessages", "errorMessages" ],
+              "isUserField" : true,
+              "inputType" : "inputType",
+              "label" : "label",
+              "params" : "",
+              "uuid" : "uuid",
+              "value" : [ {
+                "uuid" : "uuid",
+                "value" : ""
+              }, {
+                "uuid" : "uuid",
+                "value" : ""
+              } ]
+            } ],
             "uuid" : "uuid"
           } ],
           "title" : "title",
@@ -850,10 +921,72 @@
           "annexes" : [ {
             "filename" : "filename",
             "mime" : "mime",
+            "fields" : [ {
+              "reference" : "reference",
+              "errorMessages" : [ "errorMessages", "errorMessages" ],
+              "isUserField" : true,
+              "inputType" : "inputType",
+              "label" : "label",
+              "params" : "",
+              "uuid" : "uuid",
+              "value" : [ {
+                "uuid" : "uuid",
+                "value" : ""
+              }, {
+                "uuid" : "uuid",
+                "value" : ""
+              } ]
+            }, {
+              "reference" : "reference",
+              "errorMessages" : [ "errorMessages", "errorMessages" ],
+              "isUserField" : true,
+              "inputType" : "inputType",
+              "label" : "label",
+              "params" : "",
+              "uuid" : "uuid",
+              "value" : [ {
+                "uuid" : "uuid",
+                "value" : ""
+              }, {
+                "uuid" : "uuid",
+                "value" : ""
+              } ]
+            } ],
             "uuid" : "uuid"
           }, {
             "filename" : "filename",
             "mime" : "mime",
+            "fields" : [ {
+              "reference" : "reference",
+              "errorMessages" : [ "errorMessages", "errorMessages" ],
+              "isUserField" : true,
+              "inputType" : "inputType",
+              "label" : "label",
+              "params" : "",
+              "uuid" : "uuid",
+              "value" : [ {
+                "uuid" : "uuid",
+                "value" : ""
+              }, {
+                "uuid" : "uuid",
+                "value" : ""
+              } ]
+            }, {
+              "reference" : "reference",
+              "errorMessages" : [ "errorMessages", "errorMessages" ],
+              "isUserField" : true,
+              "inputType" : "inputType",
+              "label" : "label",
+              "params" : "",
+              "uuid" : "uuid",
+              "value" : [ {
+                "uuid" : "uuid",
+                "value" : ""
+              }, {
+                "uuid" : "uuid",
+                "value" : ""
+              } ]
+            } ],
             "uuid" : "uuid"
           } ],
           "content" : [ {
@@ -923,6 +1056,37 @@
         "example" : {
           "filename" : "filename",
           "mime" : "mime",
+          "fields" : [ {
+            "reference" : "reference",
+            "errorMessages" : [ "errorMessages", "errorMessages" ],
+            "isUserField" : true,
+            "inputType" : "inputType",
+            "label" : "label",
+            "params" : "",
+            "uuid" : "uuid",
+            "value" : [ {
+              "uuid" : "uuid",
+              "value" : ""
+            }, {
+              "uuid" : "uuid",
+              "value" : ""
+            } ]
+          }, {
+            "reference" : "reference",
+            "errorMessages" : [ "errorMessages", "errorMessages" ],
+            "isUserField" : true,
+            "inputType" : "inputType",
+            "label" : "label",
+            "params" : "",
+            "uuid" : "uuid",
+            "value" : [ {
+              "uuid" : "uuid",
+              "value" : ""
+            }, {
+              "uuid" : "uuid",
+              "value" : ""
+            } ]
+          } ],
           "uuid" : "uuid"
         },
         "properties" : {
@@ -934,6 +1098,12 @@
           },
           "mime" : {
             "type" : "string"
+          },
+          "fields" : {
+            "items" : {
+              "$ref" : "#/components/schemas/Field"
+            },
+            "type" : "array"
           }
         },
         "type" : "object"
@@ -988,6 +1158,37 @@
             "title" : "title",
             "uuid" : "uuid"
           },
+          "fields" : [ {
+            "reference" : "reference",
+            "errorMessages" : [ "errorMessages", "errorMessages" ],
+            "isUserField" : true,
+            "inputType" : "inputType",
+            "label" : "label",
+            "params" : "",
+            "uuid" : "uuid",
+            "value" : [ {
+              "uuid" : "uuid",
+              "value" : ""
+            }, {
+              "uuid" : "uuid",
+              "value" : ""
+            } ]
+          }, {
+            "reference" : "reference",
+            "errorMessages" : [ "errorMessages", "errorMessages" ],
+            "isUserField" : true,
+            "inputType" : "inputType",
+            "label" : "label",
+            "params" : "",
+            "uuid" : "uuid",
+            "value" : [ {
+              "uuid" : "uuid",
+              "value" : ""
+            }, {
+              "uuid" : "uuid",
+              "value" : ""
+            } ]
+          } ],
           "uuid" : "uuid"
         },
         "properties" : {
@@ -996,6 +1197,12 @@
           },
           "item" : {
             "$ref" : "#/components/schemas/ItemDescr"
+          },
+          "fields" : {
+            "items" : {
+              "$ref" : "#/components/schemas/Field"
+            },
+            "type" : "array"
           }
         },
         "type" : "object"

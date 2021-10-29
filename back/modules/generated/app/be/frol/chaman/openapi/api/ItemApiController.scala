@@ -81,14 +81,16 @@ class ItemApiController @Inject()(cc: ControllerComponents, api: ItemApi)(implic
   }
 
   /**
-    * PUT /api/item/:uuid/field/:uuidField
+    * PUT /api/item/:uuid/field/:uuidField?subReferenceUuid=[value]
     */
   def updateItemField(uuid: String, uuidField: String): Action[AnyContent] = Action.async { request =>
     def executeApi(): Future[Field] = {
       val field = request.body.asJson.map(_.as[Field]).getOrElse {
         throw new OpenApiExceptions.MissingRequiredParameterException("body", "field")
       }
-      api.updateItemField(uuid, uuidField, field)(request)
+      val subReferenceUuid = request.getQueryString("subReferenceUuid")
+        
+      api.updateItemField(uuid, uuidField, field, subReferenceUuid)(request)
     }
 
     executeApi().map { result =>

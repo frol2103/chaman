@@ -309,6 +309,11 @@ paths:
           required: true
           schema:
             type: string
+        - name: subReferenceUuid
+          in: query
+          schema:
+            type: string
+          required: false
       requestBody:
         content:
           application/json:
@@ -560,6 +565,10 @@ components:
           type: string
         mime:
           type: string
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'
 
     Thumbnail:
       type: object
@@ -593,3 +602,7 @@ components:
           type: string
         item:
           $ref: '#/components/schemas/ItemDescr'
+        fields:
+          type: array
+          items:
+            $ref: '#/components/schemas/Field'

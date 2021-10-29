@@ -48,10 +48,11 @@ class DataService @Inject()(
       .filterOpt(fieldUuid)(_.fieldUuid === _)
   }
 
-  def fieldData(ownerUuid: String, fieldUuid: String) = {
+  def fieldData(ownerUuid: String, fieldUuid: String, subreferenceUuid:Option[String]=None) = {
     lastVersion
       .filter(_.fieldUuid === fieldUuid)
       .filter(_.ownerUuid === ownerUuid)
+      .filter(_.subreferenceUuid === subreferenceUuid)
   }
 
   def fieldDataRow(ownerUuid: String) = lastVersion.filter(_.ownerUuid === ownerUuid).result

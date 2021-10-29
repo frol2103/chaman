@@ -9,11 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { Field } from './field';
 
 
 export interface Annex { 
     uuid?: string;
     filename?: string;
     mime?: string;
+    fields?: Array<Field>;
 }
 

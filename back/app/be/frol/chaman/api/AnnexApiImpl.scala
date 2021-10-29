@@ -38,7 +38,7 @@ class AnnexApiImpl @Inject()(
       db.run(
         annexService.add(AnnexRow(0L, UUID.randomUUID().toString, uuid, sha1Sum, f.filename,
         f.contentType.getOrThrowM("mime type missing"),u.uuid,DateUtils.ts))
-      ).map(AnnexMapper.toDto(_))
+      ).map(AnnexMapper.toDto(_, Map()))
     }.getOrElse(throw new RuntimeException("missing file"))
 
   }

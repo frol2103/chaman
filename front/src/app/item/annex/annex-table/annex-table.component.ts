@@ -3,6 +3,7 @@ import {Annex, AnnexService, Thumbnail, ThumbnailService} from "../../../../gene
 import {RxjsHelperService} from "../../../rxjs-helper.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {ThumbnailImpl} from "../../../model/ThumbnailImpl";
+import {FieldImpl} from "../../../model/FieldImpl";
 
 @Component({
   selector: 'app-annex-table',
@@ -26,14 +27,34 @@ export class AnnexTableComponent implements OnInit {
   datasource = new MatTableDataSource<Annex>()
 
   displayedColumns = ['name', 'actions']
+  fields = {}
 
   ngOnInit(): void {
     this.refresh()
   }
 
+  updateDisplayedColumns(fieldCols : Array<string>) {
+    this.displayedColumns = ['name'].concat(fieldCols, ['actions'])
+  }
+
   refresh() {
     this.datasource.data = this.annexes;
+    this.annexes.flatMap(v => v.fields).forEach(v=>
+      this.fields[v.uuid] = v.label
+    )
+    this.updateDisplayedColumns(this.fieldsIds)
+  }
 
+  get fieldsIds() {
+    return Object.keys(this.fields)
+  }
+
+  getField(f:Annex, uuid:string) {
+    return f.fields.find(v => v.uuid === uuid)
+  }
+
+  getFieldName(uuid:string){
+    return this.fields[uuid]
   }
 
   delete(f: Annex) {

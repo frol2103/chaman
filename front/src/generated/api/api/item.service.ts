@@ -311,13 +311,14 @@ export class ItemService {
      * @param uuid 
      * @param uuidField 
      * @param field 
+     * @param subReferenceUuid 
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public updateItemField(uuid: string, uuidField: string, field: Field, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Field>;
-    public updateItemField(uuid: string, uuidField: string, field: Field, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Field>>;
-    public updateItemField(uuid: string, uuidField: string, field: Field, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Field>>;
-    public updateItemField(uuid: string, uuidField: string, field: Field, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
+    public updateItemField(uuid: string, uuidField: string, field: Field, subReferenceUuid?: string, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<Field>;
+    public updateItemField(uuid: string, uuidField: string, field: Field, subReferenceUuid?: string, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpResponse<Field>>;
+    public updateItemField(uuid: string, uuidField: string, field: Field, subReferenceUuid?: string, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json'}): Observable<HttpEvent<Field>>;
+    public updateItemField(uuid: string, uuidField: string, field: Field, subReferenceUuid?: string, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json'}): Observable<any> {
         if (uuid === null || uuid === undefined) {
             throw new Error('Required parameter uuid was null or undefined when calling updateItemField.');
         }
@@ -326,6 +327,12 @@ export class ItemService {
         }
         if (field === null || field === undefined) {
             throw new Error('Required parameter field was null or undefined when calling updateItemField.');
+        }
+
+        let queryParameters = new HttpParams({encoder: this.encoder});
+        if (subReferenceUuid !== undefined && subReferenceUuid !== null) {
+          queryParameters = this.addToHttpParams(queryParameters,
+            <any>subReferenceUuid, 'subReferenceUuid');
         }
 
         let headers = this.defaultHeaders;
@@ -360,6 +367,7 @@ export class ItemService {
         return this.httpClient.put<Field>(`${this.configuration.basePath}/item/${encodeURIComponent(String(uuid))}/field/${encodeURIComponent(String(uuidField))}`,
             field,
             {
+                params: queryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: headers,

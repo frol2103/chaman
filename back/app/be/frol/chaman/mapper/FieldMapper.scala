@@ -12,9 +12,9 @@ import be.frol.chaman.utils.TraversableUtils._
 import play.api.libs.json.{JsObject, JsValue, Json}
 
 import java.util.UUID
-
 import be.frol.chaman.model.RichModelConversions._
-object FieldMapper {
+import play.api.Logging
+object FieldMapper extends Logging{
   def toConfigDto(value: FieldType[_]): FieldConfig = {
     FieldConfig(None, None,
       value.basicFieldType.inputType.toOpt(),
@@ -37,6 +37,10 @@ object FieldMapper {
   }
 
   def toDto(f: FieldWithConf): Field = toDtoRf(f)
+
+  def toDto(field:FieldWithConf, subReferenceUuid:String , dataMap:Map[String, Iterable[DataRow]]):Field = {
+    toDtoRf(field.withData(dataMap.get(field.uuid).getOrElse(Nil).filter(_.subreferenceUuid == Some(subReferenceUuid))))
+  }
 
   def toDtoRf(f: RichField): Field = {
     Field(
@@ -78,14 +82,14 @@ object FieldMapper {
 
   }
 
-  def toDataRows(f: Field, ownerUuid: String)(implicit userInfo: UserInfo) = {
+  def toDataRows(f: Field, ownerUuid: String, subreferenceUuid:Option[String])(implicit userInfo: UserInfo) = {
     f.value.getOrElse(Nil).map(v =>
       Tables.DataRow(
         0L,
         f.uuid.get,
         ownerUuid,
         v.uuid.getOrElse(UUID.randomUUID().toString),
-        None,
+        subreferenceUuid,
         v.value.map(_.toString),
         userInfo.uuid,
         DateUtils.ts,

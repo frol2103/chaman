@@ -59,7 +59,10 @@ class ItemApiImpl @Inject()(
       fields <- fieldService.getDbFields(data.map(_.fieldUuid).toSet)
       annexes <- annexService.forItem(uuid)
       links <- linkService.getLinks(uuid)
-    } yield ItemMapper.toDtoFD(i, DefaultFields.ItemContent.fields ++ fields.map(fieldToFieldWithConf), data, annexes, links)
+    } yield{
+      ItemMapper.toDtoFD(i, fields.map(fieldToFieldWithConf), data, annexes, links)
+    }
+
   }
 
   private def getSavedField(ownerUuid: String, fieldUuid:String) = {
@@ -77,13 +80,13 @@ class ItemApiImpl @Inject()(
   }
 
 
-  override def updateItemField(uuid: String, uuidField: String, field: Field)(implicit request: Request[AnyContent]): Future[Field] = run{ implicit user =>
+  override def updateItemField(uuid: String, uuidField: String, field: Field, subReferenceUuid: Option[String])(implicit request:Request[AnyContent]): Future[Field] = run { implicit user =>
     import api._
     db.run(
       (for {
         validatedField <- fieldValidationService.assertValidField(field)
-        currentData <- fieldDataService.fieldData(uuid, uuidField).result
-        newFields <- fieldDataService.updateFieldValues(currentData, FieldMapper.toDataRows(validatedField, uuid))
+        currentData <- fieldDataService.fieldData(uuid, uuidField, subReferenceUuid).result
+        newFields <- fieldDataService.updateFieldValues(currentData, FieldMapper.toDataRows(validatedField, uuid,subReferenceUuid))
         upd <- itemRefresher.refresh(uuid)
         field <- getSavedField(uuid, uuidField)
       } yield(field)).transactionally
