@@ -4,19 +4,21 @@ import {RxjsHelperService} from "../../../rxjs-helper.service";
 import {MatTableDataSource} from "@angular/material/table";
 import {ThumbnailImpl} from "../../../model/ThumbnailImpl";
 import {FieldImpl} from "../../../model/FieldImpl";
+import {HolderWithSubReference} from "../../holder-with-subreference-parent";
 
 @Component({
   selector: 'app-annex-table',
   templateUrl: './annex-table.component.html',
   styleUrls: ['./annex-table.component.css']
 })
-export class AnnexTableComponent implements OnInit {
+export class AnnexTableComponent extends HolderWithSubReference implements OnInit {
 
   constructor(
     private r: RxjsHelperService,
     private annexService: AnnexService,
     private thumbnailService: ThumbnailService,
   ) {
+    super()
   }
 
   @Input() annexes: Array<Annex>
@@ -26,8 +28,8 @@ export class AnnexTableComponent implements OnInit {
 
   datasource = new MatTableDataSource<Annex>()
 
-  displayedColumns = ['name', 'actions']
-  fields = {}
+  displayedColumns = []
+
 
   ngOnInit(): void {
     this.refresh()
@@ -35,6 +37,10 @@ export class AnnexTableComponent implements OnInit {
 
   updateDisplayedColumns(fieldCols : Array<string>) {
     this.displayedColumns = ['name'].concat(fieldCols, ['actions'])
+  }
+
+  getField(f:Annex, uuid:string) {
+    return f.fields.find(v => v.uuid === uuid)
   }
 
   refresh() {
@@ -45,17 +51,6 @@ export class AnnexTableComponent implements OnInit {
     this.updateDisplayedColumns(this.fieldsIds)
   }
 
-  get fieldsIds() {
-    return Object.keys(this.fields)
-  }
-
-  getField(f:Annex, uuid:string) {
-    return f.fields.find(v => v.uuid === uuid)
-  }
-
-  getFieldName(uuid:string){
-    return this.fields[uuid]
-  }
 
   delete(f: Annex) {
     if (confirm("Are you sure you want to delete annex " + f.filename)) {

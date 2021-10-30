@@ -11,7 +11,7 @@ object AnnexMapper {
       r.uuid.toOpt,
       r.name.toOpt,
       r.mimetype.toOpt,
-      DefaultFields.LinkFields.fields.map(f=>FieldMapper.toDto(f, r.uuid, dataMap)).toOpt()
+      DefaultFields.AnnexFields.fields.map(f=>FieldMapper.toDto(f, r.uuid, dataMap)).toOpt()
     )
   }
 }
