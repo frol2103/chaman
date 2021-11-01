@@ -8,7 +8,7 @@ services:
       - 80:80
 
   back:
-    build: ./back
+    image: registry.gitlab.com/chaosmanager/docker-back-dev:v1
     volumes:
       - $HOME:/var/home/:rw
       - ..:/src
@@ -18,7 +18,7 @@ services:
     stdin_open: true
 
   front:
-    build: ./front
+    image: registry.gitlab.com/chaosmanager/docker-front-dev:v1
     volumes: 
       - ../front:/src
     user: $UID

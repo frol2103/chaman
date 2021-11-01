@@ -28,7 +28,6 @@ export class AnnexTableComponent extends HolderWithSubReference implements OnIni
 
   datasource = new MatTableDataSource<Annex>()
 
-  displayedColumns = []
 
 
   ngOnInit(): void {

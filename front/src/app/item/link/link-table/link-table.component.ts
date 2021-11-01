@@ -10,7 +10,6 @@ import {HolderWithSubReference} from "../../holder-with-subreference-parent";
   styleUrls: ['./link-table.component.css']
 })
 export class LinkTableComponent extends HolderWithSubReference implements OnInit {
-  private displayedColumns = [];
 
   constructor(
     private linkService: LinkService,

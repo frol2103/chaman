@@ -2,6 +2,7 @@ import {Annex} from "../../generated/api";
 
 export abstract class HolderWithSubReference {
 
+  public displayedColumns = [];
 
   abstract updateDisplayedColumns(fieldCols : Array<string>)
 
